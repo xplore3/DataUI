@@ -73,6 +73,38 @@ export const chatApi = {
     return response.data.data;
   },
 
+  checkTaskStatus: async (): Promise<Message> => {
+    try {
+      const taskId = useUserStore.getState().getTaskId();
+      const result = await api.get(`/task_status`, {
+        taskId,
+      });
+      console.log(result);
+      let response = result.data;
+      if (result.status != 200) {
+        response = "Error in response " + result.statusText;
+      }
+      try {
+        const json = JSON.parse(response.text);
+        response = json.task_status;
+      } catch (err) {
+        console.log(err);
+      }
+      return {
+        text: response,
+        user: 'agent',
+        action: 'NONE',
+      };
+    } catch (err) {
+      console.log(err);
+    }
+    return {
+      text: 'Please wait a few seconds.',
+      user: 'agent',
+      action: 'NONE',
+    };
+  },
+
   async translateText(text: string): Promise<string> {
     try {
       //console.log('translateText: 000 ', text);
