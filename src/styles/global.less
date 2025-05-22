@@ -1,0 +1,129 @@
+.page-title {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  color: var(--text-color-1);
+  .title-icon {
+    margin-left: 12px;
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    &:hover {
+      color: #222;
+    }
+  }
+}
+
+/* Body */
+.averia-serif-libre {
+  font-family: 'Averia Serif Libre';
+}
+
+/* Customed */
+.pix-input {
+  background-image: url('@/assets/images/border-bg/input.svg');
+  background-size: 100% 48px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.green-bg {
+  background-image: url('@/assets/images/border-bg/green-bg.svg');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #2ec26d;
+}
+
+.gray-bg {
+  background-image: url('@/assets/images/border-bg/gray-bg.svg');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #c6c4c4;
+}
+
+.black-bg {
+  background-image: url('@/assets/images/border-bg/black-bg.svg');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #ffffff;
+}
+
+.btn-scale {
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.btn-scale:hover {
+  transform: scale(1.05);
+}
+
+.pc-bg {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-image: url('@/assets/images/background/pc-bg.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.h5-page {
+  position: relative;
+  z-index: 2;
+  height: 100dvh;
+  background: var(--background-color);
+}
+.hide-txt {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+input,
+textarea {
+  background-color: #ffffff;
+}
+
+input::placeholder {
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 400;
+  [data-theme='dark'] & {
+    color: #8e98a4;
+  }
+}
+
+.check-box {
+  border-color: var(--text-color-2);
+  color: var(--text-color-2);
+}
+
+textarea {
+  resize: none;
+}
+.menu-button {
+  background: transparent;
+  color: var(--text-color-2);
+}
+.menu-item {
+  background: var(--background-color);
+  color: var(--text-color-1);
+  cursor: pointer;
+}
+[data-theme='dark'] {
+  .menu-item {
+    border: 1px solid rgba(142, 152, 164, 0.2);
+    background: #121921;
+    box-shadow: 0px 2px 14px 0px rgba(0, 0, 0, 0.1);
+  }
+}
+
+input,
+textarea {
+  background-color: var(--background-color);
+}
