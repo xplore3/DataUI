@@ -11,8 +11,7 @@ import { chatApi } from '@/services/chat';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';;
 import { ReactSVG } from 'react-svg';
-import cron from "node-cron";
-//import { Cron } from "croner";
+import { Cron } from "croner";
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -156,8 +155,8 @@ const Chat = () => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
 
-      // checkResp
-      const job = cron.schedule("*/1 * * * *", async () => {
+      // checkResp per 10 seconds
+      const job = Cron("*/10 * * * * *", async () => {
         console.log(`Response check at ${new Date().toISOString()}`);
         chatApi.checkTaskStatus().then(res => {
           setMessageList(prev => [
@@ -332,7 +331,7 @@ const Chat = () => {
       <div className="chat-page-bottom">
         <div className="chat-page-keys">
           {keyList.map(item => (
-            <div className="chat-page-items" style="background: lightgrey;" key={item} onClick={() => handleKeyPress(item)}>
+            <div className="chat-page-items" key={item} onClick={() => handleKeyPress(item)}>
               {item}
             </div>
           ))}

@@ -76,9 +76,7 @@ export const chatApi = {
   checkTaskStatus: async (): Promise<Message> => {
     try {
       const taskId = useUserStore.getState().getTaskId();
-      const result = await api.get(`/task_status`, {
-        taskId,
-      });
+      const result = await api.get(`/task_status?taskId=${taskId}`, {});
       console.log(result);
       let response = result.data;
       if (result.status != 200) {
