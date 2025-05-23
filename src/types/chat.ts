@@ -6,7 +6,7 @@ export interface Chat {
 
 export interface Message {
   text: string;
-  user: 'user' | 'agent';
+  user: 'user' | 'agent' | 'client';
   action: 'NONE' | 'CONTINUE';
   title?: string;
   updatedAt?: string;

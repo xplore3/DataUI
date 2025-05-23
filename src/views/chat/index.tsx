@@ -312,7 +312,7 @@ const Chat = () => {
                 />
               </>
             )}
-            {item.user !== 'user' && item.displayText === item.text && (
+            {item.user === 'agent' && item.displayText === item.text && (
               <FooterOperation
                 text={item.text + `|||||${item.note}`}
                 onTranslate={translatedText => {

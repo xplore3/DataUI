@@ -91,7 +91,7 @@ export const chatApi = {
       }
       return {
         text: response || 'Processing ......',
-        user: 'agent',
+        user: 'client',
         action: 'NONE',
       };
     } catch (err) {
@@ -99,7 +99,7 @@ export const chatApi = {
     }
     return {
       text: 'Please wait a few seconds.',
-      user: 'agent',
+      user: 'client',
       action: 'NONE',
     };
   },
