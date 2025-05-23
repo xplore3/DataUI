@@ -90,7 +90,7 @@ export const chatApi = {
         console.log(err);
       }
       return {
-        text: response,
+        text: response || 'Processing ......',
         user: 'agent',
         action: 'NONE',
       };
