@@ -4,6 +4,7 @@ import { UserProfile } from '@/types/auth';
 
 interface UserState {
   taskId: string | null;
+  taskIdExpired: number | 0;
   userProfile: UserProfile | null;
   isAuthenticated: boolean;
 
@@ -21,12 +22,14 @@ export const useUserStore = create<UserState>()(
     (set, get) => ({
       // Initial state
       taskId: null,
+      taskIdExpired: 0,
       userProfile: null,
       isAuthenticated: false,
 
       login: userProfile => {
         set({
           taskId: null,
+          taskIdExpired: 0,
           userProfile,
           isAuthenticated: true,
         });
@@ -35,6 +38,7 @@ export const useUserStore = create<UserState>()(
       logout: () => {
         set({
           taskId: null,
+          taskIdExpired: 0,
           userProfile: null,
           isAuthenticated: false,
         });
@@ -42,7 +46,8 @@ export const useUserStore = create<UserState>()(
 
       setTaskId: taskId => {
         set({
-          taskId: taskId
+          taskId: taskId,
+          taskIdExpired: Date.now(),
         });
       },
 
@@ -56,12 +61,19 @@ export const useUserStore = create<UserState>()(
       },
 
       getUserId: () => get().userProfile?.userId || null,
-      getTaskId: () => get().taskId || null,
+      getTaskId: () => {
+        const expired = get().taskIdExpired;
+        if (expired > 0 && Date.now() - expired > 1000 * 60 * 10) {
+           return null;
+        }
+        return get().taskId || null;
+      }
     }),
     {
       name: 'user-store', // Key used in localStorage
       partialize: (state) => ({
         taskId: state.taskId,
+        taskIdExpired: state.taskIdExpired,
         userProfile: state.userProfile,
         isAuthenticated: state.isAuthenticated,
       }),
