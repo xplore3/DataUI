@@ -50,7 +50,8 @@ const Chat = () => {
     } else {
       setMessageList([
         {
-          text: `🤖Welcome to Data3Agent.`,
+          text: `Welcome to Data3Agent.🤖\n\nData3Agent是一个帮助获取数据的Agent，需要任何数据📚只管说；
+              不管是收费的还是免费的，不管是API还是网页，......📈等任何数据，都能帮你搞定。🚀`,
           displayText: `Welcome to Data3Agent.🤖\n\nData3Agent是一个帮助获取数据的Agent，需要任何数据📚只管说；
               不管是收费的还是免费的，不管是API还是网页，......📈等任何数据，都能帮你搞定。🚀`,
           user: 'agent',
