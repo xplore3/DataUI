@@ -167,13 +167,16 @@ const Chat = () => {
       });
 
       setLoading(true);
+      setText('');
+      setMessageList(prev => [
+        ...prev,
+        { text: finalText, user: 'user', action: 'NONE', displayText: finalText },
+      ]);
       chatApi
         .createChat(finalText)
         .then(res => {
-          setText('');
           setMessageList(prev => [
             ...prev,
-            { text: finalText, user: 'user', action: 'NONE', displayText: finalText },
             { ...res, displayText: '' },
           ]);
         })
