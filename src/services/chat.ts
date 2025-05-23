@@ -78,13 +78,14 @@ export const chatApi = {
       const taskId = useUserStore.getState().getTaskId();
       const result = await api.get(`/task_status?taskId=${taskId}`, {});
       console.log(result);
-      let response = result.data;
+      let response = result.data.task_status;
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
       try {
-        const json = JSON.parse(response.text);
-        response = json.task_status;
+        const match = response.match(/current_step:\s*(\d+)/);
+        const step = match ? parseInt(match[1], 10) : null;
+        response = `正在执行第${step}步...`;
       } catch (err) {
         console.log(err);
       }
