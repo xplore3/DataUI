@@ -156,7 +156,7 @@ const Chat = () => {
       if (!finalText.trim() || loading) return;
 
       // checkResp per 10 seconds
-      const job = new Cron("*/20 * * * * *", async () => {
+      const job = new Cron("*/30 * * * * *", async () => {
         console.log(`Response check at ${new Date().toISOString()}`);
         chatApi.checkTaskStatus().then(res => {
           setMessageList(prev => [

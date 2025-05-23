@@ -85,7 +85,7 @@ export const chatApi = {
       try {
         const match = response.match(/current_step:\s*(\d+)/);
         const step = match ? parseInt(match[1], 10) : null;
-        response = `正在执行第${step}步...`;
+        response = `Step ${step} ...`;
       } catch (err) {
         console.log(err);
       }
