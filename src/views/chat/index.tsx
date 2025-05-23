@@ -156,8 +156,12 @@ const Chat = () => {
       if (!finalText.trim() || loading) return;
 
       // checkResp per 10 seconds
+      let jobSkip = false;
       const job = new Cron("*/30 * * * * *", async () => {
         console.log(`Response check at ${new Date().toISOString()}`);
+        if (jobSkip) {
+          return;
+        }
         chatApi.checkTaskStatus().then(res => {
           setMessageList(prev => [
             ...prev,
@@ -175,6 +179,7 @@ const Chat = () => {
       chatApi
         .createChat(finalText)
         .then(res => {
+          jobSkip = true;
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
