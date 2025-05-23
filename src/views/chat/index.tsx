@@ -321,8 +321,8 @@ const Chat = () => {
                 onRefresh={handleRefresh}
                 menuList={
                   index === messageList.length - 1 && messageList.length > 1 && item.action !== 'bnbQuery'
-                    ? ['share', 'bookmark', 'translate', 'copy', 'refresh']
-                    : ['share', 'bookmark', 'translate', 'copy']
+                    ? ['share', 'pined', 'translate', 'copy', 'refresh']
+                    : ['share', 'pined', 'translate', 'copy']
                 }
               />
             )}
