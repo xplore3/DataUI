@@ -16,12 +16,12 @@ export const chatApi = {
         text: initialMessage,
         taskId,
       });
-      let response = result.data;
+      let response = result.data.text;
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
       try {
-        const json = JSON.parse(response.text);
+        const json = JSON.parse(response);
         if (json) {
           useUserStore.getState().setTaskId(json.taskId);
           if (json.need_more) {
