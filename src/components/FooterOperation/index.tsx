@@ -4,7 +4,7 @@ import BookMark from '@/assets/icons/bookmark.svg';
 import Refresh from '@/assets/icons/refresh.svg';
 import ImgTrue from '@/assets/icons/true.svg';
 import Copy from '@/assets/icons/copy.svg';
-import Pined from '@/assets/icons/pined.png';
+import Pined from '@/assets/icons/pined.svg';
 import './index.less';
 import React, { useState } from 'react';
 import useShare from '@/hooks/useShare';
@@ -64,6 +64,7 @@ const FooterOperation = React.memo<FooterOperationProps>(
     return (
       <div className="footer-operation">
         {menuList.includes('pined') && <ReactSVG className="footer-operation-item" src={Pined} />}
+        {menuList.includes('pined') && <div className="text-[8px]">生成程序</div>}
         {menuList.includes('share') && <ReactSVG className="footer-operation-item" src={Share} onClick={handleShareClick} />}
         {menuList.includes('copy') &&
           (isCopied ? (
