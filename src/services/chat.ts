@@ -104,6 +104,34 @@ export const chatApi = {
     };
   },
 
+  getPromptTemplates: async (): Promise<Message> => {
+    try {
+      const result = await api.get(`/prompt_templates`, {});
+      console.log(result);
+      let response = result.data;
+      if (result.status != 200) {
+        response = "Error in response " + result.statusText;
+      }
+      try {
+        response = `Templates ${response} ...`;
+      } catch (err) {
+        console.log(err);
+      }
+      return {
+        text: response || '......',
+        user: 'client',
+        action: 'NONE',
+      };
+    } catch (err) {
+      console.log(err);
+    }
+    return {
+      text: 'Error in tempates process',
+      user: 'client',
+      action: 'NONE',
+    };
+  },
+
   async translateText(text: string): Promise<string> {
     try {
       //console.log('translateText: 000 ', text);

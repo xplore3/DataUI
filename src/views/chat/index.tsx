@@ -33,7 +33,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['AI Prediction'];
+  const keyList = ['模板'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -164,6 +164,9 @@ const Chat = () => {
           return;
         }
         chatApi.checkTaskStatus().then(res => {
+          if (jobSkip) {
+            return;
+          }
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -195,16 +198,16 @@ const Chat = () => {
   );
 
   const handleKeyPress = async (key: string) => {
-    if (key === 'AI Prediction') {
+    if (key === '模板') {
       if (loading) return;
       setLoading(true);
-      // Randomly choose a token from TokenName
       try {
-        /*setMessageList(prev => [
-          ...prev,
-          {
-          },
-        ]);*/
+        chatApi.handlePromptTemplates().then(res => {
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
       } catch (error) {
         console.log(error);
       } finally {
