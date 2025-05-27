@@ -202,7 +202,7 @@ const Chat = () => {
       if (loading) return;
       setLoading(true);
       try {
-        chatApi.handlePromptTemplates().then(res => {
+        chatApi.getPromptTemplates().then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },

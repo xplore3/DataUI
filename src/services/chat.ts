@@ -112,11 +112,6 @@ export const chatApi = {
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
-      try {
-        response = `Templates ${response} ...`;
-      } catch (err) {
-        console.log(err);
-      }
       return {
         text: response || '......',
         user: 'client',
