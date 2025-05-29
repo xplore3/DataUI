@@ -42,8 +42,8 @@ const DownloadWithCode: React.FC = () => {
     <div className="download-container">
       <h2>文件下载</h2>
       <div className="file-url-info">
-        <label>文件URL:</label>
-        <div className="url-display">{fileUrl}</div>
+        <label>文件链接:</label>
+        <div className="url-display">https://data3.site/download?{fileUrl}</div>
       </div>
       <div className="input-group">
         <input
