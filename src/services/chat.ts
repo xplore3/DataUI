@@ -127,6 +127,68 @@ export const chatApi = {
     };
   },
 
+  downloadWithCode: async (code: string): Promise<Message> => {
+    let status = 200;
+    try {
+      const taskId = useUserStore.getState().getTaskId();
+      const result = await api.post<Blob>(`/download`, {
+        code: code,
+        type: 'data',
+        taskId,
+      }, { responseType: 'blob' });
+      console.log(result);
+      status = result.status;
+      //if (result.status !== 200) {
+      //  throw new Error(`Download failed with status: ${result.status}`);
+      //}
+
+      const url = window.URL.createObjectURL(new Blob([result.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      const contentDisposition = result.headers['content-disposition'];
+      let filename = 'download';
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+        if (filenameMatch?.[1]) {
+          filename = filenameMatch[1];
+        }
+      }
+
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      return {
+        text: `文件 ${filename} 下载成功`,
+        user: 'agent',
+        action: 'NONE',
+      };
+    } catch (err) {
+      console.log(err);
+      let errorMessage = '下载失败，请稍后再试';
+      if (err instanceof Error) {
+        switch (status) {
+          case 403:
+            errorMessage = '提取码错误，请重试';
+            break;
+          case 404:
+            errorMessage = '文件不存在';  
+            break;
+          default:
+            errorMessage = `服务器错误: ${err.message}`;
+            break
+        }
+      }
+      return {
+        text: errorMessage,
+        user: 'client',
+        action: 'NONE',
+      };
+    }
+  },
+
   async translateText(text: string): Promise<string> {
     try {
       //console.log('translateText: 000 ', text);
