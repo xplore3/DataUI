@@ -33,7 +33,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '获取热榜'];
+  const keyList = ['模板', '获取热榜', '人工'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -208,6 +208,38 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    else if (key === '获取热榜') {
+      if (loading) return;
+      setLoading(true);
+      try {
+        chatApi.createChat('最近小红书/抖音的热词、热话题有哪些？').then(res => {
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    else if (key === '人工') {
+      if (loading) return;
+      setLoading(true);
+      try {
+        setMessageList(prev => [
+          ...prev,
+          { text: `点击：https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf 进行人工服务`,
+            user: 'client',
+            action: 'NONE', displayText: '' },
+        ]);
       } catch (error) {
         console.log(error);
       } finally {
