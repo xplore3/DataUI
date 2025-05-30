@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { chatApi } from '@/services/chat';
-import { useLocation } from 'react-router-dom';
 import './download.less';
 
 
@@ -8,8 +7,10 @@ const DownloadWithCode: React.FC = () => {
   const [accessCode, setAccessCode] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const location = useLocation();
-  const fileUrl = location.state?.fileUrl;
+  const searchParams = new URLSearchParams(window.location.search);
+  const taskId = searchParams.get("taskId");
+  const type = searchParams.get("type");
+  const downloadUrl = `https://data3.site/download?taskId=${taskId}&type=${type}`;
 
   const handleDownload = async (): Promise<void> => {
     if (!accessCode.trim()) {
@@ -43,7 +44,7 @@ const DownloadWithCode: React.FC = () => {
       <h2>文件下载</h2>
       <div className="file-url-info">
         <label>文件链接:</label>
-        <div className="url-display">https://data3.site/download?{fileUrl}</div>
+        <a href={downloadUrl} className="url-display">downloadUrl</a>
       </div>
       <div className="input-group">
         <input
