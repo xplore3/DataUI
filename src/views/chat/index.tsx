@@ -5,6 +5,7 @@ import Logo from '@/assets/icons/logo.png';
 import Send from '@/assets/icons/send.svg';
 import SendActive from '@/assets/icons/send-active.svg';
 import LoadingImg from '@/assets/icons/loading.svg';
+import User from '@/assets/icons/user.png';
 import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react';
 import FooterOperation from '@/components/FooterOperation';
 import { chatApi } from '@/services/chat';
@@ -202,6 +203,20 @@ const Chat = () => {
     [text, loading]
   );
 
+  const handleUserSettings = async () => {
+    // Placeholder for user settings logic
+    console.log('User settings clicked');
+    const corpId = import.meta.env.VITE_WECHAT_CORP_ID;
+    //const appId = import.meta.env.VITE_WECOM_AGENT_ID;
+    const host = import.meta.env.VITE_API_HOST_URL;
+    const authCallback = import.meta.env.VITE_WECOM_AUTH_CALLBACK;
+    const redirectUri = encodeURIComponent(host + authCallback);
+    const state = 'RandomCSRF';
+
+    const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
+    window.location.href = authUrl;
+  };
+
   const handleKeyPress = async (key: string) => {
     if (key === '模板') {
       if (loading) return;
@@ -328,6 +343,7 @@ const Chat = () => {
         <img src={Logo} alt="Logo" />
         <span>Data3Agent</span>
         <div className="flex-1"></div>
+        <img src={User} alt="User" onClick={() => handleUserSettings()} />
         {/* <Lang
           onChange={lang => {
             setMessageList(pre => {
