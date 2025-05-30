@@ -197,20 +197,25 @@ export const chatApi = {
         user: 'agent',
         action: 'NONE',
       };
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       let errorMessage = '下载失败，请稍后再试';
-      if (err instanceof Error) {
-        switch (status) {
-          case 403:
-            errorMessage = '提取码错误，请重试';
-            break;
-          case 404:
-            errorMessage = '文件不存在';  
-            break;
-          default:
-            errorMessage = `服务器错误: ${err.message}`;
-            break
+      if (err) {
+        errorMessage = err.responce.data;
+        status = err.responce.status || 500;
+        console.error('Download error:', err.response.statusText);
+        if (!errorMessage) {
+          switch (status) {
+            case 403:
+              errorMessage = '提取码错误，请重试';
+              break;
+            case 404:
+              errorMessage = '文件不存在';  
+              break;
+            default:
+              errorMessage = `服务器错误: ${err.response.statusText}`;
+              break
+          }
         }
       }
       return {
