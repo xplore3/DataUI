@@ -33,7 +33,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板'];
+  const keyList = ['模板', '获取热榜'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
