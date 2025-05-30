@@ -127,12 +127,43 @@ export const chatApi = {
     };
   },
 
+  parseContentDisposition: (contentDisposition: string) => {
+    if (!contentDisposition) return null;
+
+    // RFC 5987  (filename*=utf-8'')
+    const rfc5987Match = contentDisposition.match(/filename\*=([^;]+)/i);
+    if (rfc5987Match) {
+      const parts = rfc5987Match[1].split("'");
+      if (parts.length >= 3) {
+        try {
+          return decodeURIComponent(parts[2]);
+        } catch (e) {
+          console.warn('Failed to decode RFC5987 filename:', e);
+        }
+      }
+    }
+
+    // (filename="...")
+    const standardMatch = contentDisposition.match(/filename="([^"]*)"/i);
+    if (standardMatch) {
+      return standardMatch[1];
+    }
+
+    // (filename=...)
+    const unquotedMatch = contentDisposition.match(/filename=([^;]*)/i);
+    if (unquotedMatch) {
+      return unquotedMatch[1].trim();
+    }
+
+    return null;
+  },
+
   downloadWithCode: async (code: string, taskId: string, type: string): Promise<Message> => {
     let status = 200;
     try {
       //const taskId = useUserStore.getState().getTaskId();
       const result = await api.post<Blob>(`/download`, {
-        code: code,
+        verify_code: code,
         file_type: type,
         taskId,
       }, { responseType: 'blob' });
@@ -148,10 +179,11 @@ export const chatApi = {
       const contentDisposition = result.headers['content-disposition'];
       let filename = 'download';
       if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
-        if (filenameMatch?.[1]) {
-          filename = filenameMatch[1];
-        }
+        //const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+        //if (filenameMatch?.[1]) {
+        //  filename = filenameMatch[1];
+        //}
+        filename = chatApi.parseContentDisposition(contentDisposition) || filename;
       }
 
       link.setAttribute('download', filename);

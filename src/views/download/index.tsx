@@ -26,7 +26,7 @@ const DownloadWithCode: React.FC = () => {
         accessCode.trim().toUpperCase(),
         taskId, type);
       console.log(response);
-      setError('下载成功。');
+      setError(response.text || '下载成功，请查看浏览器下载记录。');
     } catch (err) {
       console.error('下载失败:', err);
       setError('下载失败，请检查提取码或稍后再试。');
