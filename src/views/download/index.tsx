@@ -9,7 +9,7 @@ const DownloadWithCode: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchParams = new URLSearchParams(window.location.search);
   const taskId = searchParams.get("taskId");
-  const type = searchParams.get("type");
+  const type = searchParams.get("file_type");
   const downloadUrl = `https://data3.site/download?taskId=${taskId}&type=${type}`;
 
   const handleDownload = async (): Promise<void> => {
@@ -44,7 +44,7 @@ const DownloadWithCode: React.FC = () => {
       <h2>文件下载</h2>
       <div className="file-url-info">
         <label>文件链接:</label>
-        <a href={downloadUrl} className="url-display">downloadUrl</a>
+        <a href={downloadUrl} className="url-display">{downloadUrl}</a>
       </div>
       <div className="input-group">
         <input

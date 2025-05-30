@@ -133,7 +133,7 @@ export const chatApi = {
       const taskId = useUserStore.getState().getTaskId();
       const result = await api.post<Blob>(`/download`, {
         code: code,
-        type: 'data',
+        file_type: 'data',
         taskId,
       }, { responseType: 'blob' });
       console.log(result);
