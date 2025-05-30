@@ -156,6 +156,11 @@ const Chat = () => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
 
+      if (finalText === '人工' || finalText === '人工服务' || finalText === '人工客服') {
+        window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
+        return
+      }
+
       // checkResp per 10 seconds
       let jobSkip = false;
       const job = new Cron("*/30 * * * * *", async () => {
@@ -231,7 +236,8 @@ const Chat = () => {
       }
     }
     else if (key === '人工') {
-      if (loading) return;
+      window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
+      /*if (loading) return;
       setLoading(true);
       try {
         setMessageList(prev => [
@@ -244,7 +250,7 @@ const Chat = () => {
         console.log(error);
       } finally {
         setLoading(false);
-      }
+      }*/
     }
   };
 
