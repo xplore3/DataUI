@@ -127,13 +127,13 @@ export const chatApi = {
     };
   },
 
-  downloadWithCode: async (code: string): Promise<Message> => {
+  downloadWithCode: async (code: string, taskId: string, type: string): Promise<Message> => {
     let status = 200;
     try {
-      const taskId = useUserStore.getState().getTaskId();
+      //const taskId = useUserStore.getState().getTaskId();
       const result = await api.post<Blob>(`/download`, {
         code: code,
-        file_type: 'data',
+        file_type: type,
         taskId,
       }, { responseType: 'blob' });
       console.log(result);

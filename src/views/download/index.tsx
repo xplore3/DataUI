@@ -8,9 +8,9 @@ const DownloadWithCode: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchParams = new URLSearchParams(window.location.search);
-  const taskId = searchParams.get("taskId");
-  const type = searchParams.get("file_type");
-  const downloadUrl = `https://data3.site/download?taskId=${taskId}&type=${type}`;
+  const taskId = searchParams.get("taskId") || "";
+  const type = searchParams.get("file_type") || "data";
+  const downloadUrl = `https://data3.site/download?taskId=${taskId}&file_type=${type}`;
 
   const handleDownload = async (): Promise<void> => {
     if (!accessCode.trim()) {
@@ -22,7 +22,9 @@ const DownloadWithCode: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await chatApi.downloadWithCode(accessCode.trim().toUpperCase());
+      const response = await chatApi.downloadWithCode(
+        accessCode.trim().toUpperCase(),
+        taskId, type);
       console.log(response);
       setError('下载成功。');
     } catch (err) {
