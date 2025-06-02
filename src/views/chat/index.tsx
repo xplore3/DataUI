@@ -1,5 +1,5 @@
 import './index.less';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 //import backLeft from '@/assets/icons/back-left.svg';
 import Logo from '@/assets/icons/logo.png';
 import Send from '@/assets/icons/send.svg';
@@ -29,7 +29,7 @@ type Message = {
 };
 
 const Chat = () => {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [messageList, setMessageList] = useState<Message[]>([]);
   const [text, setText] = useState('');
@@ -206,8 +206,9 @@ const Chat = () => {
   );
 
   const handleUserSettings = async () => {
+    navigate('/user');
     // Placeholder for user settings logic
-    console.log('User settings clicked');
+    /*console.log('User settings clicked');
     const corpId = import.meta.env.VITE_WECHAT_CORP_ID;
     const agentId = import.meta.env.VITE_WECOM_AGENT_ID;
     const host = import.meta.env.VITE_API_HOST_URL;
@@ -217,7 +218,7 @@ const Chat = () => {
 
     //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
     const authUrl = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&state=${state}`;
-    window.location.href = authUrl;
+    window.location.href = authUrl;*/
   };
 
   const handleKeyPress = async (key: string) => {
