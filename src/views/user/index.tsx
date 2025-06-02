@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.less';
-import Logo from '@/assets/icons/logo.png';
+import Profile from '@/assets/icons/profile.svg';
 
 interface UserInfo {
   avatar: string;
@@ -128,7 +128,7 @@ const UserCenter = () => {
         退出登录
       </button>
       </>) : (<div className="user-center-login">
-        <img src={Logo} alt="Logo" />
+        <img src={Profile} alt="profile" />
         <p>使用微信扫一扫，授权微信绑定实现与微信Bot的互通使用</p>
         <button className="user-center-login-btn" onClick={onLogin}>
           授权登录
