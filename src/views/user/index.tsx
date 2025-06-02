@@ -72,15 +72,8 @@ const UserCenter = () => {
   };
 
   return (
-    {!isLogin ? (
-      <div className="user-center">
-        <p>使用微信扫一扫，授权登录页面实现与微信Bot的互通使用</p>
-        <button className="user-center-logout" onClick={onLogin}>
-          授权登录
-        </button>
-      </div>
-    ) : ({/* User Center UI */}
     <div className="user-center">
+      {isLogin ? ({/* User Center UI */}
       <div className="user-center-header">
         <img className="user-center-avatar" src={user.avatar} alt="avatar" />
         <div className="user-center-info">
@@ -133,8 +126,13 @@ const UserCenter = () => {
       <button className="user-center-logout" onClick={onLogout}>
         退出登录
       </button>
+      ) : ({
+        <p>使用微信扫一扫，授权登录页面实现与微信Bot的互通使用</p>
+        <button className="user-center-logout" onClick={onLogin}>
+          授权登录
+        </button>
+      )}
     </div>
-    )}
   );
 };
 
