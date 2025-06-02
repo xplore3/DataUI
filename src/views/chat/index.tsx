@@ -5,7 +5,7 @@ import Logo from '@/assets/icons/logo.png';
 import Send from '@/assets/icons/send.svg';
 import SendActive from '@/assets/icons/send-active.svg';
 import LoadingImg from '@/assets/icons/loading.svg';
-import User from '@/assets/icons/user.png';
+import User from '@/assets/icons/user.svg';
 import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react';
 import FooterOperation from '@/components/FooterOperation';
 import { chatApi } from '@/services/chat';
@@ -432,19 +432,21 @@ const Chat = () => {
                 <QuestionForm
                 questions={item.questions}
                 onSubmit={option => {
+                  const str = option.text;
+                  const textAsString = Array.isArray(str) ? str.join("\n") : str;
                   setMessageList(prev => {
                   const newList = [...prev];
                   // 追加用户选择的内容为新消息
                   newList.push({
-                    text: option.text,
+                    text: textAsString,
                     user: 'user',
                     action: 'NONE',
-                    displayText: option.text,
+                    displayText: textAsString,
                   });
                   return newList;
                   });
                   // 发送选择内容
-                  onSend(option.text);
+                  onSend(textAsString);
                 }}
                 />
               )}

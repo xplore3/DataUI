@@ -8,7 +8,7 @@ export interface QuestionItem {
   type: 'single' | 'multiple' | 'text';
   question: string;
   options?: string[];
-  answer: string;
+  answer?: string;
 }
 
 interface DynamicFormProps {
