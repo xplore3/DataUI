@@ -13,6 +13,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';;
 import { ReactSVG } from 'react-svg';
 import { Cron } from "croner";
+import QuestionForm, { QuestionItem } from '@/components/Question';
+import { toast } from 'react-toastify';
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -23,7 +25,7 @@ type Message = {
   displayText: string;
   taskId?: string;
   note?: string;
-  ca?: string;
+  options?: QuestionItem[];
 };
 
 const Chat = () => {
@@ -34,7 +36,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '获取热榜', '人工'];
+  const keyList = ['模板', '获取热榜', '找KOL', '深度分析', '开发信'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -207,13 +209,14 @@ const Chat = () => {
     // Placeholder for user settings logic
     console.log('User settings clicked');
     const corpId = import.meta.env.VITE_WECHAT_CORP_ID;
-    //const appId = import.meta.env.VITE_WECOM_AGENT_ID;
+    const agentId = import.meta.env.VITE_WECOM_AGENT_ID;
     const host = import.meta.env.VITE_API_HOST_URL;
     const authCallback = import.meta.env.VITE_WECOM_AUTH_CALLBACK;
     const redirectUri = encodeURIComponent(host + authCallback);
     const state = 'RandomCSRF';
 
-    const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
+    //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
+    const authUrl = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&state=${state}`;
     window.location.href = authUrl;
   };
 
@@ -250,22 +253,68 @@ const Chat = () => {
         setLoading(false);
       }
     }
-    else if (key === '人工') {
-      window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
-      /*if (loading) return;
+    else if (key === '找KOL') {
+      if (!text.trim()) {
+        toast.error('请输入产品名称/产品链接/产品官网');
+        return;
+      }
+      if (loading) return;
       setLoading(true);
       try {
-        setMessageList(prev => [
-          ...prev,
-          { text: `点击：https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf 进行人工服务`,
-            user: 'client',
-            action: 'NONE', displayText: '' },
-        ]);
+        chatApi.createChat(`根据产品名称/产品链接/产品官网${text}推荐对标网红`).then(res => {
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
-      }*/
+      }
+    }
+    else if (key === '深度分析') {
+      if (!text.trim()) {
+        toast.error('请输入账号名称/账号链接/账号ID');
+        return;
+      }
+      if (loading) return;
+      setLoading(true);
+      try {
+        chatApi.createChat(`根据给定的账号${text}，对其进行深度分析`).then(res => {
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    else if (key === '开发信') {
+      if (!text.trim()) {
+        toast.error('请输入网红名称/网红链接/网红ID');
+        return;
+      }
+      if (loading) return;
+      setLoading(true);
+      try {
+        chatApi.createChat(`针对这个网红${text}，生成一封开发信`).then(res => {
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    else if (key === '人工') {
+      window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
     }
   };
 
@@ -373,10 +422,29 @@ const Chat = () => {
                     });
                   }}
                 />
-              </>
-            )}
-            {item.user === 'agent' && item.displayText === item.text && (
-              <FooterOperation
+              )}
+              {item.options && item.options.length > 0 && (
+                <QuestionForm
+                options={item.options}
+                onSelect={option => {
+                  setMessageList(prev => {
+                  const newList = [...prev];
+                  // 追加用户选择的内容为新消息
+                  newList.push({
+                    text: option.text,
+                    user: 'user',
+                    action: 'NONE',
+                    displayText: option.text,
+                  });
+                  return newList;
+                  });
+                  // 发送选择内容
+                  onSend(option.text);
+                }}
+                />
+              )}
+              {item.user === 'agent' && item.displayText === item.text && (
+                <FooterOperation
                 text={item.text + `|||||${item.note}`}
                 onTranslate={translatedText => {
                   handleTranslate(translatedText, index);
