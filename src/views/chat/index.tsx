@@ -446,7 +446,8 @@ const Chat = () => {
                   return newList;
                   });
                   // 发送选择内容
-                  onSend(textAsString);
+                  //onSend(textAsString);
+                  toast.error('Send ' + textAsString);
                 }}
                 />
               )}
