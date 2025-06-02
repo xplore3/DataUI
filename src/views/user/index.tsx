@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.less';
+import Logo from '@/assets/icons/logo.png';
 
 interface UserInfo {
   avatar: string;
@@ -10,7 +11,7 @@ interface UserInfo {
 }
 
 const mockUser: UserInfo = {
-  avatar: 'https://data3.site/logo.png',
+  avatar: 'https://data3.site/icon128.png',
   nickname: 'John',
   gender: 'Male',
   city: 'Beijing',
@@ -127,7 +128,8 @@ const UserCenter = () => {
         退出登录
       </button>
       </>) : (<div className="user-center-login">
-        <p>使用微信扫一扫，授权登录页面实现与微信Bot的互通使用</p>
+        <img src={Logo} alt="Logo" />
+        <p>使用微信扫一扫，授权微信绑定实现与微信Bot的互通使用</p>
         <button className="user-center-login-btn" onClick={onLogin}>
           授权登录
         </button>
