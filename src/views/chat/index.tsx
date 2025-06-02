@@ -25,7 +25,7 @@ type Message = {
   displayText: string;
   taskId?: string;
   note?: string;
-  options?: QuestionItem[];
+  questions?: QuestionItem[];
 };
 
 const Chat = () => {
@@ -228,7 +228,11 @@ const Chat = () => {
         chatApi.getPromptTemplates().then(res => {
           setMessageList(prev => [
             ...prev,
-            { ...res, displayText: '' },
+            { ...res, displayText: '', questions: [
+              { id: 'template', question: '请选择您的业务领域', type: 'single', options: ['食品饮料', '美容美妆', '健康养生'] },
+              { id: 'product', question: '请输入产品名称/产品链接/产品官网', type: 'text' },
+              { id: 'platform', question: '请选择平台', type: 'multiple', options: ['小红书', '抖音'] }
+            ] },
           ]);
         })
       } catch (error) {
@@ -422,11 +426,12 @@ const Chat = () => {
                     });
                   }}
                 />
+              </>
               )}
-              {item.options && item.options.length > 0 && (
+              {item.questions && item.questions.length > 0 && (
                 <QuestionForm
-                options={item.options}
-                onSelect={option => {
+                questions={item.questions}
+                onSubmit={option => {
                   setMessageList(prev => {
                   const newList = [...prev];
                   // 追加用户选择的内容为新消息
