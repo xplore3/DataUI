@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.less';
 
@@ -126,12 +126,12 @@ const UserCenter = () => {
       <button className="user-center-logout" onClick={onLogout}>
         退出登录
       </button>
-      </>) : (<>
+      </>) : (<div className="user-center-login">
         <p>使用微信扫一扫，授权登录页面实现与微信Bot的互通使用</p>
-        <button className="user-center-logout" onClick={onLogin}>
+        <button className="user-center-login-btn" onClick={onLogin}>
           授权登录
         </button>
-      </>)}
+      </div>)}
     </div>
   );
 };

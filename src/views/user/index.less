@@ -1,14 +1,16 @@
 .user-center {
-  width: 360px;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
   padding: 28px 24px 24px 24px;
   font-family: GeologicaRegular, sans-serif;
   color: #222;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
 }
 
 .user-center-header {
@@ -134,4 +136,28 @@
 }
 .user-center-logout:hover {
   background: #d9363e;
+}
+
+.user-center-login {
+  margin-top: 16px;
+  margin: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.user-center-login-btn {
+  margin-top: 16px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #0958d9;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.user-center-login-btn:hover {
+  background: #0e4295;
 }
