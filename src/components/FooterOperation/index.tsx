@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 interface FooterOperationProps {
   menuList?: Array<'pined' | 'share' | 'bookmark' | 'translate' | 'copy' | 'refresh'>;
   text?: string;
+  onPin?: (text: string) => void;
   onShare?: () => void;
   onBookmark?: () => void;
   onTranslate?: (text: string) => void;

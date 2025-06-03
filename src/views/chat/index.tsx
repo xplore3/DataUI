@@ -15,6 +15,7 @@ import { ReactSVG } from 'react-svg';
 import { Cron } from "croner";
 import QuestionForm, { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
+import PromptPin from './prompt';
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -33,6 +34,9 @@ const Chat = () => {
   const [loading, setLoading] = useState(false);
   const [messageList, setMessageList] = useState<Message[]>([]);
   const [text, setText] = useState('');
+  const [pinPrompt, setPinPrompt] = useState('');
+  const [showPinModal, setShowPinModal] = useState(false);
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
@@ -334,6 +338,15 @@ const Chat = () => {
     [onSend]
   );
 
+  const handlePin = (promptText: string) => {
+    console.log(promptText);
+    // Popup a modal to show the prompt text and allow user to edit it,
+    // then allow user to add a title for the prompt,
+    // and save it to the local storage or send it to the server.
+    setPinPrompt(promptText);
+    setShowPinModal(true);
+  };
+
   const handleTranslate = (translatedText: string, index: number) => {
     console.warn(translatedText);
     isTranslatingRef.current = true;
@@ -391,6 +404,9 @@ const Chat = () => {
 
   return (
     <div className="chat-page ">
+      <PromptPin
+        onPin={() => setShowPinModal(false)}
+      />
       {/* Header */}
       <header className="chat-page-header">
         {/* <img src={backLeft} alt="Back" onClick={() => navigate(-1)} /> */}
@@ -455,6 +471,9 @@ const Chat = () => {
               {item.user === 'agent' && item.displayText === item.text && (
                 <FooterOperation
                 text={item.text + `|||||${item.note}`}
+                onPin={promptText => {
+                  handlePin(promptText, index);
+                }}
                 onTranslate={translatedText => {
                   handleTranslate(translatedText, index);
                 }}

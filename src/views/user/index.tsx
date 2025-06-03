@@ -17,7 +17,8 @@ const mockUser: UserInfo = {
   city: 'Beijing',
 };
 
-const mockAgentProfile = '我是您的数据助手，可以帮你用多种方式获取数据，使用多种方式加工数据';
+const mockAgentProfile = '我是您的数据助手，可以帮你用多种方式获取数据，使用多种方式加工数据;\r\n'
+   + '\r\n--------------------\r\n在这里输入有用的信息，能让Agent更好的帮助你';
 const mockModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
 const mockCurrentModel = 'GPT-3.1';
 
