@@ -405,7 +405,9 @@ const Chat = () => {
   return (
     <div className="chat-page ">
       <PromptPin
-        onPin={() => setShowPinModal(false)}
+        open={showPinModal}
+        promptText={pinPrompt}
+        onClose={() => setShowPinModal(false)}
       />
       {/* Header */}
       <header className="chat-page-header">
@@ -472,7 +474,7 @@ const Chat = () => {
                 <FooterOperation
                 text={item.text + `|||||${item.note}`}
                 onPin={promptText => {
-                  handlePin(promptText, index);
+                  handlePin(promptText);
                 }}
                 onTranslate={translatedText => {
                   handleTranslate(translatedText, index);
