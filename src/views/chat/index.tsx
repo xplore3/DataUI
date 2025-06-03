@@ -473,20 +473,26 @@ const Chat = () => {
               {item.user === 'agent' && item.displayText === item.text && (
                 <FooterOperation
                 text={item.text + `|||||${item.note}`}
-                onPin={promptText => {
-                  handlePin(promptText);
-                }}
                 onTranslate={translatedText => {
                   handleTranslate(translatedText, index);
                 }}
                 onRefresh={handleRefresh}
                 menuList={
                   index === messageList.length - 1 && messageList.length > 1 && item.action !== 'bnbQuery'
-                    ? ['share', 'pined', 'translate', 'copy', 'refresh']
-                    : ['share', 'pined', 'translate', 'copy']
+                    ? ['share', 'translate', 'copy', 'refresh']
+                    : ['share', 'translate', 'copy']
                 }
               />
-            )}
+              )}
+              {item.user === 'user' && item.text.length > 50 && (
+                <FooterOperation
+                  text={item.text}
+                  onPin={promptText => {
+                    handlePin(promptText);
+                  }}
+                  menuList={['pined']}
+                />
+              )}
           </div>
         ))}
       </div>

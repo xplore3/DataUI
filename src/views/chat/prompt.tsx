@@ -30,7 +30,7 @@ const PromptPin = ({
 
   return (
     <Modal
-      title="保存提示词"
+      title="保存为常用功能"
       open={open}
       onOk={handlePinSave}
       onCancel={onClose}

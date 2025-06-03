@@ -64,8 +64,8 @@ const FooterOperation = React.memo<FooterOperationProps>(
 
     return (
       <div className="footer-operation">
-        {menuList.includes('pined') && <ReactSVG className="footer-operation-item" src={Pined} onClick={onPin} />}
-        {menuList.includes('pined') && <div className="text-[8px]"  onClick={onPin}>生成程序</div>}
+        {menuList.includes('pined') && <ReactSVG className="footer-operation-item" src={Pined} onClick={() => onPin?.(text)} />}
+        {menuList.includes('pined') && <div className="text-[8px]"  onClick={() => onPin?.(text)}>生成程序</div>}
         {menuList.includes('share') && <ReactSVG className="footer-operation-item" src={Share} onClick={handleShareClick} />}
         {menuList.includes('copy') &&
           (isCopied ? (
