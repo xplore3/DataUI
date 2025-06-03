@@ -484,7 +484,7 @@ const Chat = () => {
                 }
               />
               )}
-              {item.user === 'user' && item.text.length > 50 && (
+              {item.user === 'user' && item.text?.length > 10 && (
                 <FooterOperation
                   text={item.text}
                   onPin={promptText => {
