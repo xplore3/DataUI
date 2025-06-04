@@ -127,6 +127,32 @@ export const chatApi = {
     };
   },
 
+  addKnowledges: async (userId: string, knowledges: string[]): Promise<Message> => {
+    try {
+      const result = await api.post(`/add_knowledge`, {
+        userId: userId,
+        knowledges: knowledges
+      });
+      console.log(result);
+      let response = result.data;
+      if (result.status != 200) {
+        response = "Error in response " + result.statusText;
+      }
+      return {
+        text: response || '......',
+        user: 'client',
+        action: 'NONE',
+      };
+    } catch (err) {
+      console.log(err);
+    }
+    return {
+      text: 'Error in addKnowledges',
+      user: 'client',
+      action: 'NONE',
+    };
+  },
+
   parseContentDisposition: (contentDisposition: string) => {
     if (!contentDisposition) return null;
 

@@ -20,12 +20,9 @@ export interface UserProfile {
   password:string
   username: string;
   agentname: string;
-  accessToken: string;
+  address: string;
   bio?: string | string[];
-  level: number;
-  experience: number;
-  nextLevelExp: number;
-  points: number;
+  points?: number;
   agentCfg?: {
     enabled: boolean;
     interval: string;

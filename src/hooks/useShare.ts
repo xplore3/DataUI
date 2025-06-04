@@ -6,9 +6,8 @@ const useShare = () => {
   const handleShareClick = (text: string) => {
     const userId = useUserStore.getState().getUserId();
 
-    const accessToken = useUserStore.getState().userProfile?.accessToken;
-    if (userId && accessToken) {
-      toast('Shared on X');
+    if (userId) {
+      toast('Shared');
       console.log(text);
       //watchApi.reTweeted(text, userId ? userId : '');
     } else {

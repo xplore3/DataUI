@@ -1,6 +1,5 @@
 import './index.less';
 import { useNavigate } from 'react-router-dom';
-//import backLeft from '@/assets/icons/back-left.svg';
 import Logo from '@/assets/icons/logo.png';
 import Send from '@/assets/icons/send.svg';
 import SendActive from '@/assets/icons/send-active.svg';
@@ -16,10 +15,12 @@ import { Cron } from "croner";
 import QuestionForm, { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
+import { useUserStore } from '@/stores/useUserStore';
 //import Lang from './lang';
 //import welcome from './welcome';
 
 type Message = {
+  //id: string;
   text: string;
   user: string;
   action: string;
@@ -27,6 +28,7 @@ type Message = {
   taskId?: string;
   note?: string;
   questions?: QuestionItem[];
+  hasSubmit?: boolean;
 };
 
 const Chat = () => {
@@ -36,6 +38,7 @@ const Chat = () => {
   const [text, setText] = useState('');
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
+  //const { userProfile } = useUserStore();
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
@@ -209,20 +212,38 @@ const Chat = () => {
     [text, loading]
   );
 
+  const handleQuestionSend = async (answers: Record<string, string | string[]>, index: number) => {
+    try {
+      if (loading) return;
+      setLoading(true);
+      const userId = useUserStore.getState().getUserId();
+      const result: string[] = Object.entries(answers).map(([key, value]) => {
+        const answer = Array.isArray(value) ? value.join(", ") : value;
+        return `Question: ${key}, Answer: ${answer}`;
+      });
+      chatApi.addKnowledges(userId, result).then(res => {
+        setMessageList(prevData => {
+          const newData = [...prevData];
+          newData[index].hasSubmit = true;
+          return newData;
+        });
+        setMessageList(prev => [
+          ...prev,
+          { ...res, displayText: '' },
+        ]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    }
+    catch (error) {
+      console.error('Error sending question:', error);
+      setLoading(false);
+    }
+  };
+
   const handleUserSettings = async () => {
     navigate('/user');
-    // Placeholder for user settings logic
-    /*console.log('User settings clicked');
-    const corpId = import.meta.env.VITE_WECHAT_CORP_ID;
-    const agentId = import.meta.env.VITE_WECOM_AGENT_ID;
-    const host = import.meta.env.VITE_API_HOST_URL;
-    const authCallback = import.meta.env.VITE_WECOM_AUTH_CALLBACK;
-    const redirectUri = encodeURIComponent(host + authCallback);
-    const state = 'RandomCSRF';
-
-    //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
-    const authUrl = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&state=${state}`;
-    window.location.href = authUrl;*/
   };
 
   const handleKeyPress = async (key: string) => {
@@ -237,7 +258,8 @@ const Chat = () => {
               { id: 'template', question: '请选择您的业务领域', type: 'single', options: ['食品饮料', '美容美妆', '健康养生'] },
               { id: 'product', question: '请输入产品名称/产品链接/产品官网', type: 'text' },
               { id: 'platform', question: '请选择平台', type: 'multiple', options: ['小红书', '抖音'] }
-            ] },
+              ], hasSubmit: false
+            },
           ]);
         })
       } catch (error) {
@@ -449,25 +471,9 @@ const Chat = () => {
               )}
               {item.questions && item.questions.length > 0 && (
                 <QuestionForm
-                questions={item.questions}
-                onSubmit={option => {
-                  const str = option.text;
-                  const textAsString = Array.isArray(str) ? str.join("\n") : str;
-                  setMessageList(prev => {
-                  const newList = [...prev];
-                  // 追加用户选择的内容为新消息
-                  newList.push({
-                    text: textAsString,
-                    user: 'user',
-                    action: 'NONE',
-                    displayText: textAsString,
-                  });
-                  return newList;
-                  });
-                  // 发送选择内容
-                  //onSend(textAsString);
-                  toast.error('Send ' + textAsString);
-                }}
+                  questions={item.questions}
+                  hasSubmit={item.hasSubmit}
+                  onSubmit={(answers) => handleQuestionSend(answers, index)}
                 />
               )}
               {item.user === 'agent' && item.displayText === item.text && (

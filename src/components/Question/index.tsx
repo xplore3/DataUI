@@ -13,10 +13,11 @@ export interface QuestionItem {
 
 interface DynamicFormProps {
   questions: QuestionItem[];
+  hasSubmit: boolean;
   onSubmit: (answers: Record<string, string | string[]>) => void;
 }
 
-const QuestionForm: React.FC<DynamicFormProps> = ({ questions, onSubmit }) => {
+const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, onSubmit }) => {
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
 
   const handleChange = (id: string, value: string | string[]) => {
@@ -87,7 +88,7 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, onSubmit }) => {
           </li>
         ))}
       </ul>
-      <button type="submit" className="question-submit">
+      <button type="submit" className={hasSubmit ? "question-submit-disabled" : "question-submit"} disabled={!hasSubmit}>
         提交
       </button>
     </form>
