@@ -27,16 +27,17 @@ const UserCenter = () => {
   const user: UserInfo = mockUser;
   const agentProfile = mockAgentProfile;
   const modelList = mockModelList;
-  const currentModel = mockCurrentModel;
 
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState(agentProfile);
   const [isLogin, setIsLogin] = useState(true);
+  const [currentModel, setCurrentModel] = useState(mockCurrentModel);
   const navigate = useNavigate();
 
   const onModelChange = (model: string) => {
     //
     console.log(`Model changed to: ${model}`);
+    setCurrentModel(model);
   };
 
   const onProfileChange = (profile: string) => {
