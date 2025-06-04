@@ -28,6 +28,7 @@ type Message = {
   taskId?: string;
   note?: string;
   questions?: QuestionItem[];
+  answers?: Record<string, string | string[]>;
   hasSubmit?: boolean;
 };
 
@@ -216,7 +217,7 @@ const Chat = () => {
     try {
       if (loading) return;
       setLoading(true);
-      const userId = useUserStore.getState().getUserId();
+      const userId = useUserStore.getState().getUserId() || 'user';
       const result: string[] = Object.entries(answers).map(([key, value]) => {
         const answer = Array.isArray(value) ? value.join(", ") : value;
         return `Question: ${key}, Answer: ${answer}`;
@@ -224,6 +225,7 @@ const Chat = () => {
       chatApi.addKnowledges(userId, result).then(res => {
         setMessageList(prevData => {
           const newData = [...prevData];
+          newData[index].answers = answers;
           newData[index].hasSubmit = true;
           return newData;
         });
@@ -472,7 +474,7 @@ const Chat = () => {
               {item.questions && item.questions.length > 0 && (
                 <QuestionForm
                   questions={item.questions}
-                  hasSubmit={item.hasSubmit}
+                  hasSubmit={item.hasSubmit || false}
                   onSubmit={(answers) => handleQuestionSend(answers, index)}
                 />
               )}

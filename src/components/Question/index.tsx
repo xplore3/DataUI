@@ -88,7 +88,7 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, onSubm
           </li>
         ))}
       </ul>
-      <button type="submit" className={hasSubmit ? "question-submit-disabled" : "question-submit"} disabled={!hasSubmit}>
+      <button type="submit" className={hasSubmit ? "question-submit-disabled" : "question-submit"} disabled={hasSubmit}>
         提交
       </button>
     </form>
