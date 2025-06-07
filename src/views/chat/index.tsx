@@ -12,7 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';;
 import { ReactSVG } from 'react-svg';
 import { Cron } from "croner";
-import QuestionForm, { QuestionItem } from '@/components/Question';
+import  { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
 import { useUserStore } from '@/stores/useUserStore';
@@ -213,36 +213,7 @@ const Chat = () => {
     [text, loading]
   );
 
-  const handleQuestionSend = async (answers: Record<string, string | string[]>, index: number) => {
-    try {
-      if (loading) return;
-      setLoading(true);
-      const userId = useUserStore.getState().getUserId() || 'user';
-      const result: string[] = Object.entries(answers).map(([key, value]) => {
-        const answer = Array.isArray(value) ? value.join(", ") : value;
-        return `Question: ${key}, Answer: ${answer}`;
-      });
-      chatApi.addKnowledges(userId, result).then(res => {
-        setMessageList(prevData => {
-          const newData = [...prevData];
-          newData[index].answers = answers;
-          newData[index].hasSubmit = true;
-          return newData;
-        });
-        setMessageList(prev => [
-          ...prev,
-          { ...res, displayText: '' },
-        ]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-    }
-    catch (error) {
-      console.error('Error sending question:', error);
-      setLoading(false);
-    }
-  };
+
 
   const handleUserSettings = async () => {
     navigate('/user');
@@ -257,9 +228,7 @@ const Chat = () => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '', questions: [
-              { id: 'template', question: '请选择您的业务领域', type: 'single', options: ['食品饮料', '美容美妆', '健康养生'] },
-              { id: 'product', question: '请输入产品名称/产品链接/产品官网', type: 'text' },
-              { id: 'platform', question: '请选择平台', type: 'multiple', options: ['小红书', '抖音'] }
+
               ], hasSubmit: false
             },
           ]);
@@ -471,13 +440,13 @@ const Chat = () => {
                 />
               </>
               )}
-              {item.questions && item.questions.length > 0 && (
+              {/* {item.questions && item.questions.length > 0 && (
                 <QuestionForm
                   questions={item.questions}
                   hasSubmit={item.hasSubmit || false}
                   onSubmit={(answers) => handleQuestionSend(answers, index)}
                 />
-              )}
+              )} */}
               {item.user === 'agent' && item.displayText === item.text && (
                 <FooterOperation
                 text={item.text + `|||||${item.note}`}

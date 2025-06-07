@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.less';
 import Profile from '@/assets/icons/profile.svg';
+import QuestionForm from '@/components/Question';
+import { useUserStore } from '@/stores/useUserStore';
+import { chatApi } from '@/services/chat';
 
 interface UserInfo {
   avatar: string;
@@ -32,7 +35,38 @@ const UserCenter = () => {
   const [profile, setProfile] = useState(agentProfile);
   const [isLogin, setIsLogin] = useState(true);
   const [currentModel, setCurrentModel] = useState(mockCurrentModel);
+  const questions = [
+    { id: 'template', question: '请选择您的业务领域', type: 'single', options: ['食品饮料', '美容美妆', '健康养生'] },
+    { id: 'product', question: '请输入产品名称/产品链接/产品官网', type: 'text' },
+    { id: 'platform', question: '请选择平台', type: 'multiple', options: ['小红书', '抖音'] }
+  ];
+
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+
+  const handleQuestionSend = async (answers: Record<string, string | string[]>, index: number) => {
+    try {
+      if (loading) return;
+      setLoading(true);
+      const userId = useUserStore.getState().getUserId() || 'user';
+      const result: string[] = Object.entries(answers).map(([key, value]) => {
+        const answer = Array.isArray(value) ? value.join(", ") : value;
+        return `Question: ${key}, Answer: ${answer}`;
+      });
+      chatApi.addKnowledges(userId, result).then(res => {
+        console.log(res);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    }
+    catch (error) {
+      console.error('Error sending question:', error);
+      setLoading(false);
+    }
+  };
+
 
   const onModelChange = (model: string) => {
     //
@@ -122,7 +156,8 @@ const UserCenter = () => {
           ))}
         </select>
       </div>
-      <div className="user-center-section user-center-links">
+      <QuestionForm questions={questions} hasSubmit={false} onSubmit={handleQuestionSend}></QuestionForm>
+      <div className="user-center-section user-center-links" style={{ marginTop: '20px' }}>
         <button className="user-center-link" onClick={onAbout}>关于</button>
         <button className="user-center-link" onClick={onHelp}>帮助与说明</button>
       </div>
