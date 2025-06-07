@@ -252,6 +252,23 @@ export const chatApi = {
     }
   },
 
+  // 生成新的下载链接（假接口）
+  generateNewLink: async (taskId: string, fileType: string): Promise<string> => {
+    try {
+      // 模拟API调用延迟
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // 模拟生成新的链接
+      const newTaskId = `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const newDownloadUrl = `https://data3.site/download?taskId=${newTaskId}&file_type=${fileType}`;
+      
+      return newDownloadUrl;
+    } catch (error) {
+      console.error('生成新链接失败:', error);
+      throw new Error('生成新链接失败，请稍后再试');
+    }
+  },
+
   async translateText(text: string): Promise<string> {
     try {
       //console.log('translateText: 000 ', text);

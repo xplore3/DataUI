@@ -7,10 +7,11 @@ const DownloadWithCode: React.FC = () => {
   const [accessCode, setAccessCode] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isGeneratingLink, setIsGeneratingLink] = useState<boolean>(false);
   const searchParams = new URLSearchParams(window.location.search);
   const taskId = searchParams.get("taskId") || "";
   const type = searchParams.get("file_type") || "data";
-  const downloadUrl = `https://data3.site/download?taskId=${taskId}&file_type=${type}`;
+  const [currentDownloadUrl, setCurrentDownloadUrl] = useState<string>(`https://data3.site/download?taskId=${taskId}&file_type=${type}`);
 
   const handleDownload = async (): Promise<void> => {
     if (!accessCode.trim()) {
@@ -35,6 +36,23 @@ const DownloadWithCode: React.FC = () => {
     }
   };
 
+  const handleGenerateNewLink = async (): Promise<void> => {
+    setError('');
+    setIsGeneratingLink(true);
+
+    try {
+      const newDownloadUrl = await chatApi.generateNewLink(taskId, type);
+      setCurrentDownloadUrl(newDownloadUrl);
+      setError('新链接生成成功！');
+    } catch (err: unknown) {
+      console.error('生成新链接失败:', err);
+      const errorMessage = err instanceof Error ? err.message : '生成新链接失败，请稍后再试。';
+      setError(errorMessage);
+    } finally {
+      setIsGeneratingLink(false);
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       handleDownload();
@@ -46,8 +64,9 @@ const DownloadWithCode: React.FC = () => {
       <h2>文件下载</h2>
       <div className="file-url-info">
         <label>文件链接:</label>
-        <a href={downloadUrl} className="url-display">{downloadUrl}</a>
+        <a href={currentDownloadUrl} className="url-display">{currentDownloadUrl}</a>
       </div>
+
       <div className="input-group">
         <input
           type="text"
@@ -72,6 +91,23 @@ const DownloadWithCode: React.FC = () => {
           )}
         </button>
       </div>
+
+      <div className="generate-link-section">
+        <button 
+          onClick={handleGenerateNewLink}
+          disabled={isGeneratingLink}
+          className={`generate-link-btn ${isGeneratingLink ? 'loading' : ''}`}
+        >
+          {isGeneratingLink ? (
+            <>
+              <span className="spinner" /> 生成中...
+            </>
+          ) : (
+            '生成新链接'
+          )}
+        </button>
+      </div>
+
       {error && <div className="error-message">{error}</div>}
     </div>
   );
