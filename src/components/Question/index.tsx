@@ -19,6 +19,7 @@ interface DynamicFormProps {
 
 const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, onSubmit }) => {
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
+  const [customInputs, setCustomInputs] = useState<Record<string, string>>({});
 
   const handleChange = (id: string, value: string | string[]) => {
     setAnswers((prev) => ({ ...prev, [id]: value }));
@@ -32,11 +33,44 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, onSubm
         : prevArr.filter((item) => item !== option);
       return { ...prev, [id]: newArr };
     });
+    
+    // 如果取消选择"其他"相关选项，清空对应的自定义输入
+    if (!checked && (option.includes('其他') || option.includes('自填'))) {
+      setCustomInputs((prev) => {
+        const newInputs = { ...prev };
+        delete newInputs[`${id}-${option}`];
+        return newInputs;
+      });
+    }
+  };
+
+  const handleCustomInputChange = (key: string, value: string) => {
+    setCustomInputs((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const isCustomOption = (option: string) => {
+    return option.includes('其他') || option.includes('自填');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(answers);
+    
+    // 合并answers和customInputs
+    const finalAnswers = { ...answers };
+    Object.entries(customInputs).forEach(([key, value]) => {
+      if (value.trim()) {
+        const [questionId, option] = key.split('-', 2);
+        if (Array.isArray(finalAnswers[questionId])) {
+          const answerArray = finalAnswers[questionId] as string[];
+          const index = answerArray.findIndex(ans => ans === option);
+          if (index !== -1) {
+            answerArray[index] = `${option}: ${value}`;
+          }
+        }
+      }
+    });
+    
+    onSubmit(finalAnswers);
   };
 
   return (
@@ -64,16 +98,26 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, onSubm
             {q.type === 'multiple' && q.options && (
               <div className="question-options">
                 {q.options.map((opt) => (
-                  <label key={opt} className="question-option">
-                    <input
-                      type="checkbox"
-                      name={`${q.id}-${opt}`}
-                      value={opt}
-                      checked={Array.isArray(answers[q.id]) && (answers[q.id] as string[]).includes(opt)}
-                      onChange={(e) => handleOptionChange(q.id, opt, e.target.checked)}
-                    />
-                    {opt}
-                  </label>
+                  <div key={opt} >
+                    <label className="question-option">
+                      <input
+                        type="checkbox"
+                        name={`${q.id}-${opt}`}
+                        value={opt}
+                        checked={Array.isArray(answers[q.id]) && (answers[q.id] as string[]).includes(opt)}
+                        onChange={(e) => handleOptionChange(q.id, opt, e.target.checked)}
+                      />
+                      {opt}
+                    </label>
+                    {isCustomOption(opt) && Array.isArray(answers[q.id]) && (answers[q.id] as string[]).includes(opt) && (
+                      <textarea
+                        className="question-custom-input"
+                        placeholder="请输入具体内容"
+                        value={customInputs[`${q.id}-${opt}`] || ''}
+                        onChange={(e) => handleCustomInputChange(`${q.id}-${opt}`, e.target.value)}
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
             )}
