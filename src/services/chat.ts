@@ -125,9 +125,7 @@ export const chatApi = {
   getPromptTemplates: async (): Promise<Message> => {
     try {
       const userId = chatApi.getUserId();
-      const result = await api.get(`/prompt_templates?userId=${userId}`, {
-        useId: chatApi.getUserId(),
-      });
+      const result = await api.get(`/prompt_templates?userId=${userId}`, {});
       console.log(result);
       let response = result.data;
       if (result.status != 200) {

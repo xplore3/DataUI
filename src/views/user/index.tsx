@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './index.less';
 import Profile from '@/assets/icons/profile.svg';
 import QuestionForm from '@/components/Question';
-import { useUserStore } from '@/stores/useUserStore';
+//import { useUserStore } from '@/stores/useUserStore';
 import { chatApi } from '@/services/chat';
 
 interface UserInfo {
