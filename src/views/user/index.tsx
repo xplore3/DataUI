@@ -120,12 +120,11 @@ const UserCenter = () => {
     try {
       if (loading || isFormSubmitted) return;
       setLoading(true);
-      const userId = useUserStore.getState().getUserId() || 'user';
       const result: string[] = Object.entries(answers).map(([key, value]) => {
         const answer = Array.isArray(value) ? value.join(", ") : value;
         return `Question: ${key}, Answer: ${answer}`;
       });
-      chatApi.addKnowledges(userId, result).then(res => {
+      chatApi.addKnowledges(result).then(res => {
         console.log(res);
         // 保存成功后设置本地缓存和显示成功消息
         localStorage.setItem('trendmuse_form_submitted', 'true');
@@ -158,9 +157,8 @@ const UserCenter = () => {
     try {
       if (loading) return;
       setLoading(true);
-      const userId = useUserStore.getState().getUserId() || 'user';
       const result: string[] = [`Agent Profile: ${profile}`];
-      chatApi.addKnowledges(userId, result).then(res => {
+      chatApi.addKnowledges(result).then(res => {
         console.log(res);
       })
       .finally(() => {

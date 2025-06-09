@@ -3,6 +3,23 @@ import { Chat, Message } from '../types/chat';
 import { useUserStore } from '@/stores/useUserStore';
 
 export const chatApi = {
+  getOrCreateUUID: () => {
+    let uuid = localStorage.getItem('device_uuid');
+    if (!uuid) {
+      uuid = crypto.randomUUID();
+      localStorage.setItem('device_uuid', uuid);
+    }
+    return uuid;
+  },
+
+  getUserId: ():string => {
+    let userId = useUserStore.getState().getUserId();
+    if (!userId) {
+      userId = chatApi.getOrCreateUUID();
+    }
+    return userId;
+  },
+
   // chat with cuckoo, send message to cuckoo and get response
   getChatList: async (): Promise<Chat[]> => {
     const response = await api.get<{ chats: Chat[] }>('/chat/list');
@@ -15,6 +32,7 @@ export const chatApi = {
       const result = await api.post(`/message`, {
         text: initialMessage,
         taskId,
+        useId: chatApi.getUserId(),
       });
       let response = result.data.text;
       if (result.status != 200) {
@@ -106,7 +124,10 @@ export const chatApi = {
 
   getPromptTemplates: async (): Promise<Message> => {
     try {
-      const result = await api.get(`/prompt_templates`, {});
+      const userId = chatApi.getUserId();
+      const result = await api.get(`/prompt_templates?userId=${userId}`, {
+        useId: chatApi.getUserId(),
+      });
       console.log(result);
       let response = result.data;
       if (result.status != 200) {
@@ -127,10 +148,10 @@ export const chatApi = {
     };
   },
 
-  addKnowledges: async (userId: string, knowledges: string[]): Promise<Message> => {
+  addKnowledges: async ( knowledges: string[]): Promise<Message> => {
     try {
       const result = await api.post(`/add_knowledge`, {
-        userId: userId,
+        useId: chatApi.getUserId(),
         knowledges: knowledges
       });
       console.log(result);
