@@ -32,7 +32,7 @@ export const chatApi = {
       const result = await api.post(`/message`, {
         text: initialMessage,
         taskId,
-        useId: chatApi.getUserId(),
+        userId: chatApi.getUserId(),
       });
       let response = result.data.text;
       if (result.status != 200) {
@@ -149,7 +149,7 @@ export const chatApi = {
   addKnowledges: async ( knowledges: string[]): Promise<Message> => {
     try {
       const result = await api.post(`/add_knowledge`, {
-        useId: chatApi.getUserId(),
+        userId: chatApi.getUserId(),
         knowledges: knowledges
       });
       console.log(result);
