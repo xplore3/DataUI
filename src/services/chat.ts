@@ -257,6 +257,7 @@ export const chatApi = {
     try {
       // 模拟API调用延迟
       await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log(taskId, fileType);
       
       // 模拟生成新的链接
       const newTaskId = `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

@@ -15,7 +15,7 @@ import { Cron } from "croner";
 import  { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
-import { useUserStore } from '@/stores/useUserStore';
+//import { useUserStore } from '@/stores/useUserStore';
 //import Lang from './lang';
 //import welcome from './welcome';
 
