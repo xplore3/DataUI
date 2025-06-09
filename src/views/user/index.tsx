@@ -20,21 +20,22 @@ const mockUser: UserInfo = {
   city: 'Beijing',
 };
 
-const mockAgentProfile = '我是您的数据助手，可以帮你用多种方式获取数据，使用多种方式加工数据;\r\n'
-   + '\r\n--------------------\r\n在这里输入有用的信息，能让Agent更好的帮助你';
-const mockModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
-const mockCurrentModel = 'GPT-3.1';
+const defAgentProfile = `你是TrendMuse，全能的【小红书】数据获取/加工专家；运营内容透视、洞察、互动助手。
+   根据我的需求，你能从数据源API库中获取任何数据、可以进行数据的筛选、过滤、搜索、导出、下载、维度发现、维度分析、总结、仿写等。
+   + '\r\n--------------------\r\n在这里输入有用的信息，能让Agent更好的帮助你`;
+const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
+const defCurrentModel = 'GPT-3.1';
 
 const UserCenter = () => {
 
   const user: UserInfo = mockUser;
-  const agentProfile = mockAgentProfile;
-  const modelList = mockModelList;
+  const agentProfile = defAgentProfile;
+  const modelList = defModelList;
 
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState(agentProfile);
   const [isLogin, setIsLogin] = useState(true);
-  const [currentModel, setCurrentModel] = useState(mockCurrentModel);
+  const [currentModel, setCurrentModel] = useState(defCurrentModel);
   const [isFormSubmitted, setIsFormSubmitted] = useState(() => {
     return localStorage.getItem('trendmuse_form_submitted') === 'true';
   });
@@ -154,6 +155,22 @@ const UserCenter = () => {
     console.log(`Profile updated: ${profile}`);
     setProfile(profile);
     setEditing(false);
+    try {
+      if (loading) return;
+      setLoading(true);
+      const userId = useUserStore.getState().getUserId() || 'user';
+      const result: string[] = [`Agent Profile: ${profile}`];
+      chatApi.addKnowledges(userId, result).then(res => {
+        console.log(res);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    }
+    catch (error) {
+      console.error('Error sending profile:', error);
+      setLoading(false);
+    }
   };
 
   const onAbout = () => {
