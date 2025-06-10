@@ -108,7 +108,7 @@ export const chatApi = {
         console.log(err);
       }
       return {
-        text: response || 'Processing ......',
+        text: response || '还在处理中哦～这个问题的信息量有点大，我正在尽力生成最有价值的答案！',
         user: 'client',
         action: 'NONE',
       };

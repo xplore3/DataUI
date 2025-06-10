@@ -20,7 +20,7 @@ const mockUser: UserInfo = {
   city: 'Beijing',
 };
 
-const defAgentProfile = `你是TrendMuse，全能的【小红书】数据获取/加工专家；运营内容透视、洞察、互动助手。
+const defAgentProfile = `你是TrendMuse，全能的运营数据获取/加工专家；运营内容透视、洞察、互动助手。
    根据我的需求，你能从数据源API库中获取任何数据、可以进行数据的筛选、过滤、搜索、导出、下载、维度发现、维度分析、总结、仿写等。
    \r\n--------------------\r\n在这里输入有用的信息，能让Agent更好的帮助你`;
 const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
@@ -193,6 +193,8 @@ const UserCenter = () => {
     const state = 'RandomCSRF';
 
     setIsLogin(true);
+    //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_base&state=${state}&agentid=${agentId}#wechat_redirect`;
+    //const authUrl = `https://open.weixin.qq.com/connect/qrconnect?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_login&state=${state}#wechat_redirect`;
     //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
     const authUrl = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&state=${state}`;
     window.location.href = authUrl;
