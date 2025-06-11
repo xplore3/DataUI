@@ -221,7 +221,6 @@ const Chat = () => {
   );
 
 
-
   const handleUserSettings = async () => {
     navigate('/user');
   };
@@ -241,10 +240,11 @@ const Chat = () => {
             },
           ]);
         })
+        .finally(() => {
+          setLoading(false);
+        });
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     }
     else if (key === '获取热榜') {
@@ -258,10 +258,11 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
+        .finally(() => {
+          setLoading(false);
+        });
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     }
     else if (key === '找KOL') {
@@ -279,10 +280,11 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
+        .finally(() => {
+          setLoading(false);
+        });
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     }
     else if (key === '账号分析') {
@@ -301,10 +303,11 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
+        .finally(() => {
+          setLoading(false);
+        });
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     }
     else if (key === '开发信') {
@@ -323,10 +326,11 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
+        .finally(() => {
+          setLoading(false);
+        });
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     }
     else if (key === '人工') {
