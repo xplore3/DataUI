@@ -248,6 +248,7 @@ const Chat = () => {
       }
     }
     else if (key === '获取热榜') {
+      toast('正在获取热榜，请稍候......');
       if (loading) return;
       setLoading(true);
       try {
