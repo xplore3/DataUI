@@ -228,6 +228,7 @@ const Chat = () => {
 
   const handleKeyPress = async (key: string) => {
     if (key === '模板') {
+      toast('正在获取模板，请稍候......');
       if (loading) return;
       setLoading(true);
       try {
@@ -263,6 +264,7 @@ const Chat = () => {
       }
     }
     else if (key === '找KOL') {
+      toast('正在根据产品信息获取对标网红KOC，请稍候......');
       /*if (!text.trim()) {
         toast.error('请输入产品名称/产品链接/产品官网');
         return;
@@ -288,6 +290,7 @@ const Chat = () => {
         setText('请输入账号名称/账号链接/账号ID');
         return;
       }
+      toast(`正在根据给定的账号${text}，对其进行深度分析，请稍候......`);
       if (loading) return;
       setLoading(true);
       try {
@@ -309,6 +312,7 @@ const Chat = () => {
         setText('请输入网红名称/网红链接/网红ID');
         return;
       }
+      toast(`正在根据网红${text}，生成一封开发信，请稍候......`);
       if (loading) return;
       setLoading(true);
       try {
