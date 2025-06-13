@@ -469,7 +469,9 @@ const Chat = () => {
               {item.options && item.options.length > 0 && (
                 <div className="options-view">
                 {item.options.map((option) => (
-                  <button className={item.hasSubmit ? "option-button-disabled" : "option-button"} disabled={item.hasSubmit} onClick={() => onSend(option)}>
+                  <button className={item.hasSubmit ? "option-button-disabled" : "option-button"}
+                    disabled={item.hasSubmit}
+                    onClick={() => { item.hasSubmit = true; onSend(option); }}>
                     {option}
                   </button>
                 ))}
