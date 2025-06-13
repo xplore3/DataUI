@@ -53,6 +53,7 @@ export const chatApi = {
         }
       } catch (err) {
         console.log(err);
+        response = response.question_description || response.question_answer || response;
       }
       return {
         text: response,
