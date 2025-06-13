@@ -467,11 +467,13 @@ const Chat = () => {
                 />
               )} */}
               {item.options && item.options.length > 0 && (
+                <div className="options-view">
                 {item.options.map((option) => (
-                  <button className={hasSubmit ? "option-button-disabled" : "option-button"} disabled={hasSubmit} onClick={() => onSend(option)}>
-                    option
+                  <button className={item.hasSubmit ? "option-button-disabled" : "option-button"} disabled={item.hasSubmit} onClick={() => onSend(option)}>
+                    {option}
                   </button>
                 ))}
+                </div>
               )}
               {item.user === 'agent' && item.displayText === item.text && (
                 <FooterOperation
