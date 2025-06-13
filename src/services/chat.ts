@@ -44,11 +44,11 @@ export const chatApi = {
         if (json) {
           useUserStore.getState().setTaskId(json.taskId);
           if (json.need_more) {
-            response = `${json.question_answer}`;
+            response = json.question_description || json.question_answer;
             options = json.available_options;
           }
           else {
-            response = json.question_answer;
+            response = json.question_description || json.question_answer;
           }
         }
       } catch (err) {
