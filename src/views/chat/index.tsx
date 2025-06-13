@@ -27,6 +27,7 @@ type Message = {
   displayText: string;
   taskId?: string;
   note?: string;
+  options?: string[];
   questions?: QuestionItem[];
   answers?: Record<string, string | string[]>;
   hasSubmit?: boolean;
@@ -465,6 +466,13 @@ const Chat = () => {
                   onSubmit={(answers) => handleQuestionSend(answers, index)}
                 />
               )} */}
+              {item.options && item.options.length > 0 && (
+                {item.options.map((option) => (
+                  <button className={hasSubmit ? "option-button-disabled" : "option-button"} disabled={hasSubmit} onClick={() => onSend(option)}>
+                    option
+                  </button>
+                ))}
+              )}
               {item.user === 'agent' && item.displayText === item.text && (
                 <FooterOperation
                 text={item.text + `|||||${item.note}`}

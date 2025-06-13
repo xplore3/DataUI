@@ -34,6 +34,7 @@ export const chatApi = {
         taskId,
         userId: chatApi.getUserId(),
       });
+      let options = [];
       let response = result.data.text;
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
@@ -44,6 +45,7 @@ export const chatApi = {
           useUserStore.getState().setTaskId(json.taskId);
           if (json.need_more) {
             response = `${json.question_description}\n\n${json.available_options.join('\n\r')}`;
+            options = json.available_options;
           }
           else {
             response = json.question_description;
@@ -56,6 +58,7 @@ export const chatApi = {
         text: response,
         user: 'agent',
         action: 'NONE',
+        options: options,
       };
     } catch (err) {
       console.log(err);
