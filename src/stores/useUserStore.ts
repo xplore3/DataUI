@@ -7,14 +7,17 @@ interface UserState {
   taskIdExpired: number | 0;
   userProfile: UserProfile | null;
   isAuthenticated: boolean;
+  originInput: string | null;
 
   login: (userProfile: UserProfile) => void;
   logout: () => void;
   setTaskId: (taskId: string) => void;
+  setOriginInput: (input: string) => void;
   updateProfile: (profile: Partial<UserProfile>) => void;
 
   getUserId: () => string | null;
   getTaskId: () => string | null;
+  getOriginInput: () => string | null;
 }
 
 export const useUserStore = create<UserState>()(
@@ -25,6 +28,7 @@ export const useUserStore = create<UserState>()(
       taskIdExpired: 0,
       userProfile: null,
       isAuthenticated: false,
+      originInput: null;
 
       login: userProfile => {
         set({
@@ -32,6 +36,7 @@ export const useUserStore = create<UserState>()(
           taskIdExpired: 0,
           userProfile,
           isAuthenticated: true,
+          originInput: null;
         });
       },
 
@@ -41,6 +46,7 @@ export const useUserStore = create<UserState>()(
           taskIdExpired: 0,
           userProfile: null,
           isAuthenticated: false,
+          originInput: null;
         });
       },
 
@@ -48,6 +54,12 @@ export const useUserStore = create<UserState>()(
         set({
           taskId: taskId,
           taskIdExpired: Date.now(),
+        });
+      },
+
+      setOrginInput: input => {
+        set({
+          originInput: input,
         });
       },
 
@@ -67,7 +79,8 @@ export const useUserStore = create<UserState>()(
            return null;
         }
         return get().taskId || null;
-      }
+      },
+      getOriginInput: () => get().originInput || null,
     }),
     {
       name: 'user-store', // Key used in localStorage
@@ -76,6 +89,7 @@ export const useUserStore = create<UserState>()(
         taskIdExpired: state.taskIdExpired,
         userProfile: state.userProfile,
         isAuthenticated: state.isAuthenticated,
+        originInput: state.originInput,
       }),
     }
   )

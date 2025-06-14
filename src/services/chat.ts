@@ -43,16 +43,12 @@ export const chatApi = {
         const json = JSON.parse(response);
         if (json) {
           useUserStore.getState().setTaskId(json.taskId);
-          if (json.need_more) {
-            response = json.data_result || json.question_description || json.question_answer;
-            options = json.intention_options || json.available_options;
-          }
-          else {
-            response = json.data_result || json.question_description || json.question_answer;
-          }
+          options = json.intention_options || json.available_options;
+          response = json.data_result || json.question_description || json.question_answer;
         }
       } catch (err) {
         console.log(err);
+        options = response.intention_options || response.available_options;
         response = response.data_result || response.question_description || response.question_answer || response;
       }
       return {
@@ -85,6 +81,47 @@ export const chatApi = {
 //     };
 //   },
 
+  dataProcess: async (option: string, origin_input: string): Promise<Message> => {
+    try {
+      const taskId = useUserStore.getState().getTaskId();
+      const result = await api.post(`/data_process`, {
+        text: option,
+        origin_input,
+        taskId,
+        userId: chatApi.getUserId(),
+      });
+      let options = [];
+      let response = result.data.text;
+      if (result.status != 200) {
+        response = "Error in response " + result.statusText;
+      }
+      try {
+        const json = JSON.parse(response);
+        if (json) {
+          useUserStore.getState().setTaskId(json.taskId);
+          options = json.intention_options;
+          response = json.data_result || json.question_description || json.question_answer;
+        }
+      } catch (err) {
+        console.log(err);
+        options = response.intention_options;
+        response = response.data_result || response.question_description || response.question_answer || response;
+      }
+      return {
+        text: response,
+        user: 'agent',
+        action: 'NONE',
+        options: options,
+      };
+    } catch (err) {
+      console.log(err);
+    }
+    return {
+      text: 'No result is available. Please check.',
+      user: 'agent',
+      action: 'NONE',
+    };
+  },
 
   deleteChat: async (chatId: string): Promise<void> => {
     await api.delete(`/chat/${chatId}`);

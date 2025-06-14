@@ -15,7 +15,7 @@ import { Cron } from "croner";
 import  { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
-//import { useUserStore } from '@/stores/useUserStore';
+import { useUserStore } from '@/stores/useUserStore';
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -221,6 +221,53 @@ const Chat = () => {
     [text, loading]
   );
 
+  // Data Process
+  const onDataProcess = useCallback(
+    async (overrideText?: string) => {
+      const finalText = overrideText || text;
+      if (!finalText.trim() || loading) return;
+
+      // checkResp per 10 seconds
+      let jobSkip = false;
+      const job = new Cron("*/30 * * * * *", async () => {
+        console.log(`Response check at ${new Date().toISOString()}`);
+        if (jobSkip) {
+          return;
+        }
+        chatApi.checkTaskStatus().then(res => {
+          if (jobSkip) {
+            return;
+          }
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
+      });
+
+      setLoading(true);
+      setText('');
+      setMessageList(prev => [
+        ...prev,
+        { text: finalText, user: 'user', action: 'NONE', displayText: finalText },
+      ]);
+      const origin_input = useUserStore.getState().getOriginInput();
+      chatApi
+        .dataProcess(finalText, origin_input)
+        .then(res => {
+          jobSkip = true;
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
+        .finally(() => {
+          job.stop();
+          setLoading(false);
+        });
+    },
+    [text, loading]
+  );
 
   const handleUserSettings = async () => {
     navigate('/user');
@@ -345,6 +392,7 @@ const Chat = () => {
       if (e.key === 'Enter' && !e.altKey) {
         e.preventDefault();
         onSend();
+        useUserStore.getState().setOriginInput(text);
       }
     },
     [onSend]
@@ -471,7 +519,7 @@ const Chat = () => {
                 {item.options.map((option) => (
                   <button className={item.hasSubmit ? "option-button-disabled" : "option-button"}
                     disabled={item.hasSubmit}
-                    onClick={() => { item.hasSubmit = true; onSend(option); }}>
+                    onClick={() => { item.hasSubmit = true; onDataProcess(option); }}>
                     {option}
                   </button>
                 ))}
@@ -524,6 +572,7 @@ const Chat = () => {
               alt="Send"
               onClick={() => {
                 onSend();
+                useUserStore.getState().setOriginInput(text);
               }}
             />
           )}
