@@ -48,6 +48,7 @@ export const chatApi = {
         }
       } catch (err) {
         console.log(err);
+        useUserStore.getState().setTaskId(response.taskId);
         options = response.intention_options || response.available_options;
         response = response.data_result || response.question_description || response.question_answer || response;
       }
@@ -98,7 +99,6 @@ export const chatApi = {
       try {
         const json = JSON.parse(response);
         if (json) {
-          useUserStore.getState().setTaskId(json.taskId);
           options = json.intention_options;
           response = json.data_result || json.question_description || json.question_answer;
         }
