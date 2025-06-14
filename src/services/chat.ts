@@ -44,16 +44,16 @@ export const chatApi = {
         if (json) {
           useUserStore.getState().setTaskId(json.taskId);
           if (json.need_more) {
-            response = json.question_description || json.question_answer;
-            options = json.available_options;
+            response = json.data_result || json.question_description || json.question_answer;
+            options = json.intention_options || json.available_options;
           }
           else {
-            response = json.question_description || json.question_answer;
+            response = json.data_result || json.question_description || json.question_answer;
           }
         }
       } catch (err) {
         console.log(err);
-        response = response.question_description || response.question_answer || response;
+        response = response.data_result || response.question_description || response.question_answer || response;
       }
       return {
         text: response,
