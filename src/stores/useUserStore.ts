@@ -28,7 +28,7 @@ export const useUserStore = create<UserState>()(
       taskIdExpired: 0,
       userProfile: null,
       isAuthenticated: false,
-      originInput: null;
+      originInput: null,
 
       login: userProfile => {
         set({
@@ -36,7 +36,7 @@ export const useUserStore = create<UserState>()(
           taskIdExpired: 0,
           userProfile,
           isAuthenticated: true,
-          originInput: null;
+          originInput: null,
         });
       },
 
@@ -46,7 +46,7 @@ export const useUserStore = create<UserState>()(
           taskIdExpired: 0,
           userProfile: null,
           isAuthenticated: false,
-          originInput: null;
+          originInput: null,
         });
       },
 
@@ -57,7 +57,7 @@ export const useUserStore = create<UserState>()(
         });
       },
 
-      setOrginInput: input => {
+      setOriginInput: input => {
         set({
           originInput: input,
         });

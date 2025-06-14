@@ -251,7 +251,7 @@ const Chat = () => {
         ...prev,
         { text: finalText, user: 'user', action: 'NONE', displayText: finalText },
       ]);
-      const origin_input = useUserStore.getState().getOriginInput();
+      const origin_input = useUserStore.getState().getOriginInput() || '';
       chatApi
         .dataProcess(finalText, origin_input)
         .then(res => {
