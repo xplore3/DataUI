@@ -391,7 +391,13 @@ const Chat = () => {
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.altKey) {
         e.preventDefault();
-        onSend();
+        const taskId = useUserStore.getState().getTaskId();
+        if (taskId) {
+          onDataProcess(text);
+        }
+        else {
+          onSend();
+        }
         useUserStore.getState().setOriginInput(text);
       }
     },
@@ -523,6 +529,7 @@ const Chat = () => {
                     {option}
                   </button>
                 ))}
+                <div>其他选项请直接在对话框输入</div>
                 </div>
               )}
               {item.user === 'agent' && item.displayText === item.text && (
@@ -571,7 +578,13 @@ const Chat = () => {
               src={text ? SendActive : Send}
               alt="Send"
               onClick={() => {
-                onSend();
+                const taskId = useUserStore.getState().getTaskId();
+                if (taskId) {
+                  onDataProcess(text);
+                }
+                else {
+                  onSend();
+                }
                 useUserStore.getState().setOriginInput(text);
               }}
             />

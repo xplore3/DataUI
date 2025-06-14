@@ -107,6 +107,10 @@ export const chatApi = {
         options = response.intention_options;
         response = response.data_result || response.question_description || response.question_answer || response;
       }
+      // Task Ended
+      if (!options || options.length < 1) {
+        useUserStore.getState().setTaskId("");
+      }
       return {
         text: response,
         user: 'agent',
