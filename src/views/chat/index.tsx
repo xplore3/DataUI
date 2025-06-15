@@ -524,7 +524,7 @@ const Chat = () => {
                 <div className="options-view">
                 {item.options.map((option) => (
                   <button className={item.hasSubmit ? "option-button-disabled" : "option-button"}
-                    disabled={item.hasSubmit}
+                    disabled={item.hasSubmit || (index !== messageList.length - 1)}
                     onClick={() => { item.hasSubmit = true; onDataProcess(option); }}>
                     {option}
                   </button>
