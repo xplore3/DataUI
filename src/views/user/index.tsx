@@ -61,7 +61,7 @@ const UserCenter = () => {
       id: 'userPortrait', 
       question: '我的用户画像', 
       type: 'multiple' as const, 
-      options: ['未来之星', '大学生', '城镇青年', '都市打工人', '年轻爸妈', '家庭主妇', '孕期中产女性', '中年男士根据一族', '其他（自填）'] 
+      options: ['未来之星', '大学生', '城镇青年', '都市打工人', '年轻爸妈', '家庭主妇', '中产女性', '中年男士', '其他（自填）'] 
     },
     { 
       id: 'targetAgeGroup', 
@@ -91,7 +91,7 @@ const UserCenter = () => {
       id: 'contentStyle', 
       question: '内容风格', 
       type: 'multiple' as const, 
-      options: ['口语化', '理性种草', '情绪共鸣', '专业解析', '秋人做题'] 
+      options: ['口语化', '理性种草', '情绪共鸣', '专业解析'] 
     },
     { 
       id: 'presentationFormat', 
@@ -213,7 +213,7 @@ const UserCenter = () => {
           </div>
         </div>
       </div>
-      <div className="user-center-section">
+      {false && <div className="user-center-section">
         <div className="user-center-section-title">Agent设置</div>
         {editing ? (
           <textarea
@@ -233,7 +233,7 @@ const UserCenter = () => {
         >
           {editing ? '保存' : '编辑'}
         </button>
-      </div>
+      </div>}
       <div className="user-center-section">
         <div className="user-center-section-title">大模型选择</div>
         <select
