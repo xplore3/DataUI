@@ -223,9 +223,10 @@ const Chat = () => {
 
   // Data Process
   const onDataProcess = useCallback(
-    async (overrideText?: string) => {
+    async (overrideText: string, msgIndex: number = messageList.length - 1) => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
+      const taskId = messageList[msgIndex].taskId || "";
 
       // checkResp per 10 seconds
       let jobSkip = false;
@@ -251,9 +252,9 @@ const Chat = () => {
         ...prev,
         { text: finalText, user: 'user', action: 'NONE', displayText: finalText },
       ]);
-      const origin_input = useUserStore.getState().getOriginInput() || '';
+      //const origin_input = useUserStore.getState().getOriginInput() || '';
       chatApi
-        .dataProcess(finalText, origin_input)
+        .dataProcess(finalText, taskId)
         .then(res => {
           jobSkip = true;
           setMessageList(prev => [
@@ -524,8 +525,8 @@ const Chat = () => {
                 <div className="options-view">
                 {item.options.map((option) => (
                   <button className={item.hasSubmit ? "option-button-disabled" : "option-button"}
-                    disabled={item.hasSubmit || (index !== messageList.length - 1)}
-                    onClick={() => { item.hasSubmit = true; onDataProcess(option); }}>
+                    disabled={item.hasSubmit/* || (index !== messageList.length - 1)*/}
+                    onClick={() => { item.hasSubmit = true; onDataProcess(option, index); }}>
                     {option}
                   </button>
                 ))}

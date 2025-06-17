@@ -82,12 +82,11 @@ export const chatApi = {
 //     };
 //   },
 
-  dataProcess: async (option: string, origin_input: string): Promise<Message> => {
+  dataProcess: async (option: string, taskId: string): Promise<Message> => {
     try {
-      const taskId = useUserStore.getState().getTaskId();
+      //const taskId = useUserStore.getState().getTaskId();
       const result = await api.post(`/data_process`, {
         text: option,
-        origin_input,
         taskId,
         userId: chatApi.getUserId(),
       });
