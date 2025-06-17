@@ -448,7 +448,7 @@ const Chat = () => {
       });*/
     setMessageList(prevData => {
       const newData = [...prevData];
-      const newOptions = getRandomElements<string>(newData[newData.length - 1].backup_options, 3, 5);
+      const newOptions = getRandomElements<string>(newData[newData.length - 1].backup_options || [], 3, 5);
       newData[newData.length - 1].options = newOptions;
       return newData;
     });
@@ -533,7 +533,7 @@ const Chat = () => {
                 {item.options.map((option) => (
                   <button className={item.hasSubmit ? "option-button-disabled" : "option-button"}
                     disabled={item.hasSubmit/* || (index !== messageList.length - 1)*/}
-                    onClick={() => { item.hasSubmit = true; onDataProcess(option, index); }}>
+                    onClick={() => { onDataProcess(option, index); }}>
                     {option}
                   </button>
                 ))}
