@@ -12,7 +12,45 @@
   max-width: 568px;
   margin: 0 auto;
   align-items: center;
+
+  /* 浅色模式变量 */
+  --background-color: #ffffff;
+  --background-color-secondary: #f7f7f7;
+  --text-color-1: #222222;
+  --text-color-2: #666666;
+  --text-color-3: #888888;
+  --border-color: #d9d9d9;
+  --border-color-light: #eee;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --card-background: #ffffff;
+  --input-background: #ffffff;
+  --button-background: #f7f7f7;
 }
+
+/* 深色模式变量 */
+[data-theme='dark'] {
+  --background-color: #121921;
+  --background-color-secondary: #1e2329;
+  --text-color-1: #ffffff;
+  --text-color-2: #8e98a4;
+  --text-color-3: #6b7280;
+  --border-color: rgba(142, 152, 164, 0.2);
+  --border-color-light: rgba(142, 152, 164, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --card-background: #1e2329;
+  --input-background: #1e2329;
+  --button-background: #2a3036;
+}
+
+input,
+textarea {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  [data-theme='dark'] & {
+    background-color: var(--background-color-secondary) !important;
+  }
+}
+
 
 * {
   -ms-overflow-style: none;
@@ -29,6 +67,9 @@
 body {
   margin: 0;
   /* min-width: 450px; */
+  background-color: var(--background-color);
+  color: var(--text-color-1);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {

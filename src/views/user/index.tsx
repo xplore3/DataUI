@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './index.less';
 import Profile from '@/assets/icons/profile.svg';
 import KnowledgeBase from '@/components/KnowledgeBase';
+import ThemeToggle from '@/components/ThemeToggle';
 //import { useUserStore } from '@/stores/useUserStore';
 
 interface UserInfo {
@@ -117,6 +118,7 @@ const UserCenter = () => {
           ))}
         </select>
       </div>
+      <ThemeToggle />
       <KnowledgeBase />
       <div className="user-center-section user-center-links" style={{ marginTop: '20px' }}>
         <button className="user-center-link" onClick={onAbout}>关于</button>
