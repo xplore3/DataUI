@@ -47,7 +47,7 @@ textarea {
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
   [data-theme='dark'] & {
-    background-color: var(--background-color-secondary) !important;
+    background-color: var(--background-color-secondary) ;
   }
 }
 
