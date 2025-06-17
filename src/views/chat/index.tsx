@@ -495,7 +495,7 @@ const Chat = () => {
       <header className="chat-page-header">
         {/* <img src={backLeft} alt="Back" onClick={() => navigate(-1)} /> */}
         <img src={Logo} alt="Logo" />
-        <span>Data3Agent</span>
+        <span>TrendMuse</span>
         <div className="flex-1"></div>
         <img src={User} alt="User" onClick={() => handleUserSettings()} />
         {/* <Lang
