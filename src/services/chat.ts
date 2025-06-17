@@ -101,17 +101,20 @@ export const chatApi = {
       let options = [];
       let backup_options = [];
       let response = result.data.text;
+      let newTaskId = '';
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
       try {
         const json = JSON.parse(response);
         if (json) {
+          newTaskId = json.taskId;
           backup_options = json.intention_options;
           response = json.data_result || json.question_description || json.question_answer;
         }
       } catch (err) {
         console.log(err);
+        newTaskId = response.taskId;
         backup_options = response.intention_options;
         response = response.data_result || response.question_description || response.question_answer || response;
       }
@@ -124,6 +127,7 @@ export const chatApi = {
         text: response,
         user: 'agent',
         action: 'NONE',
+        taskId: newTaskId,
         options: options,
         backup_options: backup_options,
       };
