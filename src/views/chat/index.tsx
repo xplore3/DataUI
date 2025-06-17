@@ -9,13 +9,14 @@ import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react
 import FooterOperation from '@/components/FooterOperation';
 import { chatApi } from '@/services/chat';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';;
+import remarkGfm from 'remark-gfm';
 import { ReactSVG } from 'react-svg';
 import { Cron } from "croner";
 import  { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
 import { useUserStore } from '@/stores/useUserStore';
+import { getRandomElements } from '@/utils/common';
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -28,6 +29,7 @@ type Message = {
   taskId?: string;
   note?: string;
   options?: string[];
+  backup_options?: string[];
   questions?: QuestionItem[];
   answers?: Record<string, string | string[]>;
   hasSubmit?: boolean;
@@ -429,8 +431,7 @@ const Chat = () => {
   };
 
   const handleRefresh = () => {
-    // is ca
-    const previousMessageText = messageList[messageList.length - 2].text;
+    /*const previousMessageText = messageList[messageList.length - 2].text;
     setLoading(true);
     chatApi
       .createChat(previousMessageText)
@@ -444,7 +445,13 @@ const Chat = () => {
       })
       .finally(() => {
         setLoading(false);
-      });
+      });*/
+    setMessageList(prevData => {
+      const newData = [...prevData];
+      const newOptions = getRandomElements<string>(newData[newData.length - 1].backup_options, 3, 5);
+      newData[newData.length - 1].options = newOptions;
+      return newData;
+    });
   };
 
   // Updated handleAnalysis uses functional update to append messages instead of replacing the list.

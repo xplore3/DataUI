@@ -1,6 +1,7 @@
 import api from './axios';
 import { Chat, Message } from '../types/chat';
 import { useUserStore } from '@/stores/useUserStore';
+import { getRandomElements } from '@/utils/common';
 
 export const chatApi = {
   getOrCreateUUID: () => {
@@ -35,6 +36,7 @@ export const chatApi = {
         userId: chatApi.getUserId(),
       });
       let options = [];
+      let backup_options = [];
       let response = result.data.text;
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
@@ -43,20 +45,22 @@ export const chatApi = {
         const json = JSON.parse(response);
         if (json) {
           useUserStore.getState().setTaskId(json.taskId);
-          options = json.intention_options || json.available_options;
+          backup_options = json.intention_options || json.available_options;
           response = json.data_result || json.question_description || json.question_answer;
         }
       } catch (err) {
         console.log(err);
         useUserStore.getState().setTaskId(response.taskId);
-        options = response.intention_options || response.available_options;
+        backup_options = response.intention_options || response.available_options;
         response = response.data_result || response.question_description || response.question_answer || response;
       }
+      options = getRandomElements<string>(backup_options, 3, 5);
       return {
         text: response,
         user: 'agent',
         action: 'NONE',
         options: options,
+        backup_options: backup_options,
       };
     } catch (err) {
       console.log(err);
