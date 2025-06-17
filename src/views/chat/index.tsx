@@ -228,7 +228,15 @@ const Chat = () => {
     async (overrideText: string, msgIndex: number = messageList.length - 1) => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
-      const taskId = messageList[msgIndex].taskId || "";
+      let taskId = "";
+      try {
+        if (msgIndex < messageList.length) {
+          taskId = messageList[msgIndex].taskId || "";
+        }
+      }
+      catch (err) {
+        console.error(err);
+      }
 
       // checkResp per 10 seconds
       let jobSkip = false;
