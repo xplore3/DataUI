@@ -48,14 +48,14 @@ export const chatApi = {
           useUserStore.getState().setTaskId(json.taskId);
           newTaskId = json.taskId;
           backup_options = json.intention_options || json.available_options;
-          response = json.data_result || json.question_description || json.analysis_and_question_description;
+          response = (json.process_result + json.option_description) || json.question_description;
         }
       } catch (err) {
         console.log(err);
         useUserStore.getState().setTaskId(response.taskId);
         newTaskId = response.taskId;
         backup_options = response.intention_options || response.available_options;
-        response = response.data_result || response.question_description || response.analysis_and_question_description || response;
+        response = (response.process_result + response.option_description) || response.question_description || response;
       }
       options = getRandomElements<string>(backup_options, 3, 5);
       return {
@@ -110,13 +110,13 @@ export const chatApi = {
         if (json) {
           newTaskId = json.taskId;
           backup_options = json.intention_options;
-          response = json.data_result || json.question_description || json.analysis_and_question_description;
+          response = (json.process_result + json.option_description) || json.question_description;
         }
       } catch (err) {
         console.log(err);
         newTaskId = response.taskId;
         backup_options = response.intention_options;
-        response = response.data_result || response.question_description || response.analysis_and_question_description || response;
+        response = (response.process_result + response.option_description) || response.question_description || response;
       }
       // Task Ended
       if (!backup_options || backup_options.length < 1) {
