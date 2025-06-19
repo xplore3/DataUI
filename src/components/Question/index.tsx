@@ -14,10 +14,11 @@ export interface QuestionItem {
 interface DynamicFormProps {
   questions: QuestionItem[];
   hasSubmit: boolean;
+  loading?: boolean;
   onSubmit: (answers: Record<string, string | string[]>) => void;
 }
 
-const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, onSubmit }) => {
+const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loading = false, onSubmit }) => {
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [customInputs, setCustomInputs] = useState<Record<string, string>>({});
 
@@ -132,8 +133,19 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, onSubm
           </li>
         ))}
       </ul>
-      <button type="submit" className={hasSubmit ? "question-submit-disabled" : "question-submit"} disabled={hasSubmit}>
-        提交
+      <button 
+        type="submit" 
+        className={`${hasSubmit || loading ? "question-submit-disabled" : "question-submit"} ${loading ? "question-submit-loading" : ""}`}
+        disabled={hasSubmit || loading}
+      >
+        {loading ? (
+          <>
+            <span className="loading-spinner"></span>
+            <span>正在提交</span>
+          </>
+        ) : (
+          '提交'
+        )}
       </button>
     </form>
   );

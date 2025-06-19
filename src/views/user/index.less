@@ -4,12 +4,12 @@
   justify-content: start;
   align-items: stretch;
   box-sizing: border-box;
-  background: #fff;
+  background: var(--card-background);
   border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 16px var(--shadow-color);
   padding: 28px 24px 70px 24px;
   font-family: GeologicaRegular, sans-serif;
-  color: #222;
+  color: var(--text-color-1);
 }
 
 .user-center-header {
@@ -23,7 +23,7 @@
   height: 64px;
   border-radius: 50%;
   margin-right: 18px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color-light);
   object-fit: cover;
 }
 
@@ -39,7 +39,7 @@
 
 .user-center-detail {
   font-size: 14px;
-  color: #888;
+  color: var(--text-color-3);
   display: flex;
   gap: 16px;
 }
@@ -57,8 +57,8 @@
 
 .user-center-profile {
   font-size: 14px;
-  color: #444;
-  background: #f7f7f7;
+  color: var(--text-color-2);
+  background: var(--background-color-secondary);
   border-radius: 6px;
   padding: 10px;
   margin-bottom: 8px;
@@ -70,13 +70,13 @@
   width: 100%;
   min-height: 68px;
   font-size: 14px;
-  color: #444;
+  color: var(--text-color-2);
   border-radius: 6px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--border-color);
   padding: 8px;
   margin-bottom: 8px;
   resize: vertical;
-  background: #f7f7f7;
+  background: var(--background-color-secondary);
 }
 
 .user-center-btn {
@@ -98,9 +98,11 @@
   width: 100%;
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--border-color);
   font-size: 14px;
   margin-bottom: 4px;
+  background: var(--input-background);
+  color: var(--text-color-1);
 }
 
 .user-center-links {

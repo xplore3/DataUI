@@ -8,8 +8,17 @@ import Help from './views/help';
 import UserCenter from './views/user';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import { useThemeStore } from './stores/useThemeStore';
 
 function App() {
+  const { theme } = useThemeStore();
+
+  useEffect(() => {
+    // 确保在应用启动时设置正确的主题
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
   return (<div>
     <ToastContainer
       position="top-right"
@@ -17,7 +26,7 @@ function App() {
       hideProgressBar={false}
       newestOnTop={false}
       pauseOnHover={false}
-      theme="colored"
+      theme={theme === 'dark' ? 'dark' : 'light'}
     />
     <Router>
       <Routes>
