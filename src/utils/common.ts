@@ -17,7 +17,7 @@ export function getRandomElements<T>(array: T[], min: number, max: number): T[] 
 }
 
 export function getUnknownErrorDesc() {
-  return '哎呀，处理过程出错了，你可以稍后重试，或回复【人工】联系管理员帮你进行支持~';
+  return '哎呀，处理过程出错了，你可以稍后重试，或回复【人工】联系管理员进行支持~';
 }
 
 export function getWaitTip() {

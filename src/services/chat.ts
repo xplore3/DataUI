@@ -28,6 +28,7 @@ export const chatApi = {
   },
 
   createChat: async (initialMessage: string): Promise<Message> => {
+    let response = null;
     try {
       const taskId = useUserStore.getState().getTaskId();
       const result = await api.post(`/message`, {
@@ -37,7 +38,7 @@ export const chatApi = {
       });
       let options = [];
       let backup_options = [];
-      let response = result.data.text;
+      response = result.data.text;
       let newTaskId = '';
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
@@ -70,7 +71,7 @@ export const chatApi = {
       console.log(err);
     }
     return {
-      text: getUnknownErrorDesc(),
+      text: response || getUnknownErrorDesc(),
       user: 'agent',
       action: 'NONE',
     };
@@ -91,6 +92,7 @@ export const chatApi = {
 //   },
 
   dataProcess: async (option: string, taskId: string): Promise<Message> => {
+    let response = null;
     try {
       //const taskId = useUserStore.getState().getTaskId();
       const result = await api.post(`/data_process`, {
@@ -100,7 +102,7 @@ export const chatApi = {
       });
       let options = [];
       let backup_options = [];
-      let response = result.data.text;
+      response = result.data.text;
       let newTaskId = '';
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
@@ -135,7 +137,7 @@ export const chatApi = {
       console.log(err);
     }
     return {
-      text: getUnknownErrorDesc(),
+      text: response || getUnknownErrorDesc(),
       user: 'agent',
       action: 'NONE',
     };
