@@ -15,3 +15,11 @@ export function getRandomElements<T>(array: T[], min: number, max: number): T[] 
     .sort(() => Math.random() - 0.5)
     .slice(0, count);
 }
+
+export function getUnknownErrorDesc() {
+  return '哎呀，处理过程出错了，你可以稍后重试，或回复【人工】联系管理员帮你进行支持~';
+}
+
+export function getWaitTip() {
+  return '系统正在处理，请稍等~';
+}

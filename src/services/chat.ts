@@ -1,7 +1,7 @@
 import api from './axios';
 import { Chat, Message } from '../types/chat';
 import { useUserStore } from '@/stores/useUserStore';
-import { getRandomElements } from '@/utils/common';
+import { getRandomElements, getUnknownErrorDesc, getWaitTip } from '@/utils/common';
 
 export const chatApi = {
   getOrCreateUUID: () => {
@@ -70,7 +70,7 @@ export const chatApi = {
       console.log(err);
     }
     return {
-      text: 'No result is available. Please check.',
+      text: getUnknownErrorDesc(),
       user: 'agent',
       action: 'NONE',
     };
@@ -135,7 +135,7 @@ export const chatApi = {
       console.log(err);
     }
     return {
-      text: 'No result is available. Please check.',
+      text: getUnknownErrorDesc(),
       user: 'agent',
       action: 'NONE',
     };
@@ -175,7 +175,7 @@ export const chatApi = {
       console.log(err);
     }
     return {
-      text: 'Please wait a few seconds.',
+      text: getWaitTip(),
       user: 'client',
       action: 'NONE',
     };
@@ -199,7 +199,7 @@ export const chatApi = {
       console.log(err);
     }
     return {
-      text: 'Error in tempates process',
+      text: getUnknownErrorDesc(),
       user: 'client',
       action: 'NONE',
     };
@@ -225,7 +225,7 @@ export const chatApi = {
       console.log(err);
     }
     return {
-      text: 'Error in addKnowledges',
+      text: getUnknownErrorDesc(),
       user: 'client',
       action: 'NONE',
     };
