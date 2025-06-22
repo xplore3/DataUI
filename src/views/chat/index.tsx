@@ -47,7 +47,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '获取热榜', '找KOL', '账号分析'];
+  const keyList = ['模板', '内容趋势洞察', '优秀内容对标', '达人合作评估'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -306,8 +306,8 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '获取热榜') {
-      toast('正在获取热榜，请稍候......');
+    else if (key === '内容趋势洞察') {
+      toast('正在获取内容趋势，请稍候......');
       if (loading) return;
       setLoading(true);
       try {
@@ -324,7 +324,7 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '找KOL') {
+    else if (key === '优秀内容对标') {
       toast('正在根据产品信息获取对标网红KOC，请稍候......');
       /*if (!text.trim()) {
         toast.error('请输入产品名称/产品链接/产品官网');
@@ -346,7 +346,7 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '账号分析') {
+    else if (key === '达人合作评估') {
       if (!text.trim()) {
         toast.error('请输入账号名称/账号链接/账号ID');
         setText('请输入账号名称/账号链接/账号ID');

@@ -13,7 +13,7 @@ const PromptPin = ({
   onClose: () => void;
 }) => {
   const [pinPrompt, setPinPrompt] = useState(promptText || '');
-  const [pinTitle, setPinTitle] = useState('');
+  const [pinTitle, setPinTitle] = useState(promptText.slice(0, 6) || '');
 
   useEffect(() => {
     setPinPrompt(promptText || '');
@@ -30,7 +30,7 @@ const PromptPin = ({
 
   return (
     <Modal
-      title="保存为常用功能"
+      title="保存提示词为常用模板"
       open={open}
       onOk={handlePinSave}
       onCancel={onClose}
