@@ -310,8 +310,13 @@ const Chat = () => {
       toast('正在获取内容趋势，请稍候......');
       if (loading) return;
       setLoading(true);
+      const prompt = '最近小红书/抖音的热词、热话题有哪些？';
+      setMessageList(prev => [
+        ...prev,
+        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
+      ]);
       try {
-        chatApi.createChat('最近小红书/抖音的热词、热话题有哪些？').then(res => {
+        chatApi.createChat(prompt).then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -332,8 +337,13 @@ const Chat = () => {
       }*/
       if (loading) return;
       setLoading(true);
+      const prompt = '根据我的产品名称/产品链接/产品官网推荐对标网红KOC';
+      setMessageList(prev => [
+        ...prev,
+        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
+      ]);
       try {
-        chatApi.createChat(`根据我的产品名称/产品链接/产品官网推荐对标网红KOC`).then(res => {
+        chatApi.createChat(prompt).then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -355,8 +365,13 @@ const Chat = () => {
       toast(`正在根据给定的账号${text}，对其进行深度分析，请稍候......`);
       if (loading) return;
       setLoading(true);
+      const prompt = `根据给定的账号${text}，对其进行深度分析`;
+      setMessageList(prev => [
+        ...prev,
+        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
+      ]);
       try {
-        chatApi.createChat(`根据给定的账号${text}，对其进行深度分析`).then(res => {
+        chatApi.createChat(prompt).then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
