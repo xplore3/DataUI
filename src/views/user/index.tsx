@@ -15,8 +15,8 @@ interface UserInfo {
 
 const mockUser: UserInfo = {
   avatar: 'https://data3.site/icon128.png',
-  nickname: 'John',
-  gender: 'Male',
+  nickname: 'TrendMuse',
+  gender: 'Female',
   city: 'Beijing',
 };
 

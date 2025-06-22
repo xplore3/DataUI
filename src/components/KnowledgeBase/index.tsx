@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QuestionForm from '@/components/Question';
 import { chatApi } from '@/services/chat';
+import { toast } from 'react-toastify';
 
 const KnowledgeBase: React.FC = () => {
   const navigate = useNavigate();
@@ -85,6 +86,11 @@ const KnowledgeBase: React.FC = () => {
   const handleQuestionSend = async (answers: Record<string, string | string[]>) => {
     try {
       if (loading || isFormSubmitted) return;
+      if (!('brandName' in answers) || !('productIntro' in answers)
+        || !('productType' in answers)) {
+        toast.error('填写的信息不完整，请检查');
+        return;
+      }
       setLoading(true);
       const result: string[] = Object.entries(answers).map(([key, value]) => {
         const answer = Array.isArray(value) ? value.join(", ") : value;
