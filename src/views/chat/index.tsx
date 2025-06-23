@@ -230,7 +230,7 @@ const Chat = () => {
 
   // Data Process
   const onDataProcess = useCallback(
-    async (overrideText: string, msgIndex: number = messageList.length - 1) => {
+    async (overrideText: string, fromOptions: boolean, msgIndex: number = messageList.length - 1) => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
       let taskId = "";
@@ -269,7 +269,7 @@ const Chat = () => {
       ]);
       //const origin_input = useUserStore.getState().getOriginInput() || '';
       chatApi
-        .dataProcess(finalText, taskId)
+        .dataProcess(finalText, taskId, fromOptions)
         .then(res => {
           jobSkip = true;
           setMessageList(prev => [
@@ -339,13 +339,13 @@ const Chat = () => {
     }
     else if (key === '优秀内容对标') {
       if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
-        toast.error('请在设置页面输入产品品牌/介绍/链接等');
+        toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
       }
       if (loading) return;
-      toast('正在根据产品信息获取对标网红KOC，请稍候......');
+      toast('正在根据产品信息获取对标网红KOC及其内容，请稍候......');
       setLoading(true);
-      const prompt = '根据我的产品名称/品牌/官网/productBrand/productIntro/userPorfile等找到合适的对标网红KOC';
+      const prompt = '根据我的产品、业务和背景等搜索到合适的对标网红KOC，匹配度达到50%以上即可；首先输出网红KOC列表，其次输出这些KOC的优秀内容列表，分析可借鉴的内容、策略、机会等';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
@@ -370,10 +370,16 @@ const Chat = () => {
         setText('请输入账号名称/账号链接/账号ID');
         return;
       }
-      toast(`正在根据给定的账号${text}，对其进行深度分析，请稍候......`);
+      toast(`正在根据给定的账号信息${text}，对其进行合作评估，请稍候......`);
       if (loading) return;
       setLoading(true);
-      const prompt = `根据给定的账号${text}，对其进行深度分析`;
+      const prompt = `根据给定的达人网红KOC账号信息${text}，找到其详细画像，对其进行合作评估，包括：
+        1. 根据达人内容与互动质量，评估每位达人的合作优先级（
+          - 高：调性高度契合 + 内容稳定 + 互动率高
+          - 中：部分调性契合 + 内容有潜力
+          - 低：调性边缘或互动一般，待观察）；
+        2. 达人内容调性分析与匹配判断，输出“内容调性匹配度打分”+ 内容风格简评；
+        3. 合作投放建议，包括合作形式、内容方向、适合投放时间段、预算建议等`;
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
@@ -427,7 +433,7 @@ const Chat = () => {
         e.preventDefault();
         const taskId = useUserStore.getState().getTaskId();
         if (taskId) {
-          onDataProcess(text);
+          onDataProcess(text, false);
         }
         else {
           onSend();
@@ -564,7 +570,7 @@ const Chat = () => {
                 {item.options.map((option) => (
                   <button className={item.hasSubmit ? "option-button-disabled" : "option-button"}
                     disabled={item.hasSubmit/* || (index !== messageList.length - 1)*/}
-                    onClick={() => { onDataProcess(option, index); }}>
+                    onClick={() => { onDataProcess(option, true, index); }}>
                     {option}
                   </button>
                 ))}
@@ -619,7 +625,7 @@ const Chat = () => {
               onClick={() => {
                 const taskId = useUserStore.getState().getTaskId();
                 if (taskId) {
-                  onDataProcess(text);
+                  onDataProcess(text, false);
                 }
                 else {
                   onSend();

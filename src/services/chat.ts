@@ -91,7 +91,7 @@ export const chatApi = {
 //     };
 //   },
 
-  dataProcess: async (option: string, taskId: string): Promise<Message> => {
+  dataProcess: async (option: string, taskId: string, fromOptions: boolean): Promise<Message> => {
     let response = null;
     try {
       //const taskId = useUserStore.getState().getTaskId();
@@ -99,6 +99,7 @@ export const chatApi = {
         text: option,
         taskId,
         userId: chatApi.getUserId(),
+        fromOptions
       });
       let options = [];
       let backup_options = [];
