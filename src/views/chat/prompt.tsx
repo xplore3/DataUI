@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Modal from 'antd/es/modal';
 import Input from 'antd/es/input';
+import { toast } from 'react-toastify';
 
 const PromptPin = ({
   open,
@@ -21,6 +22,7 @@ const PromptPin = ({
   }, [promptText, open]);
 
   const handlePinSave = () => {
+    toast('功能正在开发中，如有疑问请回复【人工】联系支持~~');
     const pinned = { title: pinTitle, prompt: pinPrompt };
     const pinnedList = JSON.parse(localStorage.getItem('PinnedPrompts') || '[]');
     pinnedList.push(pinned);
