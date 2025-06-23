@@ -339,13 +339,13 @@ const Chat = () => {
     }
     else if (key === '优秀内容对标') {
       if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
-        toast.error('请在设置页面输入产品名称/产品链接/产品官网');
+        toast.error('请在设置页面输入产品品牌/介绍/链接等');
         return;
       }
       if (loading) return;
       toast('正在根据产品信息获取对标网红KOC，请稍候......');
       setLoading(true);
-      const prompt = '根据我的产品名称/产品链接/产品官网推荐对标网红KOC';
+      const prompt = '根据我的产品名称/品牌/官网/productBrand/productIntro/userPorfile等找到合适的对标网红KOC';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },

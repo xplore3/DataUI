@@ -13,7 +13,7 @@ const KnowledgeBase: React.FC = () => {
   
   const questions = [
     { 
-      id: 'brandName', 
+      id: 'productBrand', 
       question: '品牌名称', 
       type: 'text' as const
     },
@@ -29,7 +29,7 @@ const KnowledgeBase: React.FC = () => {
       options: ['美妆个护', '时尚穿搭', '生活方式', '食品饮品', '母婴亲子', '数码电子', '服务体验', '知识分享', '其他'] 
     },
     { 
-      id: 'userPortrait', 
+      id: 'userPorfile', 
       question: '我的用户画像', 
       type: 'multiple' as const, 
       options: ['未来之星', '大学生', '城镇青年', '都市打工人', '年轻爸妈', '家庭主妇', '中产女性', '中年男士', '其他（自填）'] 
