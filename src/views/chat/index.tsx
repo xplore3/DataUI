@@ -345,7 +345,7 @@ const Chat = () => {
       if (loading) return;
       toast('正在根据产品信息获取对标网红KOC及其内容，请稍候......');
       setLoading(true);
-      const prompt = '根据我的产品、业务和背景等搜索到合适的对标网红KOC，匹配度达到50%以上即可；首先输出网红KOC列表，其次输出这些KOC的优秀内容列表，分析可借鉴的内容、策略、机会等';
+      const prompt = '根据我的产品、业务和背景等搜索到合适的对标网红KOC；首先输出网红KOC列表，其次输出这些KOC的优秀内容列表，分析可借鉴的内容、策略、机会等';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
