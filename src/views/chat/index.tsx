@@ -40,6 +40,7 @@ const Chat = () => {
   const [loading, setLoading] = useState(false);
   const [messageList, setMessageList] = useState<Message[]>([]);
   const [text, setText] = useState('');
+  const [tips, setTips] = useState('请输入你的数据处理指令');
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   //const { userProfile } = useUserStore();
@@ -174,6 +175,7 @@ const Chat = () => {
       textareaRef.current.style.height = '18px';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
+    setTips('请输入你的数据处理指令');
   }, []);
 
   // Send message
@@ -367,7 +369,7 @@ const Chat = () => {
     else if (key === '达人合作评估') {
       if (!text.trim()) {
         toast.error('请输入账号名称/账号链接/账号ID');
-        setText('请输入账号名称/账号链接/账号ID');
+        setTips('请输入账号名称/账号链接/账号ID');
         return;
       }
       toast(`正在根据给定的账号信息${text}，对其进行合作评估，请稍候......`);
@@ -614,7 +616,7 @@ const Chat = () => {
           ))}
         </div>
         <div className="chat-page-input">
-          <textarea ref={textareaRef} placeholder="Input your data request" value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
+          <textarea ref={textareaRef} placeholder={tips} value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
           {loading ? (
             <ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>
           ) : (
