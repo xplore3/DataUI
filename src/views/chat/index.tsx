@@ -98,6 +98,7 @@ const Chat = () => {
       handleCaMessage(message);
     }
 
+    setTips('请输入你的数据处理指令');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -106,6 +107,8 @@ const Chat = () => {
     if (messageList.length > 0) {
       localStorage.setItem('ChatMessage', JSON.stringify(messageList));
     }
+
+    setTips('请输入你的数据处理指令');
   }, [messageList]);
 
   // Scroll to the bottom when the message list changes (using useLayoutEffect for smoother behavior)
