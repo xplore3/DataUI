@@ -29,6 +29,7 @@ export const chatApi = {
 
   createChat: async (initialMessage: string): Promise<Message> => {
     let response = null;
+    let debug = null;
     try {
       const taskId = useUserStore.getState().getTaskId();
       const result = await api.post(`/message`, {
@@ -68,10 +69,11 @@ export const chatApi = {
         backup_options: backup_options,
       };
     } catch (err) {
+      debug = err;
       console.log(err);
     }
     return {
-      text: response || getUnknownErrorDesc(),
+      text: response || getUnknownErrorDesc(debug),
       user: 'agent',
       action: 'NONE',
     };
@@ -93,6 +95,7 @@ export const chatApi = {
 
   dataProcess: async (option: string, taskId: string, fromOptions: boolean): Promise<Message> => {
     let response = null;
+    let debug = null;
     try {
       //const taskId = useUserStore.getState().getTaskId();
       const result = await api.post(`/data_process`, {
@@ -135,10 +138,11 @@ export const chatApi = {
         backup_options: backup_options,
       };
     } catch (err) {
+      debug = err;
       console.log(err);
     }
     return {
-      text: response || getUnknownErrorDesc(),
+      text: response || getUnknownErrorDesc(debug),
       user: 'agent',
       action: 'NONE',
     };
@@ -185,6 +189,7 @@ export const chatApi = {
   },
 
   getPromptTemplates: async (): Promise<Message> => {
+    let debug = null;
     try {
       const userId = chatApi.getUserId();
       const result = await api.get(`/prompt_templates?userId=${userId}`, {});
@@ -199,16 +204,18 @@ export const chatApi = {
         action: 'NONE',
       };
     } catch (err) {
+      debug = err;
       console.log(err);
     }
     return {
-      text: getUnknownErrorDesc(),
+      text: getUnknownErrorDesc(debug),
       user: 'client',
       action: 'NONE',
     };
   },
 
   addKnowledges: async ( knowledges: string[]): Promise<Message> => {
+    let debug = null;
     try {
       const result = await api.post(`/add_knowledge`, {
         userId: chatApi.getUserId(),
@@ -225,10 +232,11 @@ export const chatApi = {
         action: 'NONE',
       };
     } catch (err) {
+      debug = err;
       console.log(err);
     }
     return {
-      text: getUnknownErrorDesc(),
+      text: getUnknownErrorDesc(debug),
       user: 'client',
       action: 'NONE',
     };

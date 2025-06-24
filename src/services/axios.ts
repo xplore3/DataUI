@@ -3,7 +3,7 @@ import { ApiError } from '../types/error';
 import { storage } from '../utils/storage';
 
 const config: AxiosRequestConfig = {
-  timeout: 2000000,
+  timeout: 3000000,
   headers: {
     'Content-Type': 'application/json',
   },

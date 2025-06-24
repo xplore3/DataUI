@@ -16,8 +16,13 @@ export function getRandomElements<T>(array: T[], min: number, max: number): T[] 
     .slice(0, count);
 }
 
-export function getUnknownErrorDesc() {
-  return '哎呀，处理过程出错了，你可以稍后重试，或回复【人工】联系管理员进行支持~';
+export function getUnknownErrorDesc(debugInfo: any) {
+  let err = '哎呀，处理过程出错了，你可以稍后重试，或回复【人工】联系管理员进行支持~';
+  const debug = import.meta.env.VITE_DEBUG;
+  if (debug && debugInfo && debugInfo.message) {
+    err += "\r\n" + debugInfo.message + "\r\n" + debugInfo.status;
+  }
+  return err;
 }
 
 export function getWaitTip() {
