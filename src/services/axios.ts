@@ -45,4 +45,16 @@ api.interceptors.response.use(
   }
 );
 
+axios.interceptors.response.use(null, async (error) => {
+  if (error.code === 'ECONNABORTED' || !navigator.onLine) {
+    console.log(error);
+    await new Promise(resolve => {
+      window.addEventListener('online', resolve, { once: true });
+    });
+    console.log('re-try......');
+    return axios.request(error.config);
+  }
+  return Promise.reject(error);
+});
+
 export default api;
