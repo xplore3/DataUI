@@ -397,6 +397,7 @@ const Chat = () => {
           ]);
         })
         .finally(() => {
+          setText('');
           setLoading(false);
         });
       } catch (error) {
@@ -420,6 +421,7 @@ const Chat = () => {
           ]);
         })
         .finally(() => {
+          setText('');
           setLoading(false);
         });
       } catch (error) {
