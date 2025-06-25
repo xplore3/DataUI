@@ -161,8 +161,16 @@ export const chatApi = {
   },
 
   checkTaskStatus: async (): Promise<Message> => {
+    let completed = false;
     try {
       const taskId = useUserStore.getState().getTaskId();
+      if (!taskId) {
+        return {
+          text: getWaitTip(),
+          user: 'client',
+          action: 'NONE',
+        };
+      }
       const result = await api.get(`/task_status?taskId=${taskId}`, {});
       console.log(result);
       let response = result.data.task_status;
@@ -170,9 +178,14 @@ export const chatApi = {
         response = "Error in response " + result.statusText;
       }
       try {
-        const match = response.match(/current_step:\s*(\d+)/);
-        const step = match ? parseInt(match[1], 10) : null;
-        response = `Step ${step} ...`;
+        //const match = response.match(/current_step:\s*(\d+)/);
+        //const step = match ? parseInt(match[1], 10) : null;
+        //response = `Step ${step} ...`;
+        const json = JSON.parse(response);
+        if (json) {
+          response = json.text;
+          completed = json.completed;
+        }
       } catch (err) {
         console.log(err);
       }
@@ -180,6 +193,7 @@ export const chatApi = {
         text: response || '还在处理中哦～这个问题的信息量有点大，我正在尽力生成最有价值的答案！',
         user: 'client',
         action: 'NONE',
+        completed,
       };
     } catch (err) {
       console.log(err);
@@ -188,6 +202,7 @@ export const chatApi = {
       text: getWaitTip(),
       user: 'client',
       action: 'NONE',
+      completed,
     };
   },
 

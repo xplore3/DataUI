@@ -16,6 +16,7 @@ export interface Message {
   inReplyTo?: string;
   lectureReward?: string;
   lectureTxHash?: string;
+  completed?: boolean;
 }
 
 export interface ChatSession {

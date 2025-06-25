@@ -33,6 +33,7 @@ type Message = {
   questions?: QuestionItem[];
   answers?: Record<string, string | string[]>;
   hasSubmit?: boolean;
+  completed?: boolean;
 };
 
 const Chat = () => {
@@ -192,24 +193,6 @@ const Chat = () => {
         return
       }
 
-      // checkResp per 10 seconds
-      let jobSkip = false;
-      const job = new Cron("*/30 * * * * *", async () => {
-        console.log(`Response check at ${new Date().toISOString()}`);
-        if (jobSkip) {
-          return;
-        }
-        chatApi.checkTaskStatus().then(res => {
-          if (jobSkip) {
-            return;
-          }
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-      });
-
       setLoading(true);
       setText('');
       setMessageList(prev => [
@@ -219,16 +202,41 @@ const Chat = () => {
       chatApi
         .createChat(finalText)
         .then(res => {
-          jobSkip = true;
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
           ]);
         })
         .finally(() => {
-          job.stop();
-          setLoading(false);
+          //setLoading(false);
         });
+
+      // checkResp per 30 seconds
+      let jobSkip = false;
+      const job = new Cron("*/30 * * * * *", async () => {
+        console.log(`Response check at ${new Date().toISOString()}`);
+        if (jobSkip) {
+          return;
+        }
+        try {
+          chatApi.checkTaskStatus().then(res => {
+            if (jobSkip) {
+              return;
+            }
+            setMessageList(prev => [
+              ...prev,
+              { ...res, displayText: '' },
+            ]);
+            if (res.completed) {
+              setLoading(false);
+              jobSkip = true;
+              job.stop();
+            }
+          });
+        } catch(err) {
+          console.log(err);
+        }
+      });
     },
     [text, loading]
   );
@@ -248,24 +256,6 @@ const Chat = () => {
         console.error(err);
       }
 
-      // checkResp per 10 seconds
-      let jobSkip = false;
-      const job = new Cron("*/30 * * * * *", async () => {
-        console.log(`Response check at ${new Date().toISOString()}`);
-        if (jobSkip) {
-          return;
-        }
-        chatApi.checkTaskStatus().then(res => {
-          if (jobSkip) {
-            return;
-          }
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-      });
-
       setLoading(true);
       setText('');
       setMessageList(prev => [
@@ -276,16 +266,41 @@ const Chat = () => {
       chatApi
         .dataProcess(finalText, taskId, fromOptions)
         .then(res => {
-          jobSkip = true;
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
           ]);
         })
         .finally(() => {
-          job.stop();
-          setLoading(false);
+          //setLoading(false);
         });
+
+      // checkResp per 30 seconds
+      let jobSkip = false;
+      const job = new Cron("*/30 * * * * *", async () => {
+        console.log(`Response check at ${new Date().toISOString()}`);
+        if (jobSkip) {
+          return;
+        }
+        try {
+          chatApi.checkTaskStatus().then(res => {
+            if (jobSkip) {
+              return;
+            }
+            setMessageList(prev => [
+              ...prev,
+              { ...res, displayText: '' },
+            ]);
+            if (res.completed) {
+              setLoading(false);
+              jobSkip = true;
+              job.stop();
+            }
+          });
+        } catch(err) {
+          console.log(err);
+        }
+      });
     },
     [text, loading]
   );
