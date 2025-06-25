@@ -40,8 +40,8 @@ export const chatApi = {
         taskId,
         userId: chatApi.getUserId(),
       });
-      let options: string[] = [];
-      let backup_options = [];
+      //let options: string[] = [];
+      //let backup_options = [];
       response = result.data.text;
       let newTaskId = '';
       if (result.status != 200) {
@@ -52,26 +52,26 @@ export const chatApi = {
         if (json) {
           useUserStore.getState().setTaskId(json.taskId);
           newTaskId = json.taskId;
-          backup_options = json.intention_options || json.available_options;
+          //backup_options = json.intention_options || json.available_options;
           response = (json.process_result + json.option_description) || json.data_result || json.question_description;
         }
       } catch (err) {
         console.log(err);
         useUserStore.getState().setTaskId(response.taskId);
         newTaskId = response.taskId;
-        backup_options = response.intention_options || response.available_options;
+        //backup_options = response.intention_options || response.available_options;
         response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
       }
-      if (backup_options) {
-        options = getRandomElements<string>(backup_options, 3, 5);
-      }
+      //if (backup_options) {
+      //  options = getRandomElements<string>(backup_options, 3, 5);
+      //}
       return {
         text: response,
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,
-        options: options,
-        backup_options: backup_options,
+        //options: options,
+        //backup_options: backup_options,
       };
     } catch (err) {
       debug = err;
@@ -109,8 +109,8 @@ export const chatApi = {
         userId: chatApi.getUserId(),
         fromOptions
       });
-      let options: string[] = [];
-      let backup_options = [];
+      //let options: string[] = [];
+      //let backup_options = [];
       response = result.data.text;
       let newTaskId = '';
       if (result.status != 200) {
@@ -120,29 +120,29 @@ export const chatApi = {
         const json = JSON.parse(response);
         if (json) {
           newTaskId = json.taskId;
-          backup_options = json.intention_options;
+          //backup_options = json.intention_options;
           response = (json.process_result + json.option_description) || json.data_result || json.question_description;
         }
       } catch (err) {
         console.log(err);
         newTaskId = response.taskId;
-        backup_options = response.intention_options;
+        //backup_options = response.intention_options;
         response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
       }
       // Task Ended
-      if (!backup_options || backup_options.length < 1) {
-        useUserStore.getState().setTaskId("");
-      }
-      if (backup_options) {
-        options = getRandomElements<string>(backup_options, 3, 5);
-      }
+      //if (!backup_options || backup_options.length < 1) {
+      //  useUserStore.getState().setTaskId("");
+      //}
+      //if (backup_options) {
+      //  options = getRandomElements<string>(backup_options, 3, 5);
+      //}
       return {
         text: response,
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,
-        options: options,
-        backup_options: backup_options,
+        //options: options,
+        //backup_options: backup_options,
       };
     } catch (err) {
       debug = err;
@@ -185,10 +185,43 @@ export const chatApi = {
         //const match = response.match(/current_step:\s*(\d+)/);
         //const step = match ? parseInt(match[1], 10) : null;
         //response = `Step ${step} ...`;
-        const json = JSON.parse(response);
-        if (json) {
-          response = json.text;
-          completed = json.completed;
+        const status = JSON.parse(response);
+        if (status) {
+          response = status.text;
+          completed = status.completed;
+
+          let options: string[] = [];
+          let backup_options = [];
+          let newTaskId = '';
+          try {
+            const json = JSON.parse(response);
+            if (json) {
+              newTaskId = json.taskId;
+              backup_options = json.intention_options;
+              response = (json.process_result + json.option_description) || json.data_result || json.question_description;
+            }
+          } catch (err) {
+            console.log(err);
+            newTaskId = response.taskId;
+            backup_options = response.intention_options;
+            response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
+          }
+          // Task Ended
+          if (completed) {
+            //useUserStore.getState().setTaskId("");
+          }
+          if (backup_options) {
+            options = getRandomElements<string>(backup_options, 3, 5);
+          }
+          return {
+            text: response,
+            user: 'agent',
+            action: 'NONE',
+            taskId: newTaskId,
+            options: options,
+            backup_options: backup_options,
+            completed,
+          };
         }
       } catch (err) {
         console.log(err);
