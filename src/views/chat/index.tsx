@@ -329,7 +329,7 @@ const Chat = () => {
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
       ]);
       try {
-        chatApi.createChat(prompt).then(res => {
+        chatApi.createChat(prompt, true).then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -356,7 +356,7 @@ const Chat = () => {
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
       ]);
       try {
-        chatApi.createChat(prompt).then(res => {
+        chatApi.createChat(prompt, true).then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -390,7 +390,7 @@ const Chat = () => {
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
       ]);
       try {
-        chatApi.createChat(prompt).then(res => {
+        chatApi.createChat(prompt, true).then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -413,7 +413,7 @@ const Chat = () => {
       toast(`正在根据网红${text}，生成一封开发信，请稍候......`);
       setLoading(true);
       try {
-        chatApi.createChat(`针对这个网红${text}，生成一封开发信`).then(res => {
+        chatApi.createChat(`针对这个网红${text}，生成一封开发信`, true).then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },

@@ -27,11 +27,14 @@ export const chatApi = {
     return response.data.chats;
   },
 
-  createChat: async (initialMessage: string): Promise<Message> => {
+  createChat: async (initialMessage: string, newTask: boolean = false): Promise<Message> => {
     let response = null;
     let debug = null;
     try {
-      const taskId = useUserStore.getState().getTaskId();
+      let taskId = useUserStore.getState().getTaskId();
+      if (newTask) {
+        taskId = '';
+      }
       const result = await api.post(`/message`, {
         text: initialMessage,
         taskId,
