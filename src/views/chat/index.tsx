@@ -474,7 +474,7 @@ const Chat = () => {
     }, 2000);
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     /*const previousMessageText = messageList[messageList.length - 2].text;
     setLoading(true);
     chatApi
@@ -490,12 +490,17 @@ const Chat = () => {
       .finally(() => {
         setLoading(false);
       });*/
-    setMessageList(prevData => {
-      const newData = [...prevData];
-      const newOptions = getRandomElements<string>(newData[newData.length - 1].backup_options || [], 3, 5);
-      newData[newData.length - 1].options = newOptions;
-      return newData;
-    });
+    if (messageList[messageList.length - 1].backup_options) {
+      setMessageList(prevData => {
+        const newData = [...prevData];
+        const newOptions = getRandomElements<string>(newData[newData.length - 1].backup_options || [], 3, 5);
+        newData[newData.length - 1].options = newOptions;
+        return newData;
+      });
+    }
+    else {
+      await handlerStatus();
+    }
   };
 
   // Updated handleAnalysis uses functional update to append messages instead of replacing the list.
