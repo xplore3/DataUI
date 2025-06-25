@@ -57,8 +57,8 @@ export const chatApi = {
         }
       } catch (err) {
         console.log(err);
-        useUserStore.getState().setTaskId(response.taskId);
-        newTaskId = response.taskId;
+        newTaskId = response.taskId || result.data.taskId;
+        useUserStore.getState().setTaskId(newTaskId);
         //backup_options = response.intention_options || response.available_options;
         response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
       }
@@ -120,12 +120,14 @@ export const chatApi = {
         const json = JSON.parse(response);
         if (json) {
           newTaskId = json.taskId;
+          useUserStore.getState().setTaskId(newTaskId);
           //backup_options = json.intention_options;
           response = (json.process_result + json.option_description) || json.data_result || json.question_description;
         }
       } catch (err) {
         console.log(err);
-        newTaskId = response.taskId;
+        newTaskId = response.taskId || result.data.taskId;
+        useUserStore.getState().setTaskId(newTaskId);
         //backup_options = response.intention_options;
         response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
       }
