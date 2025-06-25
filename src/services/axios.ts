@@ -41,7 +41,7 @@ api.interceptors.response.use(
       storage.clear();
       window.location.href = '/';
     }
-    if (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED'
+    /*if (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED'
       || !navigator.onLine) {
       console.log('disconnected.');
       await new Promise<void>(resolve => {
@@ -56,7 +56,7 @@ api.interceptors.response.use(
       if (error.config) {
         return axios.request(error.config);
       }
-    }
+    }*/
     return Promise.reject(error);
   }
 );
