@@ -207,36 +207,10 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
-        .finally(() => {
+        .finally(async () => {
           //setLoading(false);
+          await handlerStatus();
         });
-
-      // checkResp per 30 seconds
-      let jobSkip = false;
-      const job = new Cron("*/30 * * * * *", async () => {
-        console.log(`Response check at ${new Date().toISOString()}`);
-        if (jobSkip) {
-          return;
-        }
-        try {
-          chatApi.checkTaskStatus().then(res => {
-            if (jobSkip) {
-              return;
-            }
-            setMessageList(prev => [
-              ...prev,
-              { ...res, displayText: '' },
-            ]);
-            if (res.completed) {
-              setLoading(false);
-              jobSkip = true;
-              job.stop();
-            }
-          });
-        } catch(err) {
-          console.log(err);
-        }
-      });
     },
     [text, loading]
   );
@@ -271,13 +245,19 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
-        .finally(() => {
+        .finally(async () => {
           //setLoading(false);
+          await handlerStatus();
         });
+    },
+    [text, loading]
+  );
 
+  const handlerStatus = async () => {
+    try {
       // checkResp per 30 seconds
       let jobSkip = false;
-      const job = new Cron("*/30 * * * * *", async () => {
+      const job = new Cron("*/10 * * * * *", async () => {
         console.log(`Response check at ${new Date().toISOString()}`);
         if (jobSkip) {
           return;
@@ -301,9 +281,10 @@ const Chat = () => {
           console.log(err);
         }
       });
-    },
-    [text, loading]
-  );
+    } catch(err) {
+      console.log(err);
+    }
+  };
 
   const handleUserSettings = async () => {
     navigate('/user');
@@ -350,8 +331,9 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
-        .finally(() => {
-          setLoading(false);
+        .finally(async () => {
+          //setLoading(false);
+          await handlerStatus();
         });
       } catch (error) {
         console.log(error);
@@ -377,8 +359,9 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
-        .finally(() => {
-          setLoading(false);
+        .finally(async () => {
+          //setLoading(false);
+          await handlerStatus();
         });
       } catch (error) {
         console.log(error);
@@ -411,9 +394,10 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
-        .finally(() => {
+        .finally(async () => {
           setText('');
-          setLoading(false);
+          //setLoading(false);
+          await handlerStatus();
         });
       } catch (error) {
         console.log(error);
@@ -435,9 +419,10 @@ const Chat = () => {
             { ...res, displayText: '' },
           ]);
         })
-        .finally(() => {
+        .finally(async () => {
           setText('');
-          setLoading(false);
+          //setLoading(false);
+          await handlerStatus();
         });
       } catch (error) {
         console.log(error);

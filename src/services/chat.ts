@@ -40,7 +40,7 @@ export const chatApi = {
         taskId,
         userId: chatApi.getUserId(),
       });
-      let options = [];
+      let options: string[] = [];
       let backup_options = [];
       response = result.data.text;
       let newTaskId = '';
@@ -62,7 +62,9 @@ export const chatApi = {
         backup_options = response.intention_options || response.available_options;
         response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
       }
-      options = getRandomElements<string>(backup_options, 3, 5);
+      if (backup_options) {
+        options = getRandomElements<string>(backup_options, 3, 5);
+      }
       return {
         text: response,
         user: 'agent',
@@ -107,7 +109,7 @@ export const chatApi = {
         userId: chatApi.getUserId(),
         fromOptions
       });
-      let options = [];
+      let options: string[] = [];
       let backup_options = [];
       response = result.data.text;
       let newTaskId = '';
@@ -131,7 +133,9 @@ export const chatApi = {
       if (!backup_options || backup_options.length < 1) {
         useUserStore.getState().setTaskId("");
       }
-      options = getRandomElements<string>(backup_options, 3, 5);
+      if (backup_options) {
+        options = getRandomElements<string>(backup_options, 3, 5);
+      }
       return {
         text: response,
         user: 'agent',
