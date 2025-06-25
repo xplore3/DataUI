@@ -320,9 +320,9 @@ const Chat = () => {
       if (loading) return;
       toast('正在获取内容趋势，请稍候......');
       setLoading(true);
-      let prompt = '最近小红书/抖音的热词/热搜词有哪些？取出20条';
+      let prompt = '最近小红书等平台的热词/热搜词有哪些？取出20条';
       if (Date.now() % 2 == 1) {
-        prompt = '最近小红书/抖音的热门话题/Tag有哪些？请取20条';
+        prompt = '最近小红书等平台的热门话题/Tag有哪些？请取20条';
       }
       setMessageList(prev => [
         ...prev,
