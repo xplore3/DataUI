@@ -42,6 +42,7 @@ const Chat = () => {
   const [messageList, setMessageList] = useState<Message[]>([]);
   const [text, setText] = useState('');
   const [tips, setTips] = useState('请输入你的数据处理指令');
+  const [preText, setPreText] = useState('');
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   //const { userProfile } = useUserStore();
@@ -272,11 +273,12 @@ const Chat = () => {
               jobSkip = true;
               job.stop();
             }
-            if (res.text && res.text != '') {
+            if (res.text && res.text != '' && res.text !== preText) {
               setMessageList(prev => [
                 ...prev,
                 { ...res, displayText: '' },
               ]);
+              setPreText(res.text);
             }
           });
         } catch(err) {
