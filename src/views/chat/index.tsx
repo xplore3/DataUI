@@ -42,10 +42,11 @@ const Chat = () => {
   const [messageList, setMessageList] = useState<Message[]>([]);
   const [text, setText] = useState('');
   const [tips, setTips] = useState('请输入你的数据处理指令');
-  const [preText, setPreText] = useState('');
+  //const [preText, setPreText] = useState('');
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   //const { userProfile } = useUserStore();
+  let preText = '';
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
@@ -255,7 +256,6 @@ const Chat = () => {
   );
 
   const handlerStatus = async () => {
-    useEffect(() => {
     try {
       // checkResp per 30 seconds
       let jobSkip = false;
@@ -281,7 +281,7 @@ const Chat = () => {
                 ...prev,
                 { ...res, displayText: '' },
               ]);
-              setPreText(res.text);
+              preText = res.text;
             }
           });
         } catch(err) {
@@ -291,7 +291,6 @@ const Chat = () => {
     } catch(err) {
       console.log(err);
     }
-    }, [preText]);
   };
 
   const handleUserSettings = async () => {
