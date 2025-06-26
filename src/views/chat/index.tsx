@@ -267,14 +267,16 @@ const Chat = () => {
             if (jobSkip) {
               return;
             }
-            setMessageList(prev => [
-              ...prev,
-              { ...res, displayText: '' },
-            ]);
             if (res.completed) {
               setLoading(false);
               jobSkip = true;
               job.stop();
+            }
+            if (res.text && res.text != '') {
+              setMessageList(prev => [
+                ...prev,
+                { ...res, displayText: '' },
+              ]);
             }
           });
         } catch(err) {

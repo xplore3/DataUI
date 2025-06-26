@@ -191,6 +191,14 @@ export const chatApi = {
         if (status) {
           response = status.text;
           completed = status.completed;
+          if (response === '' && completed) {
+            return {
+              text: '',
+              user: 'agent',
+              action: 'NONE',
+              completed,
+            };
+          }
 
           let options: string[] = [];
           let backup_options = [];
