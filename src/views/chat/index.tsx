@@ -257,7 +257,7 @@ const Chat = () => {
     try {
       // checkResp per 30 seconds
       let jobSkip = false;
-      const job = new Cron("*/10 * * * * *", async () => {
+      const job = new Cron("*/50 * * * * *", async () => {
         console.log(`Response check at ${new Date().toISOString()}`);
         if (jobSkip) {
           return;
