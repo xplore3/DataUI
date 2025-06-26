@@ -51,7 +51,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '内容趋势洞察', '优秀内容对标', '达人合作评估'];
+  const keyList = ['模板', '内容趋势洞察', '优秀账号对标', '达人合作评估'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -133,7 +133,7 @@ const Chat = () => {
       // Skip if the content is already complete
       if (message.displayText === message.text) return;
       let currentIndex = message.displayText.length;
-      const chunkSize = 10; // Number of characters to add per frame
+      const chunkSize = 300; // Number of characters to add per frame
       const updateText = () => {
         if (currentIndex < message.text.length) {
           const nextIndex = Math.min(currentIndex + chunkSize, message.text.length);
@@ -274,8 +274,8 @@ const Chat = () => {
               jobSkip = true;
               job.stop();
             }
-            console.log(preText);
-            console.log(res.text);
+            //console.log(preText);
+            //console.log(res.text);
             if (res.text && res.text != '' && res.text !== preText) {
               setMessageList(prev => [
                 ...prev,
@@ -323,10 +323,7 @@ const Chat = () => {
       if (loading) return;
       toast('正在获取内容趋势，请稍候......');
       setLoading(true);
-      let prompt = '最近小红书等平台的热词/热搜词有哪些？取出20条';
-      if (Date.now() % 2 == 1) {
-        prompt = '最近小红书等平台的热门话题/Tag有哪些？请取20条';
-      }
+      let prompt = '取出30条小红书等平台的热词/热搜词，以及30条热门话题/Tag。';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
@@ -346,7 +343,7 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '优秀内容对标') {
+    else if (key === '优秀账户对标') {
       if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
         toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
