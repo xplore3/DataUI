@@ -254,7 +254,8 @@ const Chat = () => {
     [text, loading]
   );
 
-  const handlerStatus = useCallback(async () => {
+  const handlerStatus = async () => {
+    useEffect(() => {
     try {
       // checkResp per 30 seconds
       let jobSkip = false;
@@ -290,9 +291,8 @@ const Chat = () => {
     } catch(err) {
       console.log(err);
     }
-  },
-    [preText, loading]
-  );
+    }, [preText]);
+  };
 
   const handleUserSettings = async () => {
     navigate('/user');
