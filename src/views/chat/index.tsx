@@ -254,11 +254,11 @@ const Chat = () => {
     [text, loading]
   );
 
-  const handlerStatus = async () => {
+  const handlerStatus = useCallback(async () => {
     try {
       // checkResp per 30 seconds
       let jobSkip = false;
-      const job = new Cron("*/50 * * * * *", async () => {
+      const job = new Cron("*/20 * * * * *", async () => {
         console.log(`Response check at ${new Date().toISOString()}`);
         if (jobSkip) {
           return;
@@ -273,6 +273,8 @@ const Chat = () => {
               jobSkip = true;
               job.stop();
             }
+            console.log(preText);
+            console.log(res.text);
             if (res.text && res.text != '' && res.text !== preText) {
               setMessageList(prev => [
                 ...prev,
@@ -288,7 +290,9 @@ const Chat = () => {
     } catch(err) {
       console.log(err);
     }
-  };
+  },
+    [preText, loading]
+  );
 
   const handleUserSettings = async () => {
     navigate('/user');
