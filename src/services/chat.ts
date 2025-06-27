@@ -207,14 +207,18 @@ export const chatApi = {
             const json = JSON.parse(response);
             if (json) {
               newTaskId = json.taskId;
-              useUserStore.getState().setTaskId(newTaskId);
+              if (newTaskId) {
+                useUserStore.getState().setTaskId(newTaskId);
+              }
               backup_options = json.intention_options;
               response = (json.process_result + json.option_description) || json.data_result || json.question_description;
             }
           } catch (err) {
             console.log(err);
             newTaskId = response.taskId;
-            useUserStore.getState().setTaskId(newTaskId);
+            if (newTaskId) {
+              useUserStore.getState().setTaskId(newTaskId);
+            }
             backup_options = response.intention_options;
             response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
           }
