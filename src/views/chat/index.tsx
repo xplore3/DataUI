@@ -343,7 +343,7 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '优秀账户对标') {
+    else if (key === '优秀账号对标') {
       if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
         toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
