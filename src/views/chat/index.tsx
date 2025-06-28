@@ -353,10 +353,15 @@ const Chat = () => {
         toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
       }
+      if (!text.trim()) {
+        toast.error('请先输入你的预算情况、其他要求（如内容类型），然后再点击【优秀账号对标】按钮即可获取~');
+        setTips('请先输入你的预算情况、其他要求（如内容类型），然后再点击【优秀账号对标】按钮即可获取~');
+        return;
+      }
       if (loading) return;
       toast('正在根据产品信息获取对标网红KOC及其内容，请稍候......');
       setLoading(true);
-      const prompt = `优秀账号对标，根据我的产品、业务和背景等搜索到合适的对标网红KOC，及其热门笔记；
+      const prompt = `优秀账号对标，根据我的产品、业务和背景及【${text}】等搜索到合适的对标网红KOC，及其热门笔记；
         \r\n并进行如下分析：
         \r\n1. 将内容分为不同类型，如种草/教程/评测/合集等；
         \r\n2. 对每类内容进行分析，包括标题结构、封面设计、文案构造等；
@@ -386,13 +391,13 @@ const Chat = () => {
       }
     }
     else if (key === '达人合作评估') {
+      if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
+        toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
+        return;
+      }
       if (!text.trim()) {
         toast.error('请先输入达人账号主页链接，然后再点击【达人合作评估】按钮即可获取~');
         setTips('请先输入达人账号主页链接，然后再点击【达人合作评估】按钮即可获取~');
-        return;
-      }
-      if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
-        toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
       }
       toast(`正在根据给定的账号信息${text}，对其进行合作评估，请稍候......`);
