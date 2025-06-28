@@ -383,6 +383,7 @@ const Chat = () => {
           ]);
         })
         .finally(async () => {
+          setText('');
           //setLoading(false);
           await handlerStatus();
         });
