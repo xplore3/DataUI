@@ -328,7 +328,7 @@ const Chat = () => {
       if (loading) return;
       toast('正在获取内容趋势，请稍候......');
       setLoading(true);
-      let prompt = '取出30条小红书等平台的热词/热搜词，以及30条热门话题/Tag。';
+      let prompt = '取出30条小红书等平台的热词/热搜词，以及30条热门话题/Tag；请用表格的形式展示。';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
