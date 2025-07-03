@@ -51,7 +51,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '内容趋势洞察', '优秀账号对标', '达人合作评估'];
+  const keyList = ['模板', '今日文案', '优秀内容对标', '达人合作评估', '趋势洞察'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -324,17 +324,17 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '内容趋势洞察') {
+    else if (key === '今日文案') {
       if (loading) return;
-      toast('正在获取内容趋势，请稍候......');
+      toast('正在根据你的今日任务生成文案，请稍候......');
       setLoading(true);
-      let prompt = '取出30条小红书等平台的热词/热搜词，以及30条热门话题/Tag；请用表格的形式展示。';
+      let prompt = '根据我的产品信息，生成一篇今日的内容文案，包括标题、正文、标签等。';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
       ]);
       try {
-        chatApi.createChat(prompt, true).then(res => {
+        chatApi.routineTask(prompt, 'today_posts').then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -348,20 +348,39 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '优秀账号对标') {
+    else if (key === '趋势洞察') {
+      if (loading) return;
+      toast('正在获取内容趋势，请稍候......');
+      setLoading(true);
+      let prompt = '根据我的产品信息，获取并预测下周社交媒体平台的内容趋势，包括热门话题、热搜词等。';
+      setMessageList(prev => [
+        ...prev,
+        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
+      ]);
+      try {
+        chatApi.routineTask(prompt, 'trend_prediction').then(res => {
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
+        .finally(async () => {
+          //setLoading(false);
+          await handlerStatus();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    else if (key === '优秀内容对标') {
       if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
         toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
-        return;
-      }
-      if (!text.trim()) {
-        toast.error('请先输入你的预算情况、其他要求（如内容类型），然后再点击【优秀账号对标】按钮即可获取~');
-        setTips('请先输入你的预算情况、其他要求（如内容类型），然后再点击【优秀账号对标】按钮即可获取~');
         return;
       }
       if (loading) return;
       toast('正在根据产品信息获取对标网红KOC及其内容，请稍候......');
       setLoading(true);
-      const prompt = `优秀账号对标，根据我的产品、业务和背景及【${text}】等搜索到合适的对标网红KOC，及其热门笔记；
+      const prompt = `优秀内容对标，根据我的产品、业务和背景等搜索到合适的对标网红KOC，及其热门笔记；
         \r\n并进行如下分析：
         \r\n1. 将内容分为不同类型，如种草/教程/评测/合集等；
         \r\n2. 对每类内容进行分析，包括标题结构、封面设计、文案构造等；
@@ -376,7 +395,7 @@ const Chat = () => {
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
       ]);
       try {
-        chatApi.createChat(prompt, true).then(res => {
+        chatApi.routineTask(prompt, 'hot_posts').then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
@@ -396,16 +415,11 @@ const Chat = () => {
         toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
       }
-      if (!text.trim()) {
-        toast.error('请先输入达人账号主页链接，然后再点击【达人合作评估】按钮即可获取~');
-        setTips('请先输入达人账号主页链接，然后再点击【达人合作评估】按钮即可获取~');
-        return;
-      }
-      toast(`正在根据给定的账号信息${text}，对其进行合作评估，请稍候......`);
+      toast(`正在根据我的信息，寻找潜在合作达人，并进行合作评估，请稍候......`);
       if (loading) return;
       setLoading(true);
       const prompt = `根据我的产品/产品类型/使用场景/目标群体/内容风格等，
-        结合给定的达人网红KOC账号信息${text}，找到其详细画像，对其进行合作评估，包括：
+        找到潜在合作达人画像，对其进行合作评估，包括：
         \r\n1. 根据达人内容与互动质量，评估每位达人的合作优先级（
           - 高：调性高度契合 + 内容稳定 + 互动率高
           - 中：部分调性契合 + 内容有潜力
@@ -417,32 +431,7 @@ const Chat = () => {
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
       ]);
       try {
-        chatApi.createChat(prompt, true).then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-        .finally(async () => {
-          setText('');
-          //setLoading(false);
-          await handlerStatus();
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    else if (key === '开发信') {
-      if (!text.trim()) {
-        toast.error('请输入网红名称/网红链接/网红ID');
-        setText('请输入网红名称/网红链接/网红ID');
-        return;
-      }
-      if (loading) return;
-      toast(`正在根据网红${text}，生成一封开发信，请稍候......`);
-      setLoading(true);
-      try {
-        chatApi.createChat(`针对这个网红${text}，生成一封开发信`, true).then(res => {
+        chatApi.routineTask(prompt, 'search_koc').then(res => {
           setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
