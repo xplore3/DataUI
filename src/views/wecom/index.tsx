@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const WecomAuth = () => {
@@ -32,7 +32,7 @@ const WecomAuth = () => {
       .then((data) => {
         console.log('微信登录响应:', data);
         if (!data.userInfo) throw new Error('后端未返回用户信息');
-        localStorage.setItem('userInfo', data.userInfo);
+        localStorage.setItem('userInfo', JSON.stringify(data.userInfo));
         navigate('/user');
       })
       .catch((err) => {

@@ -4,30 +4,17 @@ import './index.less';
 import Profile from '@/assets/icons/profile.svg';
 import KnowledgeBase from '@/components/KnowledgeBase';
 import ThemeToggle from '@/components/ThemeToggle';
+import { useUser } from '../hooks/useUser';
 //import { useUserStore } from '@/stores/useUserStore';
 
-interface UserInfo {
-  avatar: string;
-  nickname: string;
-  gender: 'Male' | 'Female' | 'Unknown';
-  city: string;
-}
-
-const mockUser: UserInfo = {
-  avatar: 'https://data3.site/icon128.png',
-  nickname: 'TrendMuse',
-  gender: 'Female',
-  city: 'Beijing',
-};
 
 const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
 const defCurrentModel = 'GPT-3.1';
 
 const UserCenter = () => {
 
-  const user: UserInfo = mockUser;
   const modelList = defModelList;
-  const [isLogin, setIsLogin] = useState(true);
+  const { userInfo, isLogin } = useUser();
   const [currentModel, setCurrentModel] = useState(defCurrentModel);
   const navigate = useNavigate();
 
@@ -39,7 +26,6 @@ const UserCenter = () => {
   };
 
 
-
   const onAbout = () => {
     navigate('/about');
   };
@@ -49,7 +35,8 @@ const UserCenter = () => {
   };
 
   const onLogout = () => {
-    setIsLogin(false);
+    console.log('User logged out');
+    localStorage.removeItem('userInfo');
   };
 
   const onLogin = () => {
@@ -61,7 +48,6 @@ const UserCenter = () => {
     const redirectUri = encodeURIComponent(host + authCallback);
     const state = 'RandomCSRF' + Date.now();
 
-    setIsLogin(true);
     //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_base&state=${state}&agentid=${agentId}#wechat_redirect`;
     const authUrl = `https://open.weixin.qq.com/connect/qrconnect?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_login&state=${state}#wechat_redirect`;
     //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
@@ -73,12 +59,12 @@ const UserCenter = () => {
     <div className="user-center">
       {isLogin ? (<>
       <div className="user-center-header">
-        <img className="user-center-avatar" src={user.avatar} alt="avatar" />
+        <img className="user-center-avatar" src={userInfo.headimgurl} alt="avatar" />
         <div className="user-center-info">
-          <div className="user-center-nickname">{user.nickname}</div>
+          <div className="user-center-nickname">{userInfo.nickname}</div>
           <div className="user-center-detail">
-            <span>{user.gender}</span>
-            <span>{user.city}</span>
+            <span>{userInfo.sex == 0 ? 'Mail' : 'Female'}</span>
+            <span>{userInfo.city}</span>
           </div>
         </div>
       </div>
