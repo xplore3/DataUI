@@ -304,6 +304,14 @@ const Chat = () => {
     navigate('/user');
   };
 
+  const checkUserProfile = () => {
+    const set = localStorage.getItem('trendmuse_form_submitted') !== 'true';
+    if (!set) {
+      toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
+    }
+    return set;
+  };
+
   const handleKeyPress = async (key: string) => {
     if (key === '模板') {
       if (loading) return;
@@ -325,6 +333,9 @@ const Chat = () => {
       }
     }
     else if (key === '品牌定位') {
+      if (!checkUserProfile()) {
+        return;
+      }
       if (loading) return;
       toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
       setLoading(true);
@@ -349,6 +360,9 @@ const Chat = () => {
       }
     }
     else if (key === '今日文案') {
+      if (!checkUserProfile()) {
+        return;
+      }
       if (loading) return;
       toast('正在根据你的今日任务生成文案，请稍候......');
       setLoading(true);
@@ -398,8 +412,7 @@ const Chat = () => {
       }*/
     }
     else if (key === '热帖推荐') {
-      if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
-        toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
+      if (!checkUserProfile()) {
         return;
       }
       if (loading) return;
@@ -436,8 +449,7 @@ const Chat = () => {
       }
     }
     else if (key === '达人评估') {
-      if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
-        toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
+      if (!checkUserProfile()) {
         return;
       }
       toast(`正在根据我的信息，寻找潜在合作达人，并进行合作评估，请稍候......`);
