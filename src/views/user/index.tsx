@@ -4,7 +4,7 @@ import './index.less';
 import Profile from '@/assets/icons/profile.svg';
 import KnowledgeBase from '@/components/KnowledgeBase';
 import ThemeToggle from '@/components/ThemeToggle';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '@/hooks/useUser';
 //import { useUserStore } from '@/stores/useUserStore';
 
 
@@ -63,7 +63,7 @@ const UserCenter = () => {
         <div className="user-center-info">
           <div className="user-center-nickname">{userInfo.nickname}</div>
           <div className="user-center-detail">
-            <span>{userInfo.sex == 0 ? 'Mail' : 'Female'}</span>
+            <span>{userInfo.sex == 0 ? 'Male' : 'Female'}</span>
             <span>{userInfo.city}</span>
           </div>
         </div>
