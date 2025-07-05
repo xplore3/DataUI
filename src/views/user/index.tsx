@@ -57,9 +57,9 @@ const UserCenter = () => {
     const corpId = import.meta.env.VITE_WECHAT_CORP_ID;
     //const agentId = import.meta.env.VITE_WECOM_AGENT_ID;
     const host = import.meta.env.VITE_API_HOST_URL;
-    const authCallback = import.meta.env.VITE_WECOM_AUTH_CALLBACK;
+    const authCallback = import.meta.env.VITE_WECOM_AUTH_CALLBACK_FRONT;
     const redirectUri = encodeURIComponent(host + authCallback);
-    const state = 'RandomCSRF';
+    const state = 'RandomCSRF' + Date.now();
 
     setIsLogin(true);
     //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_base&state=${state}&agentid=${agentId}#wechat_redirect`;
