@@ -51,7 +51,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '今日文案', '优秀内容对标', '达人合作评估', '趋势洞察'];
+  const keyList = ['模板', '品牌定位', '今日文案', '热帖推荐', '达人评估', '趋势洞察'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -324,6 +324,30 @@ const Chat = () => {
         console.log(error);
       }
     }
+    else if (key === '品牌定位') {
+      if (loading) return;
+      toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
+      setLoading(true);
+      let prompt = '根据我的产品/背景知识库等信息，生成品牌定位分析报告。';
+      setMessageList(prev => [
+        ...prev,
+        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
+      ]);
+      try {
+        chatApi.routineTask(prompt, 'positioning_analysis').then(res => {
+          setMessageList(prev => [
+            ...prev,
+            { ...res, displayText: '' },
+          ]);
+        })
+        .finally(async () => {
+          //setLoading(false);
+          await handlerStatus();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
     else if (key === '今日文案') {
       if (loading) return;
       toast('正在根据你的今日任务生成文案，请稍候......');
@@ -349,7 +373,8 @@ const Chat = () => {
       }
     }
     else if (key === '趋势洞察') {
-      if (loading) return;
+      toast('功能正在开发中，请耐心等待~，如有问题请回复【人工】获取支持~~');
+      /*if (loading) return;
       toast('正在获取内容趋势，请稍候......');
       setLoading(true);
       let prompt = '根据我的产品信息，获取并预测下周社交媒体平台的内容趋势，包括热门话题、热搜词等。';
@@ -370,9 +395,9 @@ const Chat = () => {
         });
       } catch (error) {
         console.log(error);
-      }
+      }*/
     }
-    else if (key === '优秀内容对标') {
+    else if (key === '热帖推荐') {
       if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
         toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
@@ -410,7 +435,7 @@ const Chat = () => {
         console.log(error);
       }
     }
-    else if (key === '达人合作评估') {
+    else if (key === '达人评估') {
       if (localStorage.getItem('trendmuse_form_submitted') !== 'true') {
         toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
         return;
