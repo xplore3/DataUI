@@ -55,7 +55,7 @@ const UserCenter = () => {
   const onLogin = () => {
     console.log('User settings clicked');
     const corpId = import.meta.env.VITE_WECHAT_CORP_ID;
-    const agentId = import.meta.env.VITE_WECOM_AGENT_ID;
+    //const agentId = import.meta.env.VITE_WECOM_AGENT_ID;
     const host = import.meta.env.VITE_API_HOST_URL;
     const authCallback = import.meta.env.VITE_WECOM_AUTH_CALLBACK;
     const redirectUri = encodeURIComponent(host + authCallback);
@@ -63,9 +63,9 @@ const UserCenter = () => {
 
     setIsLogin(true);
     //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_base&state=${state}&agentid=${agentId}#wechat_redirect`;
-    //const authUrl = `https://open.weixin.qq.com/connect/qrconnect?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_login&state=${state}#wechat_redirect`;
+    const authUrl = `https://open.weixin.qq.com/connect/qrconnect?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_login&state=${state}#wechat_redirect`;
     //const authUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`;
-    const authUrl = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&state=${state}`;
+    //const authUrl = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${corpId}&agentid=${agentId}&redirect_uri=${redirectUri}&state=${state}`;
     window.location.href = authUrl;
   };
 
