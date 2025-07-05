@@ -8,22 +8,20 @@ import { useUser } from '@/hooks/useUser';
 //import { useUserStore } from '@/stores/useUserStore';
 
 
-const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
-const defCurrentModel = 'GPT-3.1';
+//const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
+//const defCurrentModel = 'GPT-3.1';
 
 const UserCenter = () => {
 
-  const modelList = defModelList;
-  const { userInfo, isLogin } = useUser();
-  const [currentModel, setCurrentModel] = useState(defCurrentModel);
   const navigate = useNavigate();
+  const { userInfo, isLogin } = useUser();
+  //const modelList = defModelList;
+  //const [currentModel, setCurrentModel] = useState(defCurrentModel);
 
-
-  const onModelChange = (model: string) => {
-    //
-    console.log(`Model changed to: ${model}`);
-    setCurrentModel(model);
-  };
+  //const onModelChange = (model: string) => {
+    //console.log(`Model changed to: ${model}`);
+    //setCurrentModel(model);
+  //};
 
 
   const onAbout = () => {
