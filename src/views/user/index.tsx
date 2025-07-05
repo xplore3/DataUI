@@ -91,7 +91,7 @@ const UserCenter = () => {
           {editing ? '保存' : '编辑'}
         </button>
       </div> */}
-      <div className="user-center-section">
+      {/* <div className="user-center-section">
         <div className="user-center-section-title">大模型选择</div>
         <select
           className="user-center-select"
@@ -104,7 +104,7 @@ const UserCenter = () => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
       <ThemeToggle />
       <KnowledgeBase />
       <div className="user-center-section user-center-links" style={{ marginTop: '20px' }}>

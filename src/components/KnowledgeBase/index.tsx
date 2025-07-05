@@ -126,7 +126,7 @@ const KnowledgeBase: React.FC = () => {
 
   const handleResetForm = () => {
     localStorage.removeItem('trendmuse_form_submitted');
-    localStorage.removeItem('trendmuse_form_answers');
+    //localStorage.removeItem('trendmuse_form_answers');
     setIsFormSubmitted(false);
   };
 
