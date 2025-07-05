@@ -266,8 +266,8 @@ const Chat = () => {
     try {
       // checkResp per 30 seconds
       let jobSkip = false;
-      const job = new Cron("*/20 * * * * *", async () => {
-        console.log(`Response check at ${new Date().toISOString()}`);
+      const job = new Cron("*/10 * * * * *", async () => {
+        //console.log(`Response check at ${new Date().toISOString()}`);
         if (jobSkip) {
           return;
         }
@@ -346,11 +346,10 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'positioning_analysis').then(res => {
-          /*setMessageList(prev => [
+          setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);*/
-          console.log(res);
+          ]);
         })
         .finally(async () => {
           //setLoading(false);
@@ -374,11 +373,10 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'today_posts').then(res => {
-          /*setMessageList(prev => [
+          setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);*/
-          console.log(res);
+          ]);
         })
         .finally(async () => {
           //setLoading(false);
@@ -436,14 +434,13 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'hot_posts').then(res => {
-          /*setMessageList(prev => [
+          setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);*/
-          console.log(res);
+          ]);
         })
         .finally(async () => {
-          setText('');
+          //setText('');
           //setLoading(false);
           await handlerStatus();
         });
@@ -472,11 +469,10 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'search_koc').then(res => {
-          /*setMessageList(prev => [
+          setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);*/
-          console.log(res);
+          ]);
         })
         .finally(async () => {
           setText('');
