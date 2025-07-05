@@ -37,6 +37,7 @@ const UserCenter = () => {
   const onLogout = () => {
     console.log('User logged out');
     localStorage.removeItem('userInfo');
+    navigate('/chat');
   };
 
   const onLogin = () => {
