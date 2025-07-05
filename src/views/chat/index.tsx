@@ -305,7 +305,7 @@ const Chat = () => {
   };
 
   const checkUserProfile = () => {
-    const set = localStorage.getItem('trendmuse_form_submitted') !== 'true';
+    const set = localStorage.getItem('trendmuse_form_submitted') === 'true';
     if (!set) {
       toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
     }
@@ -346,10 +346,11 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'positioning_analysis').then(res => {
-          setMessageList(prev => [
+          /*setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);
+          ]);*/
+          console.log(res);
         })
         .finally(async () => {
           //setLoading(false);
@@ -373,10 +374,11 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'today_posts').then(res => {
-          setMessageList(prev => [
+          /*setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);
+          ]);*/
+          console.log(res);
         })
         .finally(async () => {
           //setLoading(false);
@@ -434,10 +436,11 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'hot_posts').then(res => {
-          setMessageList(prev => [
+          /*setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);
+          ]);*/
+          console.log(res);
         })
         .finally(async () => {
           setText('');
@@ -469,10 +472,11 @@ const Chat = () => {
       ]);
       try {
         chatApi.routineTask(prompt, 'search_koc').then(res => {
-          setMessageList(prev => [
+          /*setMessageList(prev => [
             ...prev,
             { ...res, displayText: '' },
-          ]);
+          ]);*/
+          console.log(res);
         })
         .finally(async () => {
           setText('');
