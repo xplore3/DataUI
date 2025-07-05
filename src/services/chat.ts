@@ -1,6 +1,7 @@
 import api from './axios';
 import { Chat, Message } from '../types/chat';
 import { useUserStore } from '@/stores/useUserStore';
+import { useUser } from '@/hooks/useUser';
 import { getRandomElements, getUnknownErrorDesc, getWaitTip } from '@/utils/common';
 
 export const chatApi = {
@@ -14,7 +15,9 @@ export const chatApi = {
   },
 
   getUserId: ():string => {
-    let userId = useUserStore.getState().getUserId();
+    const { userInfo } = useUser();
+    //let userId = useUserStore.getState().getUserId();
+    let userId = userInfo?.unionid;
     if (!userId) {
       userId = chatApi.getOrCreateUUID();
     }
