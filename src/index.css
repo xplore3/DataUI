@@ -9,7 +9,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  max-width: 90%;
+  max-width: 568px;
   margin: 0 auto;
   align-items: center;
 
@@ -47,7 +47,7 @@ textarea {
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
   [data-theme='dark'] & {
-    background-color: var(--background-color-secondary) ;
+    background-color: transparent;
   }
 }
 
