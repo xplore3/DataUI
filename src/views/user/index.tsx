@@ -10,6 +10,8 @@ import { useUser } from '@/hooks/useUser';
 
 //const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
 //const defCurrentModel = 'GPT-3.1';
+const defaultAvatar = 'https://data3.site/icon128.png';
+const defaultNickname = 'TrendMuse';
 
 const UserCenter = () => {
 
@@ -58,9 +60,9 @@ const UserCenter = () => {
     <div className="user-center">
       {isLogin ? (<>
       <div className="user-center-header">
-        <img className="user-center-avatar" src={userInfo.headimgurl} alt="avatar" />
+        <img className="user-center-avatar" src={userInfo.headimgurl || defaultAvatar} alt="avatar" />
         <div className="user-center-info">
-          <div className="user-center-nickname">{userInfo.nickname}</div>
+          <div className="user-center-nickname">{userInfo.nickname || defaultNickname}</div>
           <div className="user-center-detail">
             <span>{userInfo.sex == 0 ? 'Male' : 'Female'}</span>
             <span>{userInfo.city}</span>
