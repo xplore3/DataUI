@@ -100,7 +100,7 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loadin
           <li key={q.id} className="question-item">
             <div className="question-title">{q.question}</div>
             {q.type === 'single' && q.options && (
-              <div className="question-options">
+              <div className="question-options question-options-single">
                 {q.options.map((opt) => (
                   <label key={opt} className="question-option">
                     <input
@@ -116,7 +116,7 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loadin
               </div>
             )}
             {q.type === 'multiple' && q.options && (
-              <div className="question-options">
+              <div className="question-options question-options-multiple">
                 {q.options.map((opt) => (
                   <div key={opt} >
                     <label className="question-option">
