@@ -136,7 +136,7 @@ const KnowledgeBase: React.FC = () => {
       options: ['主要卖产品：专注于销售某类商品', '主要卖内容：专注于分享某领域知识或经验', '产品+内容：同时销售产品并分享相关内容'] 
     },
     { 
-      id: 'basicIntroductionDetailedDescription', 
+      id: 'detailedDescription', 
       question: '基本介绍详细描述',
       tips: `示例1：【爱格女包】是一个【卖女士包】的品牌账号，成立于【2024年】。因为想【让更多打工人用上质量好，但是价格优惠，工厂直出的通勤包】而创立了这个品牌。我希望在【3年内】，它能成为【工厂品质女包的领军品牌】。
       \n  示例2：【张三谈职场】是一个专注于【职业发展和心理健康】的达人账号，成立于【2025年】。因为希望【帮助更多人提升职场竞争力，掌握有效的时间管理和心理调适技巧】而创建了这个账号。我希望在【3年内】能够成为【职业发展与心理健康领域的知名影响者】。\n`, 
@@ -149,7 +149,7 @@ const KnowledgeBase: React.FC = () => {
       options: ['功能性（主要解决具体问题/提供功能）', '情绪性（主要带来心理感受/价值观连接）', '二者兼有'] 
     },
     { 
-      id: 'maximumSellingPoint', 
+      id: 'biggestSellingPoint', 
       question: '你的最大卖点', 
       type: 'text' as const
     },
@@ -180,10 +180,10 @@ const KnowledgeBase: React.FC = () => {
       id: 'ageRange', 
       question: '年龄范围', 
       type: 'multiple' as const, 
-      options: ['18以下', '18-24', '25-34', '35-44', '45-54', '55以上', '不限'] 
+      options: ['<18', '18-24', '25-34', '35-44', '>44'] 
     },
     { 
-      id: 'geographicPreference', 
+      id: 'regionalPreference', 
       question: '地域偏好', 
       type: 'single' as const, 
       options: ['一线城市', '新一线', '二三线城市', '不限', '其他（自填）'] 
@@ -201,19 +201,19 @@ const KnowledgeBase: React.FC = () => {
       options: ['都市精英', '小镇青年', '斜杠青年', '社恐宅家', '热衷社交', '文艺青年', '健身运动', '旅行探索', '知识追求', '潮流消费', '心理自助', '美妆时尚'] 
     },
     { 
-      id: 'futureThreeToSixMonthsGoals', 
+      id: 'futureMonthsGoals', 
       question: '未来3-6个月最希望优先实现', 
       type: 'multiple' as const, 
       options: ['粉丝增长', '提升转化/销量', '建立品牌心智', '提高内容影响力（曝光）'] 
     },
     { 
-      id: 'mostHopedTrendMuseHelp', 
+      id: 'mostHopeful', 
       question: '最希望 TrendMuse 帮你做的', 
       type: 'multiple' as const, 
       options: ['账号定位优化', '品牌故事/文化提炼', '差异化/爆款选题建议', '小红书日更内容生成', '合作达人推荐及筛选', '网络热点同步', '其他'] 
     },
     { 
-      id: 'brandAccountValues', 
+      id: 'brandValuesAndStyles', 
       question: '请从以下选项中选择最符合您品牌/账号的价值观，这将决定账号的定位与风格输出', 
       type: 'multiple' as const, 
       options: ['真实/透明', '多元/包容', '可持续/环保', '稳定/安全感', '利他/责任', '创新/前卫', '专业/极致', '归属/社群', '自我表达/个性', '健康/自律', '独立/强大', '幽默/轻松', '奢华/稀缺', '好奇/探索', '克制/极简', '其他：输入'] 
