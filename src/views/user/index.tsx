@@ -58,7 +58,7 @@ const UserCenter = () => {
 
   return (
     <div className="user-center">
-      {!isLogin ? (<>
+      {isLogin ? (<>
       <div className="user-center-header">
         <button 
           className="user-center-back-btn"

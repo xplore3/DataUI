@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 
 const KnowledgeBase: React.FC = () => {
   const navigate = useNavigate();
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(() => {
+    return localStorage.getItem('trendmuse_form_submitted') === 'true';
+  });
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string | string[]>>({});
@@ -244,6 +246,7 @@ const KnowledgeBase: React.FC = () => {
         // 保存成功后设置状态
         setSavedAnswers(answers);
         setIsFormSubmitted(true);
+        localStorage.setItem('trendmuse_form_submitted', 'true');
       })
       .finally(() => {
         setLoading(false);
