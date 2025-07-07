@@ -51,7 +51,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '品牌定位', '今日文案', '热帖推荐', '达人评估', '趋势洞察'];
+  const keyList = ['模板', '品牌定位', '今日文案', '爆款仿写'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -360,7 +360,7 @@ const Chat = () => {
       if (loading) return;
       toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
       setLoading(true);
-      const prompt = '根据我的产品/背景知识库等信息，生成品牌定位分析报告。';
+      const prompt = '根据我的产品/背景知识库等信息，生成品牌定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
@@ -432,7 +432,7 @@ const Chat = () => {
         console.log(error);
       }*/
     }
-    else if (key === '热帖推荐') {
+    else if (key === '爆款仿写') {
       if (!checkUserProfile()) {
         return;
       }
