@@ -7,6 +7,7 @@ export interface QuestionItem {
   id: string;
   type: 'single' | 'multiple' | 'text';
   question: string;
+  tips?: string;
   options?: string[];
   answer?: string;
 }
@@ -142,6 +143,7 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loadin
               </div>
             )}
             {q.type === 'text' && (
+              <p className="question-input">${q.tips || ''}</p>
               <input
                 className="question-input"
                 type="text"
