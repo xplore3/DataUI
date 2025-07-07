@@ -387,7 +387,7 @@ const Chat = () => {
       if (loading) return;
       toast('正在根据你的今日任务生成文案，请稍候......');
       setLoading(true);
-      const prompt = '根据我的产品信息，生成一篇今日的内容文案，包括标题、正文、标签等。';
+      const prompt = '根据我的产品信息，生成今日的一些内容文案，包括标题、正文、标签等。';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
@@ -437,18 +437,9 @@ const Chat = () => {
         return;
       }
       if (loading) return;
-      toast('正在根据产品信息获取对标网红KOC及其内容，请稍候......');
+      toast('正在获取相关热门内容，并进行分析和仿写，请稍候......');
       setLoading(true);
-      const prompt = `优秀内容对标，根据我的产品、业务和背景等搜索到合适的对标网红KOC，及其热门笔记；
-        \r\n并进行如下分析：
-        \r\n1. 将内容分为不同类型，如种草/教程/评测/合集等；
-        \r\n2. 对每类内容进行分析，包括标题结构、封面设计、文案构造等；
-        \r\n3. 如果账号存在多种结构策略则分点归纳分析。
-        \r\n\r\n进行以上分析之后，可以提供如下一些下一步意图选项：
-        \r\n【逐条分析互动表现Top10内容、提取内容类型/封面/标签/标题关键字/互动数据、
-          拆解爆款原因（是否为话题+人设+品牌+场景+评论运营等组合驱动）、
-          总结3~5条可直接模仿内容、总结3条竞品内容未覆盖的机会点、
-          分析可模仿内容的可借鉴原因、可借鉴内容适合我方哪类产品】。`;
+      const prompt = `找到所在行业/赛道的热门内容（包括低粉爆文）并汇集成数据表格，并基于这些爆款，生成10篇高仿写但原创表达的内容文案`;
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
