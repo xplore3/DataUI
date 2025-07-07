@@ -360,9 +360,9 @@ export const chatApi = {
     };
   },
 
-  getKnowledges: async (userId: string): Promise<string> => {
-    const response = await api.get(`/read_knowledge?userId=${userId}`, {});
-    return response.data.data;
+  getKnowledges: async (): Promise<string[] | string> => {
+    const response = await api.get(`/read_knowledge?userId=${chatApi.getUserId()}`, {});
+    return response.data;
   },
 
   parseContentDisposition: (contentDisposition: string) => {

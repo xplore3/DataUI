@@ -23,8 +23,8 @@
 }
 
 .question-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
 }
@@ -36,6 +36,9 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  flex: 0 0 auto;
+  min-width: 120px;
+  max-width: 100%;
 }
 
 .question-input {

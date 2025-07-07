@@ -58,8 +58,15 @@ const UserCenter = () => {
 
   return (
     <div className="user-center">
-      {isLogin ? (<>
+      {!isLogin ? (<>
       <div className="user-center-header">
+        <button 
+          className="user-center-back-btn"
+          onClick={() => navigate('/chat')}
+          title="返回对话"
+        >
+         返回对话
+        </button>
         <img className="user-center-avatar" src={userInfo.headimgurl || defaultAvatar} alt="avatar" />
         <div className="user-center-info">
           <div className="user-center-nickname">{userInfo.nickname || defaultNickname}</div>

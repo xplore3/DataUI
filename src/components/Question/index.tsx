@@ -1,5 +1,5 @@
 import './index.less';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //import { toast } from 'react-toastify';
 
 
@@ -15,12 +15,31 @@ interface DynamicFormProps {
   questions: QuestionItem[];
   hasSubmit: boolean;
   loading?: boolean;
+  initialAnswers?: Record<string, string | string[]>;
   onSubmit: (answers: Record<string, string | string[]>) => void;
 }
 
-const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loading = false, onSubmit }) => {
-  const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
+const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loading = false, initialAnswers = {}, onSubmit }) => {
+  const [answers, setAnswers] = useState<Record<string, string | string[]>>(initialAnswers);
   const [customInputs, setCustomInputs] = useState<Record<string, string>>({});
+
+  // 处理初始化自定义输入框的值
+  useEffect(() => {
+    const initialCustomInputs: Record<string, string> = {};
+    Object.entries(initialAnswers).forEach(([questionId, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (typeof item === 'string' && item.includes(': ')) {
+            const [option, customValue] = item.split(': ', 2);
+            if (option.includes('其他') || option.includes('自填')) {
+              initialCustomInputs[`${questionId}-${option}`] = customValue;
+            }
+          }
+        });
+      }
+    });
+    setCustomInputs(initialCustomInputs);
+  }, [initialAnswers]);
 
   const handleChange = (id: string, value: string | string[]) => {
     setAnswers((prev) => ({ ...prev, [id]: value }));
