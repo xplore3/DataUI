@@ -143,7 +143,7 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loadin
               </div>
             )}
             {q.type === 'text' && (
-              <div>
+              <div className="question-sub-div">
                 <span className="question-tips">{q.tips || ''}</span>
                 <input
                   className="question-input"
