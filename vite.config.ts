@@ -6,6 +6,17 @@ import UnoCSS from 'unocss/vite';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), UnoCSS()],
+  build: {
+    target: ['chrome61', 'safari11', 'firefox60'],
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'markdown-vendor': ['react-markdown', 'remark-gfm'],
+        },
+      },
+    },
+  },
   server: {
     host: '0.0.0.0',
     proxy: {

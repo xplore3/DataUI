@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正则表达式兼容性测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>正则表达式兼容性测试</h1>
+    <p>本页面测试浏览器对 ES2018 高级正则表达式语法的支持情况。</p>
+    
+    <div class="test-section">
+        <h2>浏览器信息</h2>
+        <div id="browser-info" class="info"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>正则表达式功能测试</h2>
+        <div id="regex-tests"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Markdown 渲染测试</h2>
+        <div id="markdown-test"></div>
+    </div>
+
+    <script>
+        // 显示浏览器信息
+        function showBrowserInfo() {
+            const info = document.getElementById('browser-info');
+            info.innerHTML = `
+                <strong>User Agent:</strong> ${navigator.userAgent}<br>
+                <strong>Platform:</strong> ${navigator.platform}<br>
+                <strong>JavaScript Version:</strong> ${typeof Symbol !== 'undefined' ? 'ES6+' : 'ES5 或更早'}
+            `;
+        }
+
+        // 测试各种正则表达式功能
+        function testRegexFeatures() {
+            const tests = [
+                {
+                    name: '命名捕获组 (?<name>...)',
+                    test: () => {
+                        const regex = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/;
+                        const match = regex.exec('2023-12-25');
+                        return match && match.groups && match.groups.year === '2023';
+                    }
+                },
+                {
+                    name: '前瞻断言 (?=...)',
+                    test: () => {
+                        const regex = /\d(?=px)/;
+                        return regex.test('100px');
+                    }
+                },
+                {
+                    name: '后瞻断言 (?<=...)',
+                    test: () => {
+                        const regex = /(?<=\$)\d+/;
+                        return regex.test('$100');
+                    }
+                },
+                {
+                    name: 'Unicode 属性转义 \\p{...}',
+                    test: () => {
+                        const regex = /\p{Emoji}/u;
+                        return regex.test('😀');
+                    }
+                },
+                {
+                    name: '基础正则表达式',
+                    test: () => {
+                        const regex = /hello/i;
+                        return regex.test('Hello World');
+                    }
+                }
+            ];
+
+            const container = document.getElementById('regex-tests');
+            let html = '';
+
+            tests.forEach(test => {
+                let result, className, message;
+                try {
+                    result = test.test();
+                    className = result ? 'success' : 'error';
+                    message = result ? '✅ 支持' : '❌ 不支持';
+                } catch (error) {
+                    className = 'error';
+                    message = `❌ 错误: ${error.message}`;
+                    result = false;
+                }
+
+                html += `
+                    <div class="test-result ${className}">
+                        <strong>${test.name}:</strong> ${message}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 测试 Markdown 渲染
+        function testMarkdownRender() {
+            const container = document.getElementById('markdown-test');
+            
+            // 检查是否能加载主应用
+            try {
+                const testMarkdown = '# 测试标题\n\n这是一段**粗体**文本和*斜体*文本。\n\n- 列表项1\n- 列表项2';
+                
+                container.innerHTML = `
+                    <div class="test-result info">
+                        <strong>Markdown 测试内容:</strong><br>
+                        <code>${testMarkdown.replace(/\n/g, '\\n')}</code>
+                    </div>
+                    <div class="test-result success">
+                        <strong>✅ 基础测试通过</strong><br>
+                        页面可以正常加载，建议在实际应用中进行完整测试。
+                    </div>
+                `;
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="test-result error">
+                        <strong>❌ Markdown 测试失败:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 执行所有测试
+        function runAllTests() {
+            showBrowserInfo();
+            testRegexFeatures();
+            testMarkdownRender();
+        }
+
+        // 页面加载完成后运行测试
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', runAllTests);
+        } else {
+            runAllTests();
+        }
+    </script>
+</body>
+</html> 

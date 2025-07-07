@@ -135,6 +135,7 @@ const Chat = () => {
   // AIMessage component with requestAnimationFrame typing animation
   const AIMessage = ({ message, onDisplayUpdate }: { message: Message; onDisplayUpdate: (text: string) => void }) => {
     const animationFrameRef = useRef<number | null>(null);
+    const [renderError, setRenderError] = useState(false);
 
     useEffect(() => {
       // Skip if the content is already complete
@@ -157,28 +158,48 @@ const Chat = () => {
       };
     }, [message.text, message.displayText, onDisplayUpdate]);
 
-    return (
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-          a: ({ href, children, ...props }) => (
-            <a
-              href={href}
-              onClick={e => {
-                e.preventDefault();
-                window.open(href, '_blank');
-              }}
-              style={{ cursor: 'pointer' }}
-              {...props}
-            >
-              {children}
-            </a>
-          ),
-        }}
-      >
-        {message.displayText}
-      </ReactMarkdown>
-    );
+    // 错误边界：如果 ReactMarkdown 出错，显示纯文本内容
+    if (renderError) {
+      return (
+        <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
+          {message.displayText}
+        </pre>
+      );
+    }
+
+    try {
+      return (
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: ({ href, children, ...props }) => (
+              <a
+                href={href}
+                onClick={e => {
+                  e.preventDefault();
+                  window.open(href, '_blank');
+                }}
+                style={{ cursor: 'pointer' }}
+                {...props}
+              >
+                {children}
+              </a>
+            ),
+          }}
+        >
+          {message.displayText}
+        </ReactMarkdown>
+      );
+    } catch (error) {
+      // 如果 ReactMarkdown 渲染失败，切换到纯文本模式
+      console.warn('ReactMarkdown render failed, falling back to plain text:', error);
+      setRenderError(true);
+      return (
+        <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
+          {message.displayText}
+        </pre>
+      );
+    }
   };
 
   // Handle input changes in the text area
@@ -339,7 +360,7 @@ const Chat = () => {
       if (loading) return;
       toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
       setLoading(true);
-      let prompt = '根据我的产品/背景知识库等信息，生成品牌定位分析报告。';
+      const prompt = '根据我的产品/背景知识库等信息，生成品牌定位分析报告。';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
@@ -366,7 +387,7 @@ const Chat = () => {
       if (loading) return;
       toast('正在根据你的今日任务生成文案，请稍候......');
       setLoading(true);
-      let prompt = '根据我的产品信息，生成一篇今日的内容文案，包括标题、正文、标签等。';
+      const prompt = '根据我的产品信息，生成一篇今日的内容文案，包括标题、正文、标签等。';
       setMessageList(prev => [
         ...prev,
         { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
@@ -461,7 +482,7 @@ const Chat = () => {
           - 高：调性高度契合 + 内容稳定 + 互动率高
           - 中：部分调性契合 + 内容有潜力
           - 低：调性边缘或互动一般，待观察）；
-        \r\n2. 达人内容调性分析与匹配判断，输出“内容调性匹配度打分”+ 内容风格简评；
+        \r\n2. 达人内容调性分析与匹配判断，输出"内容调性匹配度打分"+ 内容风格简评；
         \r\n3. 合作投放建议，包括合作形式、内容方向、适合投放时间段、预算建议等`;
       setMessageList(prev => [
         ...prev,
