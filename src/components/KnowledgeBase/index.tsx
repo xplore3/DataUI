@@ -186,13 +186,13 @@ const KnowledgeBase: React.FC = () => {
       id: 'regionalPreference', 
       question: '地域偏好', 
       type: 'single' as const, 
-      options: ['一线城市', '新一线', '二三线城市', '不限', '其他（自填）'] 
+      options: ['一线城市', '新一线', '二三线城市', '不限'] 
     },
     { 
       id: 'consumptionAbility', 
       question: '消费能力', 
       type: 'single' as const, 
-      options: ['低（目标用户的月消费能力<100）薅羊毛、占便宜、性价比高', '中（目标用户的月消费能力100-500）', '高（目标用户的月消费能力500+）需要身份、品质感'] 
+      options: ['低（目标用户的月消费能力<100）', '中（目标用户的月消费能力100-500）', '高（目标用户的月消费能力500+）'] 
     },
     { 
       id: 'userProfileTags', 
