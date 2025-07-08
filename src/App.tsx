@@ -11,7 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { useThemeStore } from './stores/useThemeStore';
-import VConsole from 'vconsole';
+//import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
 
@@ -20,11 +20,11 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  useEffect(() => {
-    if (window.location.href.includes('debug=1')) {
-      new VConsole();
-    }
-  }, []);
+  //useEffect(() => {
+  //  if (window.location.href.includes('debug=1')) {
+  //    new VConsole();
+  //  }
+  //}, []);
 
   return (<div>
     <ToastContainer
