@@ -224,7 +224,7 @@ const KnowledgeBase: React.FC = () => {
       type: 'text' as const
     },
     { 
-      id: 'privateBrandKnowledgeUploadLink', 
+      id: 'privateBrandKnowledge', 
       question: '如果可以，请将更多资料上传到您的私有品牌知识库，这将帮助您的灵感 Muse 更好地理解您（此项为非必选项）', 
       type: 'text' as const
     }
