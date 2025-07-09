@@ -14,6 +14,7 @@ const defaultAvatar = 'https://data3.site/icon128.png';
 const defaultNickname = 'TrendMuse';
 
 const UserCenter = () => {
+  const isMobile = /iphone|android|ipad|mobile/i.test(navigator.userAgent);
 
   const navigate = useNavigate();
   const { userInfo, isLogin } = useUser();
@@ -35,13 +36,16 @@ const UserCenter = () => {
   };
 
   const onLogout = () => {
-    console.log('User logged out');
+    //console.log('User logged out');
     localStorage.removeItem('userInfo');
     navigate('/chat');
   };
 
   const onLogin = () => {
-    console.log('User settings clicked');
+    //console.log('User settings clicked');
+    if (isMobile) {
+      return;
+    }
     const corpId = import.meta.env.VITE_WECHAT_CORP_ID;
     //const agentId = import.meta.env.VITE_WECOM_AGENT_ID;
     const host = import.meta.env.VITE_API_HOST_URL;
@@ -58,7 +62,7 @@ const UserCenter = () => {
 
   return (
     <div className="user-center">
-      {isLogin ? (<>
+      {(isLogin || isMobile) ? (<>
       <div className="user-center-header">
         <button 
           className="user-center-back-btn"
