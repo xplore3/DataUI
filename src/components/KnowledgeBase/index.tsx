@@ -137,7 +137,7 @@ const KnowledgeBase: React.FC = () => {
     },
     { 
       id: 'detailedDescription', 
-      question: '基本介绍详细描述',
+      question: '详细描述',
       tips: `示例1：【爱格女包】是一个【卖女士包】的品牌账号，成立于【2024年】。因为想【让更多打工人用上质量好，但是价格优惠，工厂直出的通勤包】而创立了这个品牌。我希望在【3年内】，它能成为【工厂品质女包的领军品牌】。
       \n  示例2：【张三谈职场】是一个专注于【职业发展和心理健康】的达人账号，成立于【2025年】。因为希望【帮助更多人提升职场竞争力，掌握有效的时间管理和心理调适技巧】而创建了这个账号。我希望在【3年内】能够成为【职业发展与心理健康领域的知名影响者】。\n`, 
       type: 'text' as const
@@ -224,8 +224,14 @@ const KnowledgeBase: React.FC = () => {
       type: 'text' as const
     },
     { 
-      id: 'privateBrandKnowledge', 
+      id: 'privateBrandKnowledge',
       question: '如果可以，请将更多资料上传到您的私有品牌知识库，这将帮助您的灵感 Muse 更好地理解您（此项为非必选项）', 
+      type: 'text' as const
+    },
+    { 
+      id: 'temporaryAddition', 
+      question: '其他一些需要临时性参考的信息',
+      tips: `备注：临时性季节性附加信息，可以随时更新。\n`, 
       type: 'text' as const
     }
   ];
