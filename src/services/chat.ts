@@ -332,7 +332,7 @@ export const chatApi = {
     };
   },
 
-  addKnowledges: async ( knowledges: string[]): Promise<Message> => {
+  addKnowledges: async (knowledges: string): Promise<Message> => {
     let debug = null;
     try {
       const result = await api.post(`/add_knowledge`, {
@@ -360,7 +360,7 @@ export const chatApi = {
     };
   },
 
-  getKnowledges: async (): Promise<string[] | string> => {
+  getKnowledges: async (): Promise<string> => {
     const response = await api.get(`/read_knowledge?userId=${chatApi.getUserId()}`, {});
     return response.data;
   },
