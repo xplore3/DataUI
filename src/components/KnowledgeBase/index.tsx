@@ -137,7 +137,7 @@ const KnowledgeBase: React.FC = () => {
     },
     { 
       id: 'detailedDescription', 
-      question: '详细描述',
+      question: '品牌介绍',
       tips: `示例1：【爱格女包】是一个【卖女士包】的品牌账号，成立于【2024年】。因为想【让更多打工人用上质量好，但是价格优惠，工厂直出的通勤包】而创立了这个品牌。我希望在【3年内】，它能成为【工厂品质女包的领军品牌】。
       \n  示例2：【张三谈职场】是一个专注于【职业发展和心理健康】的达人账号，成立于【2025年】。因为希望【帮助更多人提升职场竞争力，掌握有效的时间管理和心理调适技巧】而创建了这个账号。我希望在【3年内】能够成为【职业发展与心理健康领域的知名影响者】。\n`, 
       type: 'text' as const
@@ -150,14 +150,14 @@ const KnowledgeBase: React.FC = () => {
     },
     { 
       id: 'biggestSellingPoint', 
-      question: '你的最大卖点', 
+      question: '你的最大卖点或者与同类最大的差异', 
       type: 'text' as const
     },
-    { 
+    /*{ 
       id: 'biggestDifference', 
       question: '与同类最大的差异', 
       type: 'text' as const
-    },
+    },*/
     { 
       id: 'productType', 
       question: '产品类型', 
@@ -185,20 +185,21 @@ const KnowledgeBase: React.FC = () => {
     { 
       id: 'regionalPreference', 
       question: '地域偏好', 
-      type: 'single' as const, 
+      type: 'multiple' as const, 
       options: ['一线城市', '新一线', '二三线城市', '不限'] 
     },
     { 
       id: 'consumptionAbility', 
       question: '消费能力', 
-      type: 'single' as const, 
+      type: 'multiple' as const, 
       options: ['低（目标用户的月消费能力<100）', '中（目标用户的月消费能力100-500）', '高（目标用户的月消费能力500+）'] 
     },
     { 
       id: 'userProfileTags', 
       question: '用户画像标签', 
       type: 'multiple' as const, 
-      options: ['都市精英', '小镇青年', '斜杠青年', '社恐宅家', '热衷社交', '文艺青年', '健身运动', '旅行探索', '知识追求', '潮流消费', '心理自助', '美妆时尚'] 
+      //options: ['都市精英', '小镇青年', '斜杠青年', '社恐宅家', '热衷社交', '文艺青年', '健身运动', '旅行探索', '知识追求', '潮流消费', '心理自助', '美妆时尚'] 
+      options: ['模特', '学生', '摄影师', '老师', '创业者', '育婴师', '插画师', '化妆师', '营养师', '金融从业者', '甜点师', '室内设计师', '教练', '厨师', '品牌创始人', '造型师', '画家', '平面设计师', '服装设计师', '主播', '医生', '编辑', '妈妈', '萌娃', '情侣', '母女', '夫妻', '母子', '家庭', '爸爸', '留学背景', '户外爱好者', '海外华人', '数码爱好者', '铲屎官', '手账爱好者', '孕妈', '二次元人群', '独居人群', '汉服爱好者', '手办爱好者']
     },
     { 
       id: 'futureMonthsGoals', 
