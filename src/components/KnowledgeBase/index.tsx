@@ -35,7 +35,7 @@ const KnowledgeBase: React.FC = () => {
           if (multipleChoiceQuestions.includes(key)) {
             // 多选题：如果包含逗号分隔符就分割，否则转为单元素数组
             if (json[key].includes(', ')) {
-              answers[key] = json[key].split(', ').map(v => v.trim());
+              answers[key] = json[key].split(', ').map((v: string) => v.trim());
             } else {
               answers[key] = [json[key]];
             }
