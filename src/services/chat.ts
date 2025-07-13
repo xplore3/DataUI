@@ -365,6 +365,11 @@ export const chatApi = {
     return response.data;
   },
 
+  getQualityEvaluation: async (): Promise<string> => {
+    const response = await api.get(`/quality_evaluation?userId=${chatApi.getUserId()}`, {});
+    return response.data;
+  },
+
   parseContentDisposition: (contentDisposition: string) => {
     if (!contentDisposition) return null;
 

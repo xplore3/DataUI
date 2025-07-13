@@ -223,6 +223,15 @@ const Chat = () => {
         return
       }
 
+      if (finalText === '测试001') {
+        const response = await chatApi.getQualityEvaluation();
+        setMessageList(prev => [
+          ...prev,
+          { text: response, user: 'client', action: 'NONE', displayText: response },
+        ]);
+        return;
+      }
+
       setLoading(true);
       setText('');
       setMessageList(prev => [
