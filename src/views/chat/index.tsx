@@ -224,11 +224,20 @@ const Chat = () => {
       }
 
       if (finalText === '测试001') {
-        const response = await chatApi.getQualityEvaluation();
-        setMessageList(prev => [
-          ...prev,
-          { text: response, user: 'client', action: 'NONE', displayText: response },
-        ]);
+        toast('正在获取测试信息，请稍候......');
+        setLoading(true);
+        chatApi.getQualityEvaluation()
+          .then(response => {
+            setMessageList(prev => [
+              ...prev,
+              { text: response, user: 'client', action: 'NONE', displayText: response },
+            ]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return;
+          });
         return;
       }
 
