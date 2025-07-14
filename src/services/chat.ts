@@ -204,6 +204,49 @@ export const chatApi = {
     };
   },
 
+  dataHub: async (text: string): Promise<Message> => {
+    let response = null;
+    let debug = null;
+    try {
+      const result = await api.post(`/datahub`, {
+        text: text,
+        userId: chatApi.getUserId(),
+      });
+      response = result.data.text;
+      let newTaskId = '';
+      if (result.status != 200) {
+        response = "Error in response " + result.statusText;
+      }
+      try {
+        const json = JSON.parse(response);
+        if (json) {
+          newTaskId = json.taskId;
+          useUserStore.getState().setTaskId(newTaskId);
+          response = (json.process_result + json.option_description) || json.data_result || json.question_description;
+        }
+      } catch (err) {
+        console.log(err);
+        newTaskId = response.taskId || result.data.taskId;
+        useUserStore.getState().setTaskId(newTaskId);
+        response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
+      }
+      return {
+        text: response,
+        user: 'agent',
+        action: 'NONE',
+        taskId: newTaskId,
+      };
+    } catch (err) {
+      debug = err;
+      console.log(err);
+    }
+    return {
+      text: response || getUnknownErrorDesc(debug),
+      user: 'agent',
+      action: 'NONE',
+    };
+  },
+
   deleteChat: async (chatId: string): Promise<void> => {
     await api.delete(`/chat/${chatId}`);
   },

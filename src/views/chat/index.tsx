@@ -240,6 +240,23 @@ const Chat = () => {
           });
         return;
       }
+      else if (finalText.slice(0, 5) === '测试002') {
+        toast('正在获取测试信息002，请稍候......');
+        setLoading(true);
+        chatApi.dataHub(finalText.slice(5))
+          .then(res => {
+            setMessageList(prev => [
+              ...prev,
+              { ...res, displayText: '' },
+            ]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return;
+          });
+        return;
+      }
 
       setLoading(true);
       setText('');
