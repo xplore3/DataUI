@@ -58,7 +58,7 @@ const Chat = () => {
     const savedMessages = localStorage.getItem('ChatMessage');
     if (savedMessages) {
       const parsedMessages: Message[] = JSON.parse(savedMessages);
-      const initializedMessages = parsedMessages.map(msg => {
+      const initializedMessages = parsedMessages.slice(-200).map(msg => {
         return {
           ...msg,
           displayText: msg.text,
