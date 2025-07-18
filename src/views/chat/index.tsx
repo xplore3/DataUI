@@ -46,7 +46,7 @@ const Chat = () => {
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   //const { userProfile } = useUserStore();
-  let preText = '';
+  //let preText = '';
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
@@ -339,12 +339,23 @@ const Chat = () => {
             }
             //console.log(preText);
             //console.log(res.text);
-            if (res.text && res.text != '' && res.text !== preText) {
+            /*if (res.text && res.text != '' && res.text !== preText) {
               setMessageList(prev => [
                 ...prev,
                 { ...res, displayText: '' },
               ]);
               preText = res.text;
+            }*/
+            if (res.text) {
+              setMessageList(prev => {
+                const newList = [...prev];
+                const index = newList.length - 1;
+                if (newList[index].taskId != res.taskId) {
+                  return [...prev, { ...res, displayText: '' }]
+                }
+                newList[index] = { ...newList[index], text: res.text, displayText: res.text };
+                return newList;
+              });
             }
           });
         } catch(err) {
