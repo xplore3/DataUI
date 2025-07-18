@@ -46,7 +46,7 @@ const Chat = () => {
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   //const { userProfile } = useUserStore();
-  let preText = '';
+  //let preText = '';
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
