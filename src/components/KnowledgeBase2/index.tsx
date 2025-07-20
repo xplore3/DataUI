@@ -194,7 +194,7 @@ const KnowledgeBase2: React.FC = () => {
               onFinish={handleFormSubmit}
               initialValues={savedAnswers}
             >
-              <Divider orientation="left">一、基本情况</Divider>
+              <Divider  orientation="left" orientationMargin="0">一、基本情况</Divider>
               
               <Form.Item
                 label="本名"
@@ -297,7 +297,7 @@ const KnowledgeBase2: React.FC = () => {
                 <TextArea rows={3}  placeholder="请描述您创业前的工作经历" />
               </Form.Item>
               
-              <Divider orientation="left">二、行业深耕经历</Divider>
+              <Divider  orientation="left" orientationMargin="0">二、行业深耕经历</Divider>
               
               <Form.Item
                 label="入行时间"
@@ -336,7 +336,7 @@ const KnowledgeBase2: React.FC = () => {
                 </Radio.Group>
               </Form.Item>
               
-              <Divider orientation="left">三、个人差异化优势</Divider>
+              <Divider  orientation="left" orientationMargin="0">三、个人差异化优势</Divider>
               
               <Form.Item
                 label="专业背书"
@@ -440,7 +440,7 @@ const KnowledgeBase2: React.FC = () => {
                 </Form.Item>
               </Form.Item>
               
-              <Divider orientation="left">四、企业运营现状</Divider>
+              <Divider  orientation="left" orientationMargin="0">四、企业运营现状</Divider>
               
               <Form.Item
                 label="当前团队规模"
@@ -517,7 +517,7 @@ const KnowledgeBase2: React.FC = () => {
                  />
                </Form.Item>
               
-              <Divider orientation="left">五、目标用户画像</Divider>
+              <Divider  orientation="left" orientationMargin="0">五、目标用户画像</Divider>
               
               <Form.Item
                 label="目标用户年龄段"
@@ -563,7 +563,7 @@ const KnowledgeBase2: React.FC = () => {
                 />
               </Form.Item>
               
-              <Divider orientation="left">六、个人IP潜力挖掘</Divider>
+              <Divider  orientation="left" orientationMargin="0">六、个人IP潜力挖掘</Divider>
               
               <Form.Item
                 label="您最想传递的价值观"
