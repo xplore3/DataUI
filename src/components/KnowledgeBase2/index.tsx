@@ -165,7 +165,7 @@ const KnowledgeBase2: React.FC = () => {
         <div className="user-center-success-message">
           <div className="success-icon">✅</div>
           <div className="success-text">
-            TrendMuse 已经了解您的个人IP背景和企业情况！
+            已经了解您的个人IP背景和企业情况！
             <br />
             现在可以开始为您提供个性化的内容策略和建议了！
           </div>
