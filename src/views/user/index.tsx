@@ -10,8 +10,8 @@ import { useUser } from '@/hooks/useUser';
 
 //const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
 //const defCurrentModel = 'GPT-3.1';
-const defaultAvatar = 'https://data3.site/icon128.png';
-const defaultNickname = 'TrendMuse';
+const defaultAvatar = 'https://test.data3.site/icon128.png';
+const defaultNickname = 'IP罗盘';
 
 const UserCenter = () => {
   const isMobile = /iphone|android|ipad|mobile/i.test(navigator.userAgent);
@@ -62,7 +62,7 @@ const UserCenter = () => {
 
   return (
     <div className="user-center">
-      {(!isLogin || isMobile) ? (<>
+      {(isLogin || isMobile) ? (<>
       <div className="user-center-header">
         <button 
           className="user-center-back-btn"

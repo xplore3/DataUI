@@ -105,11 +105,11 @@ const Welcome = () => {
       {/* Header */}
       <header className="welcome-page-header">
         <img src={Logo} alt="Logo" />
-        <h1>TrendMuse</h1>
+        <h1>XData3：面向AI的商业数据引擎</h1>
         <p className="welcome-description">
-          基于自然语言驱动的数据洞察与内容执行助手
+          基于自然语言的商业数据搜索、获取、购买引擎
           <br />
-          请输入您的数据需求，我将为您提供精准的数据分析和内容策略
+          获取直接交付AI的数据，赋能每个Agent
         </p>
       </header>
 

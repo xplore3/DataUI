@@ -51,7 +51,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '品牌定位', '今日文案', '爆款仿写'];
+  const keyList = ['模板', 'IP定位', '口播文案', '爆款仿写'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -68,14 +68,7 @@ const Chat = () => {
     } else {
       setMessageList([
         {
-          text: `你好，我是TrendMuse —— 基于自然语言驱动的数据洞察与内容执行助手。
-                  \n你只需说出需求，我将自动获取社交媒体及短视频数据，输出：
-                    \r\n1. **--高热趋势内容分析📈**
-                    \n2. **--竞品账号策略解构📚**
-                    \n3. **--用户评论兴趣提炼🚀**
-                    \n4. **--达人合作建议🤖**
-                    \n5. **--可直接发布的内容文案与评论模版📚**
-                  \n等任意社媒运营需求.…
+          text: `你好，我是IP罗盘 —— 基于自然语言驱动的数据洞察与内容执行助手。
                 \r\n✍️请输入你现在最想解决的问题，我将为你构建内容策略和落地方案。
                 \r\n\r\n为了更好的实现数据获取和数据处理的功能效果，输入内容须是如下格式：
                 \r\n🚩【平台】【时间期限】【关键词】【数量】【过滤条件】【排序相关】
@@ -83,12 +76,12 @@ const Chat = () => {
                 \r\n帮我找一下【小红书】上【一周内】关于【足球】的【100条】内容，要求【点赞数】大于【1000】
                 \r\n
                 \r\n⏩ 快捷键按钮
-                \r\n🌟「品牌定位」：基于个人品牌及产品背景生成品牌定位报告
-                \r\n🤝「今日文案」：结合今日热点，生成每日可用的优秀文案
+                \r\n🌟「IP定位」：基于个人品牌及产品背景生成IP定位报告
+                \r\n🤝「口播文案」：结合今日热点，生成每日可用的优秀文案
                 \r\n🔥「爆款仿写」：整理近日爆文，基于个人知识库生成类似文案
-                \r\n🔗 「模板」：一键解锁TrendMuse更多数据提示语
+                \r\n🔗 「模板」：一键解锁更多数据提示语
                 \r\n
-                \r\n🚩Ps：请记得在右上角个人主页，完善你的品牌知识库哦😊~
+                \r\n🚩Ps：请记得在右上角个人主页，完善你的IP知识库哦😊~
           `,
           displayText: '',
           user: 'agent',
@@ -377,15 +370,15 @@ const Chat = () => {
       } catch (error) {
         console.log(error);
       }
-    } else if (key === '品牌定位') {
+    } else if (key === 'IP定位') {
       if (!checkUserProfile()) {
         return;
       }
       if (loading) return;
-      toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
+      toast('正在根据背景知识库等信息进行IP定位分析，请稍候......');
       setLoading(true);
       const prompt =
-        '根据我的产品/背景知识库等信息，生成品牌定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
+        '根据我的产品/背景知识库等信息，生成IP定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
       setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
         chatApi
@@ -400,7 +393,7 @@ const Chat = () => {
       } catch (error) {
         console.log(error);
       }
-    } else if (key === '今日文案') {
+    } else if (key === '口播文案') {
       if (!checkUserProfile()) {
         return;
       }
@@ -572,28 +565,6 @@ const Chat = () => {
     }
   };
 
-  // Updated handleAnalysis uses functional update to append messages instead of replacing the list.
-  const handleLlmAnalysis = async (input: string) => {
-    if (input) {
-      if (loading) return;
-      setText('AI Analysis Processing...');
-      setLoading(true);
-      try {
-        //const response = await chatApi.dataQuery(input, userProfile!.userId);
-        /*setMessageList(prev => [
-          ...prev,
-          {
-          },
-        ]);*/
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-        setText('');
-      }
-    }
-  };
-
   return (
     <div className="chat-page ">
       <PromptPin open={showPinModal} promptText={pinPrompt} onClose={() => setShowPinModal(false)} />
@@ -601,7 +572,7 @@ const Chat = () => {
       <header className="chat-page-header">
         {/* <img src={backLeft} alt="Back" onClick={() => navigate(-1)} /> */}
         <img src={Logo} alt="Logo" />
-        <span>TrendMuse</span>
+        <span>IP罗盘</span>
         <div className="flex-1"></div>
         <img src={User} alt="User" onClick={() => handleUserSettings()} />
         {/* <Lang
