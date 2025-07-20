@@ -38,7 +38,7 @@ function App() {
     />
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/chat" replace />} />
+        <Route path="/" element={<Navigate to="/welcome" replace />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/download" element={<DownloadWithCode />} />
         <Route path="/about" element={<About />} />
