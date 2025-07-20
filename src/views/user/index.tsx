@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import './index.less';
 import Profile from '@/assets/icons/profile.svg';
-import KnowledgeBase from '@/components/KnowledgeBase';
+import KnowledgeBase from '@/components/KnowledgeBase2';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useUser } from '@/hooks/useUser';
 //import { useUserStore } from '@/stores/useUserStore';
@@ -62,7 +62,7 @@ const UserCenter = () => {
 
   return (
     <div className="user-center">
-      {(isLogin || isMobile) ? (<>
+      {(!isLogin || isMobile) ? (<>
       <div className="user-center-header">
         <button 
           className="user-center-back-btn"
