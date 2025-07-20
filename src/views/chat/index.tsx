@@ -341,6 +341,7 @@ const Chat = () => {
     const set = localStorage.getItem('trendmuse_form_submitted') === 'true';
     if (!set) {
       toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
+      navigate('/user');
     }
     return set;
   };
