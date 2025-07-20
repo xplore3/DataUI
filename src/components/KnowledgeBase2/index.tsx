@@ -171,7 +171,7 @@ const KnowledgeBase2: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+        <div >
           <Card title="企业家个人IP打造调查表" style={{ marginBottom: '20px' }}>
             <Form
               form={form}
@@ -186,21 +186,21 @@ const KnowledgeBase2: React.FC = () => {
                 name="realName"
                 rules={[{ required: true, message: '请填写您的姓名' }]}
               >
-                <Input placeholder="请输入您的真实姓名" />
+                <Input placeholder="请输入您的真实姓名" style={{ width: '200px' }} />
               </Form.Item>
               
                              <Form.Item
                  label="朋友常称您"
                  name="friendsCall"
                >
-                 <Input placeholder='如"老张""慧姐"' />
+                 <Input placeholder='如"老张""慧姐"'  style={{ width: '200px' }}  />
                </Form.Item>
                
                <Form.Item
                  label="客户常称您"
                  name="clientsCall"
                >
-                 <Input placeholder='如"王总""李老师"' />
+                 <Input placeholder='如"王总""李老师"'  style={{ width: '200px' }}  />
               </Form.Item>
               
               <Form.Item
@@ -441,6 +441,15 @@ const KnowledgeBase2: React.FC = () => {
                  <TextArea 
                    rows={2} 
                    placeholder="例：成本相同，但售后响应速度领先50%" 
+                 />
+               </Form.Item>
+               <Form.Item
+                 label="增长潜力"
+                 name="growthPotential"
+               >
+                 <TextArea 
+                   rows={2} 
+                   placeholder="若业务翻倍，需新增成本：___万元（主要用于________）" 
                  />
                </Form.Item>
               
