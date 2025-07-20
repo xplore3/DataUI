@@ -11,8 +11,8 @@ import { chatApi } from '@/services/chat';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ReactSVG } from 'react-svg';
-import { Cron } from "croner";
-import  { QuestionItem } from '@/components/Question';
+import { Cron } from 'croner';
+import { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
 import { useUserStore } from '@/stores/useUserStore';
@@ -98,14 +98,21 @@ const Chat = () => {
     }
 
     // Get message from url
-    const urlParams = new URLSearchParams(window.location.search);
-    const message = urlParams.get('message');
-    const handleCaMessage = async (msg: string) => {
-      setMessageList(prev => [...prev, { text: msg, user: 'user', action: 'NONE', displayText: msg }]);
-      handleLlmAnalysis(msg);
-    };
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const message = urlParams.get('message');
+    const message = localStorage.getItem('welcomeMessage');
+    console.log(message);
+    // const handleCaMessage = async (msg: string) => {
+    //   setMessageList(prev => [...prev, { text: msg, user: 'user', action: 'NONE', displayText: msg }]);
+    //   handleLlmAnalysis(msg);
+    // };
     if (message) {
-      handleCaMessage(message);
+      // handleCaMessage(message);
+      setText(message);
+      setTimeout(() => {
+        onSend(message);
+      }, 1);
+      localStorage.removeItem('welcomeMessage');
     }
 
     setTips('请输入你的数据处理指令');
@@ -160,11 +167,7 @@ const Chat = () => {
 
     // 错误边界：如果 ReactMarkdown 出错，显示纯文本内容
     if (renderError) {
-      return (
-        <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
-          {message.displayText}
-        </pre>
-      );
+      return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message.displayText}</pre>;
     }
 
     try {
@@ -194,11 +197,7 @@ const Chat = () => {
       // 如果 ReactMarkdown 渲染失败，切换到纯文本模式
       console.warn('ReactMarkdown render failed, falling back to plain text:', error);
       setRenderError(true);
-      return (
-        <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
-          {message.displayText}
-        </pre>
-      );
+      return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message.displayText}</pre>;
     }
   };
 
@@ -220,18 +219,16 @@ const Chat = () => {
 
       if (finalText === '人工' || finalText === '人工服务' || finalText === '人工客服') {
         window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
-        return
+        return;
       }
 
       if (finalText === '测试001') {
         toast('正在获取测试信息，请稍候......');
         setLoading(true);
-        chatApi.getQualityEvaluation()
+        chatApi
+          .getQualityEvaluation()
           .then(response => {
-            setMessageList(prev => [
-              ...prev,
-              { text: response, user: 'client', action: 'NONE', displayText: response },
-            ]);
+            setMessageList(prev => [...prev, { text: response, user: 'client', action: 'NONE', displayText: response }]);
           })
           .finally(async () => {
             setText('');
@@ -239,16 +236,13 @@ const Chat = () => {
             return;
           });
         return;
-      }
-      else if (finalText.slice(0, 5) === '测试002') {
+      } else if (finalText.slice(0, 5) === '测试002') {
         toast('正在获取测试信息002，请稍候......');
         setLoading(true);
-        chatApi.dataHub(finalText.slice(5))
+        chatApi
+          .dataHub(finalText.slice(5))
           .then(res => {
-            setMessageList(prev => [
-              ...prev,
-              { ...res, displayText: '' },
-            ]);
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
           .finally(async () => {
             setText('');
@@ -260,17 +254,11 @@ const Chat = () => {
 
       setLoading(true);
       setText('');
-      setMessageList(prev => [
-        ...prev,
-        { text: finalText, user: 'user', action: 'NONE', displayText: finalText },
-      ]);
+      setMessageList(prev => [...prev, { text: finalText, user: 'user', action: 'NONE', displayText: finalText }]);
       chatApi
         .createChat(finalText)
         .then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
+          setMessageList(prev => [...prev, { ...res, displayText: '' }]);
         })
         .finally(async () => {
           //setLoading(false);
@@ -285,30 +273,23 @@ const Chat = () => {
     async (overrideText: string, fromOptions: boolean, msgIndex: number = messageList.length - 1) => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
-      let taskId = "";
+      let taskId = '';
       try {
         if (msgIndex < messageList.length) {
-          taskId = messageList[msgIndex].taskId || "";
+          taskId = messageList[msgIndex].taskId || '';
         }
-      }
-      catch (err) {
+      } catch (err) {
         console.error(err);
       }
 
       setLoading(true);
       setText('');
-      setMessageList(prev => [
-        ...prev,
-        { text: finalText, user: 'user', action: 'NONE', displayText: finalText },
-      ]);
+      setMessageList(prev => [...prev, { text: finalText, user: 'user', action: 'NONE', displayText: finalText }]);
       //const origin_input = useUserStore.getState().getOriginInput() || '';
       chatApi
         .dataProcess(finalText, taskId, fromOptions)
         .then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
+          setMessageList(prev => [...prev, { ...res, displayText: '' }]);
         })
         .finally(async () => {
           //setLoading(false);
@@ -322,7 +303,7 @@ const Chat = () => {
     try {
       // checkResp per 30 seconds
       let jobSkip = false;
-      const job = new Cron("*/10 * * * * *", async () => {
+      const job = new Cron('*/10 * * * * *', async () => {
         //console.log(`Response check at ${new Date().toISOString()}`);
         if (jobSkip) {
           return;
@@ -351,18 +332,18 @@ const Chat = () => {
                 const newList = [...prev];
                 const index = newList.length - 1;
                 if (newList[index].taskId != res.taskId) {
-                  return [...prev, { ...res, displayText: '' }]
+                  return [...prev, { ...res, displayText: '' }];
                 }
                 newList[index] = { ...newList[index], text: res.text, displayText: res.text };
                 return newList;
               });
             }
           });
-        } catch(err) {
+        } catch (err) {
           console.log(err);
         }
       });
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   };
@@ -385,48 +366,41 @@ const Chat = () => {
       toast('正在获取模板，请稍候......');
       setLoading(true);
       try {
-        chatApi.getPromptTemplates().then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '', questions: [], hasSubmit: false
-            },
-          ]);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+        chatApi
+          .getPromptTemplates()
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '', questions: [], hasSubmit: false }]);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       } catch (error) {
         console.log(error);
       }
-    }
-    else if (key === '品牌定位') {
+    } else if (key === '品牌定位') {
       if (!checkUserProfile()) {
         return;
       }
       if (loading) return;
       toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
       setLoading(true);
-      const prompt = '根据我的产品/背景知识库等信息，生成品牌定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
-      setMessageList(prev => [
-        ...prev,
-        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
-      ]);
+      const prompt =
+        '根据我的产品/背景知识库等信息，生成品牌定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
+      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
-        chatApi.routineTask(prompt, 'positioning_analysis').then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-        .finally(async () => {
-          //setLoading(false);
-          await handlerStatus();
-        });
+        chatApi
+          .routineTask(prompt, 'positioning_analysis')
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            //setLoading(false);
+            await handlerStatus();
+          });
       } catch (error) {
         console.log(error);
       }
-    }
-    else if (key === '今日文案') {
+    } else if (key === '今日文案') {
       if (!checkUserProfile()) {
         return;
       }
@@ -434,26 +408,21 @@ const Chat = () => {
       toast('正在根据你的今日任务生成文案，请稍候......');
       setLoading(true);
       const prompt = '根据我的产品信息，生成今日的一些内容文案，包括标题、正文、标签等。';
-      setMessageList(prev => [
-        ...prev,
-        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
-      ]);
+      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
-        chatApi.routineTask(prompt, 'today_posts').then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-        .finally(async () => {
-          //setLoading(false);
-          await handlerStatus();
-        });
+        chatApi
+          .routineTask(prompt, 'today_posts')
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            //setLoading(false);
+            await handlerStatus();
+          });
       } catch (error) {
         console.log(error);
       }
-    }
-    else if (key === '趋势洞察') {
+    } else if (key === '趋势洞察') {
       toast('功能正在开发中，请耐心等待~，如有问题请回复【人工】获取支持~~');
       /*if (loading) return;
       toast('正在获取内容趋势，请稍候......');
@@ -477,8 +446,7 @@ const Chat = () => {
       } catch (error) {
         console.log(error);
       }*/
-    }
-    else if (key === '爆款仿写') {
+    } else if (key === '爆款仿写') {
       if (!checkUserProfile()) {
         return;
       }
@@ -486,27 +454,22 @@ const Chat = () => {
       toast('正在获取相关热门内容，并进行分析和仿写，请稍候......');
       setLoading(true);
       const prompt = `找到所在行业/赛道的热门内容（包括低粉爆文）并汇集成数据表格，并基于这些爆款，生成10篇高仿写但原创表达的内容文案`;
-      setMessageList(prev => [
-        ...prev,
-        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
-      ]);
+      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
-        chatApi.routineTask(prompt, 'hot_posts').then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-        .finally(async () => {
-          //setText('');
-          //setLoading(false);
-          await handlerStatus();
-        });
+        chatApi
+          .routineTask(prompt, 'hot_posts')
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            //setText('');
+            //setLoading(false);
+            await handlerStatus();
+          });
       } catch (error) {
         console.log(error);
       }
-    }
-    else if (key === '达人评估') {
+    } else if (key === '达人评估') {
       if (!checkUserProfile()) {
         return;
       }
@@ -521,27 +484,22 @@ const Chat = () => {
           - 低：调性边缘或互动一般，待观察）；
         \r\n2. 达人内容调性分析与匹配判断，输出"内容调性匹配度打分"+ 内容风格简评；
         \r\n3. 合作投放建议，包括合作形式、内容方向、适合投放时间段、预算建议等`;
-      setMessageList(prev => [
-        ...prev,
-        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
-      ]);
+      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
-        chatApi.routineTask(prompt, 'search_koc').then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-        .finally(async () => {
-          setText('');
-          //setLoading(false);
-          await handlerStatus();
-        });
+        chatApi
+          .routineTask(prompt, 'search_koc')
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            setText('');
+            //setLoading(false);
+            await handlerStatus();
+          });
       } catch (error) {
         console.log(error);
       }
-    }
-    else if (key === '人工') {
+    } else if (key === '人工') {
       window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
     }
   };
@@ -554,8 +512,7 @@ const Chat = () => {
         const taskId = useUserStore.getState().getTaskId();
         if (taskId) {
           onDataProcess(text, false);
-        }
-        else {
+        } else {
           onSend();
         }
         useUserStore.getState().setOriginInput(text);
@@ -610,8 +567,7 @@ const Chat = () => {
         newData[newData.length - 1].options = newOptions;
         return newData;
       });
-    }
-    else {
+    } else {
       await handlerStatus();
     }
   };
@@ -640,11 +596,7 @@ const Chat = () => {
 
   return (
     <div className="chat-page ">
-      <PromptPin
-        open={showPinModal}
-        promptText={pinPrompt}
-        onClose={() => setShowPinModal(false)}
-      />
+      <PromptPin open={showPinModal} promptText={pinPrompt} onClose={() => setShowPinModal(false)} />
       {/* Header */}
       <header className="chat-page-header">
         {/* <img src={backLeft} alt="Back" onClick={() => navigate(-1)} /> */}
@@ -682,28 +634,32 @@ const Chat = () => {
                   }}
                 />
               </>
-              )}
-              {/* {item.questions && item.questions.length > 0 && (
+            )}
+            {/* {item.questions && item.questions.length > 0 && (
                 <QuestionForm
                   questions={item.questions}
                   hasSubmit={item.hasSubmit || false}
                   onSubmit={(answers) => handleQuestionSend(answers, index)}
                 />
               )} */}
-              {item.options && item.options.length > 0 && (
-                <div className="options-view">
-                {item.options.map((option) => (
-                  <button className={item.hasSubmit ? "option-button-disabled" : "option-button"}
-                    disabled={item.hasSubmit/* || (index !== messageList.length - 1)*/}
-                    onClick={() => { onDataProcess(option, true, index); }}>
+            {item.options && item.options.length > 0 && (
+              <div className="options-view">
+                {item.options.map(option => (
+                  <button
+                    className={item.hasSubmit ? 'option-button-disabled' : 'option-button'}
+                    disabled={item.hasSubmit /* || (index !== messageList.length - 1)*/}
+                    onClick={() => {
+                      onDataProcess(option, true, index);
+                    }}
+                  >
                     {option}
                   </button>
                 ))}
                 <div>其他选项请直接在对话框输入</div>
-                </div>
-              )}
-              {item.user === 'agent' && item.displayText === item.text && (
-                <FooterOperation
+              </div>
+            )}
+            {item.user === 'agent' && item.displayText === item.text && (
+              <FooterOperation
                 text={item.text + `|||||${item.note}`}
                 onTranslate={translatedText => {
                   handleTranslate(translatedText, index);
@@ -715,16 +671,16 @@ const Chat = () => {
                     : ['share', 'translate', 'copy']
                 }
               />
-              )}
-              {item.user === 'user' && item.text?.length > 10 && (
-                <FooterOperation
-                  text={item.text}
-                  onPin={promptText => {
-                    handlePin(promptText);
-                  }}
-                  menuList={['pined']}
-                />
-              )}
+            )}
+            {item.user === 'user' && item.text?.length > 10 && (
+              <FooterOperation
+                text={item.text}
+                onPin={promptText => {
+                  handlePin(promptText);
+                }}
+                menuList={['pined']}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -751,8 +707,7 @@ const Chat = () => {
                 const taskId = useUserStore.getState().getTaskId();
                 if (taskId) {
                   onDataProcess(text, false);
-                }
-                else {
+                } else {
                   onSend();
                 }
                 useUserStore.getState().setOriginInput(text);
