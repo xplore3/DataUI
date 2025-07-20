@@ -15,6 +15,7 @@ const KnowledgeBase2: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string | string[]>>({});
+  const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
   
   // 解析从getKnowledges接口返回的数据格式
   const parseKnowledgeData = (knowledgeData: string | null | undefined): Record<string, string | string[]> => {
@@ -65,6 +66,13 @@ const KnowledgeBase2: React.FC = () => {
           const parsedAnswers = parseKnowledgeData(knowledgeData);
           setSavedAnswers(parsedAnswers);
           form.setFieldsValue(parsedAnswers);
+          // 设置专业背书的选中状态
+          if (parsedAnswers.professionalEndorsements) {
+            const endorsements = Array.isArray(parsedAnswers.professionalEndorsements) 
+              ? parsedAnswers.professionalEndorsements 
+              : [parsedAnswers.professionalEndorsements];
+            setSelectedEndorsements(endorsements);
+          }
           // 如果有数据，说明已经填写过
           setIsFormSubmitted(Object.keys(parsedAnswers).length > 0);
         } else {
@@ -132,6 +140,13 @@ const KnowledgeBase2: React.FC = () => {
         const parsedAnswers = parseKnowledgeData(knowledgeData);
         setSavedAnswers(parsedAnswers);
         form.setFieldsValue(parsedAnswers);
+        // 设置专业背书的选中状态
+        if (parsedAnswers.professionalEndorsements) {
+          const endorsements = Array.isArray(parsedAnswers.professionalEndorsements) 
+            ? parsedAnswers.professionalEndorsements 
+            : [parsedAnswers.professionalEndorsements];
+          setSelectedEndorsements(endorsements);
+        }
       }
     } catch (error) {
       console.error('Error loading saved answers:', error);
@@ -279,7 +294,7 @@ const KnowledgeBase2: React.FC = () => {
                 label="创业前的工作"
                 name="previousWork"
               >
-                <Input placeholder="请描述您创业前的工作经历" />
+                <TextArea rows={3}  placeholder="请描述您创业前的工作经历" />
               </Form.Item>
               
               <Divider orientation="left">二、行业深耕经历</Divider>
@@ -327,11 +342,60 @@ const KnowledgeBase2: React.FC = () => {
                 label="专业背书"
                 name="professionalEndorsements"
               >
-                <Checkbox.Group>
-                  <Checkbox value="行业奖项">行业奖项</Checkbox>
-                  <Checkbox value="专利/著作权">专利/著作权</Checkbox>
-                  <Checkbox value="头部企业合作案例">头部企业合作案例</Checkbox>
-                  <Checkbox value="著作/专栏">著作/专栏</Checkbox>
+                <Checkbox.Group 
+                  onChange={(values) => setSelectedEndorsements(values as string[])}
+                  value={selectedEndorsements}
+                  style={{width: "100%"}}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px',width: "100%" }}>
+                    <div>
+                      <Checkbox value="行业奖项">行业奖项</Checkbox>
+                      {selectedEndorsements.includes('行业奖项') && (
+                        <Form.Item
+                          name="industryAwardDetail"
+                          style={{ marginTop: '8px', marginBottom: 0 }}
+                        >
+                          <TextArea rows={2}  placeholder="请输入具体奖项名称"  />
+                        </Form.Item>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <Checkbox value="专利/著作权">专利/著作权</Checkbox>
+                      {selectedEndorsements.includes('专利/著作权') && (
+                        <Form.Item
+                          name="patentDetail"
+                          style={{ marginTop: '8px', marginBottom: 0 }}
+                        >
+                          <TextArea rows={2}  placeholder="请输入专利/著作权数量及名称"  />
+                        </Form.Item>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <Checkbox value="头部企业合作案例">头部企业合作案例</Checkbox>
+                      {selectedEndorsements.includes('头部企业合作案例') && (
+                        <Form.Item
+                          name="corporatePartnerDetail"
+                          style={{ marginTop: '8px', marginBottom: 0 }}
+                        >
+                          <TextArea rows={2}  placeholder="请输入合作企业名称及案例"  />
+                        </Form.Item>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <Checkbox value="著作/专栏">著作/专栏</Checkbox>
+                      {selectedEndorsements.includes('著作/专栏') && (
+                        <Form.Item
+                          name="publicationDetail"
+                          style={{ marginTop: '8px', marginBottom: 0 }}
+                        >
+                          <TextArea rows={2}  placeholder="请输入著作/专栏名称"  />
+                        </Form.Item>
+                      )}
+                    </div>
+                  </div>
                 </Checkbox.Group>
               </Form.Item>
               
