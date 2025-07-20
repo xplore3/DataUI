@@ -8,6 +8,7 @@ import { useState, useCallback, useRef } from 'react';
 import { ReactSVG } from 'react-svg';
 import { chatApi } from '@/services/chat';
 import { toast } from 'react-toastify';
+import { Collapse } from 'antd';
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -134,53 +135,82 @@ const Welcome = () => {
           </div>
         </div>
 
-        {/* Selection Options */}
+                {/* Selection Options */}
         <div className="welcome-options">
-          {/* 数据类别 */}
-          <div className="option-group">
-            <label className="option-label">数据类别</label>
-            <div className="option-checkboxes">
-              {categoryOptions.map(category => (
-                <label key={category} className="checkbox-item">
-                  <input type="checkbox" checked={selectedCategories.includes(category)} onChange={() => handleCategoryChange(category)} />
-                  <span>{category}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* 平台 */}
-          <div className="option-group">
-            <label className="option-label">平台</label>
-            <div className="option-checkboxes">
-              {platformOptions.map(platform => (
-                <label key={platform} className="checkbox-item">
-                  <input type="checkbox" checked={selectedPlatforms.includes(platform)} onChange={() => handlePlatformChange(platform)} />
-                  <span>{platform}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* 时效 */}
-          <div className="option-group">
-            <label className="option-label">时效</label>
-            <div className="option-radios">
-              {timeframeOptions.map(timeframe => (
-                <label key={timeframe} className="radio-item">
-                  <input
-                    type="radio"
-                    name="timeframe"
-                    value={timeframe}
-                    checked={selectedTimeframe === timeframe}
-                    onChange={() => handleTimeframeChange(timeframe)}
-                  />
-                  <span>{timeframe}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+          <Collapse
+            ghost
+            expandIconPosition="end"
+            items={[
+              {
+                key: 'category',
+                label: '数据类别',
+                children: (
+                  <div className="option-checkboxes">
+                    {categoryOptions.map(category => (
+                      <label key={category} className="checkbox-item">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedCategories.includes(category)} 
+                          onChange={() => handleCategoryChange(category)} 
+                        />
+                        <span>{category}</span>
+                      </label>
+                    ))}
+                  </div>
+                ),
+              },
+              {
+                key: 'platform',
+                label: '平台',
+                children: (
+                  <div className="option-checkboxes">
+                    {platformOptions.map(platform => (
+                      <label key={platform} className="checkbox-item">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedPlatforms.includes(platform)} 
+                          onChange={() => handlePlatformChange(platform)} 
+                        />
+                        <span>{platform}</span>
+                      </label>
+                    ))}
+                  </div>
+                ),
+              },
+              {
+                key: 'timeframe',
+                label: '时效',
+                children: (
+                  <div className="option-radios">
+                    {timeframeOptions.map(timeframe => (
+                      <label key={timeframe} className="radio-item">
+                        <input
+                          type="radio"
+                          name="timeframe"
+                          value={timeframe}
+                          checked={selectedTimeframe === timeframe}
+                          onChange={() => handleTimeframeChange(timeframe)}
+                        />
+                        <span>{timeframe}</span>
+                      </label>
+                    ))}
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
+
+         {/* Submit Button */}
+         {/* <div className="welcome-submit">
+           <button 
+             className="submit-button"
+             onClick={onSubmit}
+             disabled={loading || !text.trim()}
+           >
+             {loading ? '处理中...' : '开始分析'}
+           </button>
+         </div> */}
       </div>
     </div>
   );

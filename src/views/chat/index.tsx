@@ -51,7 +51,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', 'IP定位', '口播文案', '爆款仿写'];
+  const keyList = ['IP定位'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -349,6 +349,7 @@ const Chat = () => {
     const set = localStorage.getItem('trendmuse_form_submitted') === 'true';
     if (!set) {
       toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
+      navigate('/user');
     }
     return set;
   };
