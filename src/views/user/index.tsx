@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import './index.less';
 import Profile from '@/assets/icons/profile.svg';
-import KnowledgeBase from '@/components/KnowledgeBase';
+import KnowledgeBase from '@/components/KnowledgeBase2';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useUser } from '@/hooks/useUser';
 //import { useUserStore } from '@/stores/useUserStore';
@@ -10,8 +10,8 @@ import { useUser } from '@/hooks/useUser';
 
 //const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
 //const defCurrentModel = 'GPT-3.1';
-const defaultAvatar = 'https://data3.site/icon128.png';
-const defaultNickname = 'TrendMuse';
+const defaultAvatar = 'https://test.data3.site/icon128.png';
+const defaultNickname = 'IP罗盘';
 
 const UserCenter = () => {
   const isMobile = /iphone|android|ipad|mobile/i.test(navigator.userAgent);
