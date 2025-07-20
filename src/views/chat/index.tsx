@@ -572,28 +572,6 @@ const Chat = () => {
     }
   };
 
-  // Updated handleAnalysis uses functional update to append messages instead of replacing the list.
-  const handleLlmAnalysis = async (input: string) => {
-    if (input) {
-      if (loading) return;
-      setText('AI Analysis Processing...');
-      setLoading(true);
-      try {
-        //const response = await chatApi.dataQuery(input, userProfile!.userId);
-        /*setMessageList(prev => [
-          ...prev,
-          {
-          },
-        ]);*/
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-        setText('');
-      }
-    }
-  };
-
   return (
     <div className="chat-page ">
       <PromptPin open={showPinModal} promptText={pinPrompt} onClose={() => setShowPinModal(false)} />
