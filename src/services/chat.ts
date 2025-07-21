@@ -217,21 +217,22 @@ export const chatApi = {
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
+      console.log(response);
       try {
         const json = JSON.parse(response);
         if (json) {
           newTaskId = json.taskId;
           useUserStore.getState().setTaskId(newTaskId);
-          response = (json.process_result + json.option_description) || json.data_result || json.question_description;
+          response = json.data_result || json.question_description;
         }
       } catch (err) {
         console.log(err);
         newTaskId = response.taskId || result.data.taskId;
         useUserStore.getState().setTaskId(newTaskId);
-        response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
+        response = response.data_result || response.question_description || response;
       }
       return {
-        text: response,
+        text: `\`\`\`json\n${response}\n\`\`\``,
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,
