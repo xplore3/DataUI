@@ -260,12 +260,16 @@ export const chatApi = {
   checkTaskStatus: async (): Promise<Message> => {
     let completed = false;
     try {
-      const taskId = useUserStore.getState().getTaskId();
+      let taskId = useUserStore.getState().getTaskId();
+      if (!taskId) {
+        taskId = useUserStore.getState().getTaskId();
+      }
       if (!taskId) {
         return {
-          text: getWaitTip(),
+          text: '',
           user: 'client',
           action: 'NONE',
+          completed: false
         };
       }
       const result = await api.get(`/task_status?taskId=${taskId}`, {});
