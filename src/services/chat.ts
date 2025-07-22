@@ -232,7 +232,7 @@ export const chatApi = {
         response = response.data_result || response.question_description || response;
       }
       return {
-        text: `\`\`\`json\n${response}\n\`\`\``,
+        text: `\`\`\`json\n${response}\n\`\`\`\n\n${response.substring(0, 60)}...`,
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,
@@ -260,12 +260,13 @@ export const chatApi = {
   checkTaskStatus: async (): Promise<Message> => {
     let completed = false;
     try {
-      const taskId = useUserStore.getState().getTaskId();
+      let taskId = useUserStore.getState().getTaskId();
       if (!taskId) {
         return {
-          text: getWaitTip(),
+          text: '',
           user: 'client',
           action: 'NONE',
+          completed: false
         };
       }
       const result = await api.get(`/task_status?taskId=${taskId}`, {});

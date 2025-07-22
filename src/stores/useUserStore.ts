@@ -75,7 +75,7 @@ export const useUserStore = create<UserState>()(
       getUserId: () => get().userProfile?.userId || null,
       getTaskId: () => {
         const expired = get().taskIdExpired;
-        if (expired > 0 && Date.now() - expired > 1000 * 60 * 10) {
+        if (expired > 0 && Date.now() - expired > 1000 * 60 * 60) {
            return null;
         }
         return get().taskId || null;
