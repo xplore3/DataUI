@@ -212,49 +212,55 @@ const Chat = () => {
     setTips('请输入你的数据处理指令');
   }, []);
 
+  const fixCommand = (finalText: string) => {
+    try {
+      if (finalText === '人工' || finalText === '人工服务' || finalText === '人工客服') {
+        window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
+        return true;
+      }
+
+      if (finalText === '测试001') {
+        toast('正在获取测试信息，请稍候......');
+        setLoading(true);
+        chatApi
+          .getQualityEvaluation()
+          .then(response => {
+            setMessageList(prev => [...prev, { text: response, user: 'client', action: 'NONE', displayText: response }]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return true;
+          });
+        return true;
+      } else if (finalText.slice(0, 5) === '测试002') {
+        toast('正在获取测试信息002，请稍候......');
+        setLoading(true);
+        chatApi
+          .dataHub(finalText.slice(5))
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return true;
+          });
+        return true;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    return false;
+  };
+
   // Send message
   const onSend = useCallback(
     async (overrideText?: string) => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
 
-      if (finalText === '人工' || finalText === '人工服务' || finalText === '人工客服') {
-        window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
-        return
-      }
-
-      if (finalText === '测试001') {
-        toast('正在获取测试信息，请稍候......');
-        setLoading(true);
-        chatApi.getQualityEvaluation()
-          .then(response => {
-            setMessageList(prev => [
-              ...prev,
-              { text: response, user: 'client', action: 'NONE', displayText: response },
-            ]);
-          })
-          .finally(async () => {
-            setText('');
-            setLoading(false);
-            return;
-          });
-        return;
-      }
-      else if (finalText.slice(0, 5) === '测试002') {
-        toast('正在获取测试信息002，请稍候......');
-        setLoading(true);
-        chatApi.dataHub(finalText.slice(5))
-          .then(res => {
-            setMessageList(prev => [
-              ...prev,
-              { ...res, displayText: '' },
-            ]);
-          })
-          .finally(async () => {
-            setText('');
-            setLoading(false);
-            return;
-          });
+      if (fixCommand(finalText)) {
         return;
       }
 
@@ -285,6 +291,9 @@ const Chat = () => {
     async (overrideText: string, fromOptions: boolean, msgIndex: number = messageList.length - 1) => {
       const finalText = overrideText || text;
       if (!finalText.trim() || loading) return;
+      if (fixCommand(finalText)) {
+        return;
+      }
       let taskId = "";
       try {
         if (msgIndex < messageList.length) {
