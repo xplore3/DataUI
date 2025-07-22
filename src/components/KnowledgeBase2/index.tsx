@@ -10,7 +10,7 @@ const KnowledgeBase2: React.FC = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [isFormSubmitted, setIsFormSubmitted] = useState(() => {
-    return localStorage.getItem('trendmuse_entrepreneur_form_submitted') === 'true';
+    return localStorage.getItem('trendmuse_form_submitted') === 'true';
   });
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -112,14 +112,17 @@ const KnowledgeBase2: React.FC = () => {
       
       console.log(result);
       
-      await chatApi.addKnowledges(JSON.stringify(result));
-      
-      // 保存成功后设置状态
-      setSavedAnswers(values);
-      setIsFormSubmitted(true);
-      localStorage.setItem('trendmuse_entrepreneur_form_submitted', 'true');
-      toast.success('信息保存成功！');
-      
+      await chatApi.addKnowledges(JSON.stringify(result)).then(res => {
+        console.log(res);
+        // 保存成功后设置状态
+        setSavedAnswers(values);
+        setIsFormSubmitted(true);
+        localStorage.setItem('trendmuse_form_submitted', 'true');
+        toast.success('信息保存成功！');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
     } catch (error) {
       console.error('Error sending form:', error);
       toast.error('保存失败，请重试');
