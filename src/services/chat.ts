@@ -262,9 +262,6 @@ export const chatApi = {
     try {
       let taskId = useUserStore.getState().getTaskId();
       if (!taskId) {
-        taskId = useUserStore.getState().getTaskId();
-      }
-      if (!taskId) {
         return {
           text: '',
           user: 'client',
