@@ -5,6 +5,7 @@ import About from './views/about';
 import Chat from './views/chat';
 import DownloadWithCode from './views/download';
 import Help from './views/help';
+import IpHome from './views/iphome';
 import UserCenter from './views/user';
 import WecomAuth from './views/wecom';
 import { ToastContainer } from 'react-toastify';
@@ -38,11 +39,12 @@ function App() {
     />
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/chat" replace />} />
+        <Route path="/" element={<Navigate to="/ip" replace />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/download" element={<DownloadWithCode />} />
         <Route path="/about" element={<About />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/ip" element={<IpHome />} />
         <Route path="/user" element={<UserCenter />} />
         <Route path="/wecom" element={<WecomAuth />} />
         <Route path="/welcome" element={<Welcome />} />

@@ -178,7 +178,7 @@ const KnowledgeBase2: React.FC = () => {
               onClick={handleGoToChat}
               style={{ marginRight: '10px' }}
             >
-              开始对话
+              开始定位
             </Button>
             <Button 
               onClick={handleResetForm}

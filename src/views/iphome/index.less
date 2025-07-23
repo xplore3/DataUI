@@ -1,0 +1,65 @@
+.ip-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "PingFang SC", sans-serif;
+  color: #333;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px 60px;
+
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 16px;
+    }
+
+    .header-text {
+      .title {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1e3a8a;
+      }
+
+      .subtitle {
+        font-size: 18px;
+        color: #999;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .description {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    max-width: 880px;
+    margin-bottom: 40px;
+  }
+
+  .start-button {
+    background-color: #1e3a8a;
+    color: white;
+    font-size: 18px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #3b5bb0;
+    }
+  }
+}
