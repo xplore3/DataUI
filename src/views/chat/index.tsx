@@ -660,7 +660,7 @@ const Chat = () => {
       </div>
 
       {/* Bottom input area */}
-      { false && (<div className="chat-page-bottom">
+      <div className="chat-page-bottom">
         <div className="chat-page-keys">
           {keyList.map(item => (
             <div className="chat-page-items" key={item} onClick={() => handleKeyPress(item)}>
@@ -668,7 +668,7 @@ const Chat = () => {
             </div>
           ))}
         </div>
-        <div className="chat-page-input">
+        { false && (<div className="chat-page-input">
           <textarea ref={textareaRef} placeholder={tips} value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
           {loading ? (
             <ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>
@@ -688,8 +688,8 @@ const Chat = () => {
               }}
             />
           )}
-        </div>
-      </div>)}
+        </div>)}
+      </div>
     </div>
   );
 };
