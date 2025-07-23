@@ -3,11 +3,19 @@
   min-height: 100vh;
   font-family: "PingFang SC", sans-serif;
   color: #333;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .main-content {
   flex: 1;
   padding: 40px 60px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 
   .header {
     display: flex;
@@ -18,6 +26,11 @@
       width: 50px;
       height: 50px;
       margin-right: 16px;
+
+      @media (max-width: 768px) {
+        width: 40px;
+        height: 40px;
+      }
     }
 
     .header-text {
@@ -25,12 +38,20 @@
         font-size: 32px;
         font-weight: bold;
         color: #1e3a8a;
+
+        @media (max-width: 768px) {
+          font-size: 24px;
+        }
       }
 
       .subtitle {
         font-size: 18px;
         color: #999;
         margin-top: 4px;
+
+        @media (max-width: 768px) {
+          font-size: 14px;
+        }
       }
     }
   }
@@ -39,6 +60,10 @@
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 20px;
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
   }
 
   .description {
@@ -47,6 +72,11 @@
     color: #333;
     max-width: 880px;
     margin-bottom: 40px;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      line-height: 1.6;
+    }
   }
 
   .start-button {
@@ -60,6 +90,12 @@
 
     &:hover {
       background-color: #3b5bb0;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 16px;
+      width: 100%;
+      padding: 12px 0;
     }
   }
 }
