@@ -95,7 +95,7 @@ const Chat = () => {
       localStorage.removeItem('welcomeMessage');
     }
 
-    handleKeyPress('IP定位');
+    //handleKeyPress('IP定位');
 
     setTips('请输入你的数据处理指令');
     // eslint-disable-next-line react-hooks/exhaustive-deps
