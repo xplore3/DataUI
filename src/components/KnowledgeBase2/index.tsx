@@ -94,24 +94,39 @@ const KnowledgeBase2: React.FC = () => {
   const handleFormSubmit = async (values: Record<string, any>) => {
     try {
       if (loading || isFormSubmitted) return;
-      
+
       // 检查必填字段
       if (!values.realName || !values.gender || !values.industry) {
         toast.error('填写的信息不完整，请检查必填项');
         return;
       }
-      
+
       setLoading(true);
-      
+
       const result: Record<string, string> = Object.fromEntries(
         Object.entries(values).map(([key, value]) => {
           const answer = Array.isArray(value) ? value.join(", ") : String(value || '');
           return [key, answer];
         })
       );
-      
       console.log(result);
-      
+      const answers: Record<string, string> = Object.fromEntries(
+        Object.entries(values).map(([key, value]) => {
+          const answer = Array.isArray(value) ? value.join(", ") : String(value || '');
+          return [answer];
+        })
+      );
+      console.log(answers);
+      const strAnswers = JSON.stringify(answers);
+      const preAnswers = localStorage.getItem('local_knowledge_value');
+      if (preAnswers !== strAnswers) {
+        localStorage.setItem('local_knowledge_value', strAnswers);
+        localStorage.setItem('local_knowledge_value_updated', 'true');
+      }
+      else {
+        //localStorage.setItem('local_knowledge_value_updated', 'false');
+      }
+
       await chatApi.addKnowledges(JSON.stringify(result)).then(res => {
         console.log(res);
         // 保存成功后设置状态

@@ -96,6 +96,7 @@ const Chat = () => {
     }
 
     //handleKeyPress('IP定位');
+    knowledgeCheck();
 
     setTips('请输入你的数据处理指令');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,6 +193,19 @@ const Chat = () => {
     }
     setTips('请输入你的数据处理指令');
   }, []);
+
+  const knowledgeCheck = () => {
+    try {
+      const knowledgeUpdated = localStorage.getItem('local_knowledge_value_updated');
+      if (knowledgeUpdated && knowledgeUpdated === 'true') {
+        const newKnowledge = localStorage.getItem('local_knowledge_value');
+        setMessageList(prev => [...prev, { text: newKnowledge, user: 'user', action: 'NONE', displayText: newKnowledge }]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    return false;
+  };
 
   const fixCommand = (finalText: string) => {
     try {

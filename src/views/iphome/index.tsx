@@ -35,19 +35,16 @@ const IpHome: React.FC = () => {
           <img src="/logo.png" alt="IP罗盘 Logo" className="logo" />
           <div className="header-text">
             <div className="title">IP罗盘</div>
-            <div className="subtitle">直达正确之路</div>
+            <div className="subtitle">找到属于你的罗盘，直达正确之路</div>
           </div>
         </div>
 
         <h1 className="section-title">IP定位</h1>
 
         <p className="description">
-          这是一款强大的智能IP定位工具，它通过分析IP主个人数据、各大平台实时数据，结合全球顶尖定位理论，
-          为处于各个阶段的企业主打造个人IP提供决策支撑。定位内容包括：人设定位、商业定位、内容定位等。
-          它灵活调用各大平台（小红书、抖音、视频号、快手等）实时数据，结合全球顶尖大模型的分析，
-          为企业主输出动态的定位报告。该定位方案简易读、可执行、可验证、具备短期效能和长期价值。
-          把企业主独特的个人特质（如专业能力、价值观、奋斗故事等）转化为具有高识别度和情感吸引力的
-          “人格化品牌”，为企业构建新的护城河，注入新的生命力。
+          一款面向企业主的智能IP定位工具。基于你的个人特质与多平台实时数据，通过顶尖大模型分析，帮助你精准梳理人设定位、商业定位与内容方向。
+          从小红书、抖音、视频号等平台获取趋势信号，输出可理解、可执行、可验证的个性化定位方案。
+          不仅提供明确的行动路径，更帮助你塑造一个有温度、有辨识度的“人格化品牌”，让你的影响力与事业一起成长，成为真正意义上的“人货合一”。
         </p>
 
         <button className="start-button" onClick={onStart}>立即使用</button>
