@@ -204,8 +204,6 @@ const Chat = () => {
         if (newKnowledge && newKnowledge != '') {
           setMessageList(prev => [...prev, { text: newKnowledge, user: 'user', action: 'NONE', displayText: newKnowledge }]);
         }
-      }
-      else {
         localStorage.setItem('local_knowledge_value_updated', 'false');
       }
     } catch (err) {
