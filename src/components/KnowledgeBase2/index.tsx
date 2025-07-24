@@ -117,15 +117,16 @@ const KnowledgeBase2: React.FC = () => {
         try {
           const json = JSON.parse(res);
           summary = json.summary || '';
-          console.log(summary);
-          const preAnswers = localStorage.getItem('local_knowledge_value') || '';
-          if (preAnswers !== summary) {
-            localStorage.setItem('local_knowledge_value', summary);
-            localStorage.setItem('local_knowledge_value_updated', 'true');
-          }
         }
         catch (err) {
           console.log(err);
+          summary = res.summary || '';
+        }
+        console.log(summary);
+        const preAnswers = localStorage.getItem('local_knowledge_value') || '';
+        if (preAnswers !== summary) {
+          localStorage.setItem('local_knowledge_value', summary);
+          localStorage.setItem('local_knowledge_value_updated', 'true');
         }
         // 保存成功后设置状态
         setSavedAnswers(values);
@@ -207,19 +208,7 @@ const KnowledgeBase2: React.FC = () => {
             <Form
               form={form}
               layout="vertical"
-              onFinish={async (values) => {
-                // 构建 label:value 的 map
-                const labelValueMap: Record<string, any> = {};
-                // 遍历所有表单项，提取 label
-                const fields = await form.validateFields();
-                Object.entries(fields).forEach((field: any) => {
-                  const { name, label } = field;
-                  if (label && values[name]) {
-                    labelValueMap[label] = values[name];
-                  }
-                });
-                handleFormSubmit(values, labelValueMap);
-              }}
+              onFinish={handleFormSubmit}
               initialValues={savedAnswers}
             >
               <Divider  orientation="left" orientationMargin="0">一、基本情况</Divider>
