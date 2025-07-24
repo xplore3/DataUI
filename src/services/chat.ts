@@ -377,7 +377,7 @@ export const chatApi = {
     };
   },
 
-  addKnowledges: async (knowledges: string): Promise<string> => {
+  addKnowledges: async (knowledges: string): Promise<any> => {
     let debug = null;
     try {
       const result = await api.post(`/add_knowledge`, {
