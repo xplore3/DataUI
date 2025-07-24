@@ -195,8 +195,10 @@ const Chat = () => {
   }, []);
 
   const knowledgeCheck = () => {
+    console.log('knowledgeCheck');
     try {
       const knowledgeUpdated = localStorage.getItem('local_knowledge_value_updated');
+      console.log(knowledgeUpdated);
       if (knowledgeUpdated && knowledgeUpdated === 'true') {
         const newKnowledge = localStorage.getItem('local_knowledge_value');
         if (newKnowledge && newKnowledge != '') {
