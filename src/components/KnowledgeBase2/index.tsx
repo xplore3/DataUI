@@ -91,7 +91,7 @@ const KnowledgeBase2: React.FC = () => {
     loadSavedAnswers();
   }, [form]);
 
-  const handleFormSubmit = async (values: Record<string, any>, labelValueMap: Record<string, any>) => {
+  const handleFormSubmit = async (values: Record<string, any>) => {
     try {
       if (loading || isFormSubmitted) return;
 
@@ -110,19 +110,23 @@ const KnowledgeBase2: React.FC = () => {
         })
       );
       console.log(result);
-      console.log(labelValueMap);
-      const strAnswers = JSON.stringify(labelValueMap);
-      const preAnswers = localStorage.getItem('local_knowledge_value');
-      if (preAnswers !== strAnswers) {
-        localStorage.setItem('local_knowledge_value', strAnswers);
-        localStorage.setItem('local_knowledge_value_updated', 'true');
-      }
-      else {
-        //localStorage.setItem('local_knowledge_value_updated', 'false');
-      }
 
       await chatApi.addKnowledges(JSON.stringify(result)).then(res => {
         console.log(res);
+        let summary = JSON.stringify(result);
+        try {
+          const json = JSON.parse(res);
+          summary = json.summary || '';
+          console.log(summary);
+          const preAnswers = localStorage.getItem('local_knowledge_value') || '';
+          if (preAnswers !== summary) {
+            localStorage.setItem('local_knowledge_value', summary);
+            localStorage.setItem('local_knowledge_value_updated', 'true');
+          }
+        }
+        catch (err) {
+          console.log(err);
+        }
         // 保存成功后设置状态
         setSavedAnswers(values);
         setIsFormSubmitted(true);

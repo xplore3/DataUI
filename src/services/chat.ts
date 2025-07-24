@@ -377,7 +377,7 @@ export const chatApi = {
     };
   },
 
-  addKnowledges: async (knowledges: string): Promise<Message> => {
+  addKnowledges: async (knowledges: string): Promise<string> => {
     let debug = null;
     try {
       const result = await api.post(`/add_knowledge`, {
@@ -389,20 +389,12 @@ export const chatApi = {
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
-      return {
-        text: response || '......',
-        user: 'client',
-        action: 'NONE',
-      };
+      return response;
     } catch (err) {
       debug = err;
       console.log(err);
     }
-    return {
-      text: getUnknownErrorDesc(debug),
-      user: 'client',
-      action: 'NONE',
-    };
+    return getUnknownErrorDesc(debug);
   },
 
   getKnowledges: async (): Promise<string> => {

@@ -199,12 +199,15 @@ const Chat = () => {
     try {
       const knowledgeUpdated = localStorage.getItem('local_knowledge_value_updated');
       console.log(knowledgeUpdated);
-      /*if (knowledgeUpdated && knowledgeUpdated === 'true') {
+      if (knowledgeUpdated && knowledgeUpdated === 'true') {
         const newKnowledge = localStorage.getItem('local_knowledge_value');
         if (newKnowledge && newKnowledge != '') {
           setMessageList(prev => [...prev, { text: newKnowledge, user: 'user', action: 'NONE', displayText: newKnowledge }]);
         }
-      }*/
+      }
+      else {
+        localStorage.setItem('local_knowledge_value_updated', 'false');
+      }
     } catch (err) {
       console.log(err);
     }
