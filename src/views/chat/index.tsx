@@ -51,7 +51,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['IP定位'];
+  const keyList = ['开始定位'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -95,7 +95,7 @@ const Chat = () => {
       localStorage.removeItem('welcomeMessage');
     }
 
-    //handleKeyPress('IP定位');
+    //handleKeyPress('开始定位');
     knowledgeCheck();
 
     setTips('请输入你的数据处理指令');
@@ -392,7 +392,7 @@ const Chat = () => {
       } catch (error) {
         console.log(error);
       }
-    } else if (key === 'IP定位') {
+    } else if (key === '开始定位') {
       if (!checkUserProfile()) {
         return;
       }
