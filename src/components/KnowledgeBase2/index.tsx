@@ -102,6 +102,7 @@ const KnowledgeBase2: React.FC = () => {
       }
 
       setLoading(true);
+      toast('正在提交知识库数据...');
 
       const result: Record<string, string> = Object.fromEntries(
         Object.entries(values).map(([key, value]) => {
