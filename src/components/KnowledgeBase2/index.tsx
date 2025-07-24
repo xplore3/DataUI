@@ -111,7 +111,7 @@ const KnowledgeBase2: React.FC = () => {
       );
       console.log(result);
       const answers: Record<string, string> = Object.fromEntries(
-        Object.entries(values).map(([key, value]) => {
+        Object.entries(values).map(([value]) => {
           const answer = Array.isArray(value) ? value.join(", ") : String(value || '');
           return [answer];
         })
