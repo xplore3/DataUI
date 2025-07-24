@@ -203,11 +203,12 @@ const KnowledgeBase2: React.FC = () => {
             <Form
               form={form}
               layout="vertical"
-              onFinish={(values) => {
+              onFinish={async (values) => {
                 // 构建 label:value 的 map
                 const labelValueMap: Record<string, any> = {};
                 // 遍历所有表单项，提取 label
-                form.getFields().forEach((field: any) => {
+                const fields = await form.validateFields();
+                Object.entries(fields).forEach((field: any) => {
                   const { name, label } = field;
                   if (label && values[name]) {
                     labelValueMap[label] = values[name];
