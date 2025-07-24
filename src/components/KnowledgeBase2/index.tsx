@@ -91,7 +91,7 @@ const KnowledgeBase2: React.FC = () => {
     loadSavedAnswers();
   }, [form]);
 
-  const handleFormSubmit = async (values: Record<string, any>) => {
+  const handleFormSubmit = async (values: Record<string, any>, labelValueMap: Record<string, any>) => {
     try {
       if (loading || isFormSubmitted) return;
 
@@ -110,14 +110,8 @@ const KnowledgeBase2: React.FC = () => {
         })
       );
       console.log(result);
-      const answers: Record<string, string> = Object.fromEntries(
-        Object.entries(values).map(([value]) => {
-          const answer = Array.isArray(value) ? value.join(", ") : String(value || '');
-          return [answer];
-        })
-      );
-      console.log(answers);
-      const strAnswers = JSON.stringify(answers);
+      console.log(labelValueMap);
+      const strAnswers = JSON.stringify(labelValueMap);
       const preAnswers = localStorage.getItem('local_knowledge_value');
       if (preAnswers !== strAnswers) {
         localStorage.setItem('local_knowledge_value', strAnswers);
@@ -209,7 +203,18 @@ const KnowledgeBase2: React.FC = () => {
             <Form
               form={form}
               layout="vertical"
-              onFinish={handleFormSubmit}
+              onFinish={(values) => {
+                // 构建 label:value 的 map
+                const labelValueMap: Record<string, any> = {};
+                // 遍历所有表单项，提取 label
+                form.getFields().forEach((field: any) => {
+                  const { name, label } = field;
+                  if (label && values[name]) {
+                    labelValueMap[label] = values[name];
+                  }
+                });
+                handleFormSubmit(values, labelValueMap);
+              }}
               initialValues={savedAnswers}
             >
               <Divider  orientation="left" orientationMargin="0">一、基本情况</Divider>
