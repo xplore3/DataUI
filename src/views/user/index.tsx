@@ -74,10 +74,10 @@ const UserCenter = () => {
         <img className="user-center-avatar" src={userInfo.headimgurl || defaultAvatar} alt="avatar" />
         <div className="user-center-info">
           <div className="user-center-nickname">{userInfo.nickname || defaultNickname}</div>
-          <div className="user-center-detail">
+          {/*<div className="user-center-detail">
             <span>{userInfo.sex == 0 ? 'Male' : 'Female'}</span>
             <span>{userInfo.city}</span>
-          </div>
+          </div>*/}
         </div>
       </div>
       {/* Agent设置部分暂时隐藏 */}
