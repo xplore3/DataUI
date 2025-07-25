@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Radio, Checkbox, Button, Card, Divider, InputNumber, Rate } from 'antd';
+import { Form, Input, Radio, Checkbox, Button, Card, Divider, InputNumber } from 'antd';
 import { chatApi } from '@/services/chat';
 import { toast } from 'react-toastify';
 
@@ -15,7 +15,7 @@ const KnowledgeBase2: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string | string[]>>({});
-  const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
+  //const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
   
   // 解析从getKnowledges接口返回的数据格式
   const parseKnowledgeData = (knowledgeData: string | null | undefined): Record<string, string | string[]> => {
@@ -67,12 +67,12 @@ const KnowledgeBase2: React.FC = () => {
           setSavedAnswers(parsedAnswers);
           form.setFieldsValue(parsedAnswers);
           // 设置专业背书的选中状态
-          if (parsedAnswers.professionalEndorsements) {
+          /*if (parsedAnswers.professionalEndorsements) {
             const endorsements = Array.isArray(parsedAnswers.professionalEndorsements) 
               ? parsedAnswers.professionalEndorsements 
               : [parsedAnswers.professionalEndorsements];
             setSelectedEndorsements(endorsements);
-          }
+          }*/
           // 如果有数据，说明已经填写过
           setIsFormSubmitted(Object.keys(parsedAnswers).length > 0);
         } else {
@@ -159,12 +159,12 @@ const KnowledgeBase2: React.FC = () => {
         setSavedAnswers(parsedAnswers);
         form.setFieldsValue(parsedAnswers);
         // 设置专业背书的选中状态
-        if (parsedAnswers.professionalEndorsements) {
+        /*if (parsedAnswers.professionalEndorsements) {
           const endorsements = Array.isArray(parsedAnswers.professionalEndorsements) 
             ? parsedAnswers.professionalEndorsements 
             : [parsedAnswers.professionalEndorsements];
           setSelectedEndorsements(endorsements);
-        }
+        }*/
       }
     } catch (error) {
       console.error('Error loading saved answers:', error);
