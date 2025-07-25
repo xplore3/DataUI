@@ -183,7 +183,7 @@ const KnowledgeBase2: React.FC = () => {
         <div className="user-center-success-message">
           <div className="success-icon">✅</div>
           <div className="success-text">
-            已经了解您的个人IP背景和企业情况！
+            已经了解您的个人IP背景和企业情况！您的独特经历与认知是个人IP的核心资产。
             <br />
             现在可以开始为您提供个性化的内容策略和建议了！
           </div>
@@ -229,13 +229,13 @@ const KnowledgeBase2: React.FC = () => {
                  <Input placeholder='如"老张""慧姐"'  style={{ width: '200px' }}  />
                </Form.Item>
                
-               <Form.Item
+               {/*<Form.Item
                  label="客户常称您"
                  name="clientsCall"
                >
                  <Input placeholder='如"王总""李老师"'  style={{ width: '200px' }}  />
-              </Form.Item>
-              
+              </Form.Item>*/}
+
               <Form.Item
                 label="性别"
                 name="gender"
@@ -246,16 +246,16 @@ const KnowledgeBase2: React.FC = () => {
                   <Radio value="女">女</Radio>
                 </Radio.Group>
               </Form.Item>
-              
+
               <Form.Item
                 label="年龄"
                 name="age"
               >
                 <InputNumber placeholder="请输入年龄" min={18} max={100} />
               </Form.Item>
-              
+
               <Form.Item
-                label="日常爱好"
+                label="爱好与特长"
                 name="hobbies"
               >
                 <Checkbox.Group>
@@ -270,7 +270,7 @@ const KnowledgeBase2: React.FC = () => {
                 </Checkbox.Group>
               </Form.Item>
               
-              <Form.Item
+              {/*<Form.Item
                 label="隐藏技能"
                 name="hiddenSkills"
               >
@@ -284,16 +284,16 @@ const KnowledgeBase2: React.FC = () => {
                   <Checkbox value="设计">设计</Checkbox>
                   <Checkbox value="主持">主持</Checkbox>
                 </Checkbox.Group>
-              </Form.Item>
+              </Form.Item>*/}
               
               <Form.Item
-                label="最高学历/专业"
+                label="教育及工作背景"
                 name="education"
               >
                 <Input placeholder="如：硕士/计算机科学" />
               </Form.Item>
               
-              <Form.Item
+              {/*<Form.Item
                 label="从事什么行业"
                 name="industry"
                 rules={[{ required: true, message: '请填写行业信息' }]}
@@ -302,34 +302,85 @@ const KnowledgeBase2: React.FC = () => {
               </Form.Item>
               
               <Form.Item
+                label="创业前的工作"
+                name="previousWork"
+              >
+                <TextArea rows={3}  placeholder="请描述您创业前的工作经历" />
+              </Form.Item>*/}
+              
+              <Divider  orientation="left" orientationMargin="0">二、行业履历</Divider>
+
+              <Form.Item
+                label="所在行业（或商业模式）"
+                name="industry"
+                rules={[{ required: true, message: '请填写行业信息' }]}
+              >
+                <Input placeholder="请输入您从事的行业" />
+              </Form.Item>
+
+              <Form.Item
+                 label="细分领域"
+                 name="industrySubfield"
+               >
+                 <Input placeholder='如"智能汽车安全""母婴电商"' />
+               </Form.Item>
+
+              <Form.Item
                 label="从业年限"
                 name="workYears"
               >
                 <InputNumber placeholder="请输入从业年限" min={0} max={50} addonAfter="年" />
               </Form.Item>
-              
+
               <Form.Item
-                label="创业前的工作"
-                name="previousWork"
+                 label="您的产品或服务是"
+                 name="productOrService"
+               >
+                 <Input placeholder='输入产品或服务' />
+               </Form.Item>
+
+              <Form.Item
+                label="您处在行业的阶段"
+                name="industryLevel"
+                rules={[{ required: true, message: '请选择行业的阶段' }]}
               >
-                <TextArea rows={3}  placeholder="请描述您创业前的工作经历" />
+                <Radio.Group>
+                  <Radio value="头部">A. 头部</Radio>
+                  <Radio value="腰部">B. 腰部</Radio>
+                  <Radio value="底部">C. 底部</Radio>
+                </Radio.Group>
               </Form.Item>
-              
-              <Divider  orientation="left" orientationMargin="0">二、行业深耕经历</Divider>
-              
+
               <Form.Item
+                 label="您对行业的深刻理解"
+                 name="industryInsight"
+               >
+                 <TextArea 
+                   rows={3} 
+                   placeholder='您曾以为"_______"，但实际发现"_______"。(例：曾以为技术领先就能赢市场，实际发现用户信任才是核心)' 
+                 />
+               </Form.Item>
+
+              <Form.Item
+                 label="同行（或客户）怎么评价您"
+                 name="clientsEvaluation"
+               >
+                 <Input placeholder='输入评价' />
+               </Form.Item>
+
+              <Form.Item
+                 label="您在行业的核心竞争力"
+                 name="coreCompetitiveness"
+               >
+                 <Input placeholder='输入核心竞争力' />
+               </Form.Item>
+
+              {/*<Form.Item
                 label="入行时间"
                 name="industryStartYear"
               >
                 <InputNumber placeholder="入行年份" min={1980} max={new Date().getFullYear()} addonAfter="年" />
               </Form.Item>
-              
-                             <Form.Item
-                 label="行业细分领域"
-                 name="industrySubfield"
-               >
-                 <Input placeholder='如"智能汽车安全""母婴电商"' />
-               </Form.Item>
                
                <Form.Item
                  label="颠覆认知的行业真相"
@@ -352,9 +403,9 @@ const KnowledgeBase2: React.FC = () => {
                   <Radio value="服务体验">服务体验</Radio>
                   <Radio value="其他">其他</Radio>
                 </Radio.Group>
-              </Form.Item>
+              </Form.Item>*/}
               
-              <Divider  orientation="left" orientationMargin="0">三、个人差异化优势</Divider>
+              {/*<Divider  orientation="left" orientationMargin="0">三、个人差异化优势</Divider>
               
               <Form.Item
                 label="专业背书"
@@ -456,25 +507,49 @@ const KnowledgeBase2: React.FC = () => {
                 <Form.Item name="storytelling" style={{ display: 'inline-block', margin: 0 }}>
                   <Rate />
                 </Form.Item>
-              </Form.Item>
-              
-              <Divider  orientation="left" orientationMargin="0">四、企业运营现状</Divider>
-              
+              </Form.Item>*/}
+
+              <Divider  orientation="left" orientationMargin="0">三、企业规模</Divider>
+
               <Form.Item
                 label="当前团队规模"
                 name="teamSize"
               >
                 <InputNumber placeholder="团队人数" min={1} addonAfter="人" />
               </Form.Item>
-              
+
               <Form.Item
                 label="当前营收规模"
                 name="revenue"
               >
                 <Input placeholder="请输入营收规模" />
               </Form.Item>
-              
+
               <Form.Item
+                label="主营产品"
+                name="mainProduct"
+              >
+                <Input placeholder="请描述主营产品和占比" />
+              </Form.Item>
+
+              <Form.Item
+                label="其它产品"
+                name="subsidiaryProduct"
+              >
+                <Input placeholder="请描述其它产品和占比" />
+              </Form.Item>
+
+               <Form.Item
+                 label="您的产品优势"
+                 name="competitiveAdvantage"
+               >
+                 <TextArea 
+                   rows={2} 
+                   placeholder="例：成本相同，但售后响应速度领先50%" 
+                 />
+               </Form.Item>
+
+              {/*<Form.Item
                 label="月均人力成本"
                 name="laborCost"
               >
@@ -493,13 +568,6 @@ const KnowledgeBase2: React.FC = () => {
                 name="marketingCost"
               >
                 <InputNumber placeholder="营销成本" min={0} addonAfter="元" />
-              </Form.Item>
-              
-              <Form.Item
-                label="主营产品"
-                name="mainProduct"
-              >
-                <Input placeholder="请描述您的主营产品" />
               </Form.Item>
               
                              <Form.Item
@@ -533,12 +601,23 @@ const KnowledgeBase2: React.FC = () => {
                    rows={2} 
                    placeholder="若业务翻倍，需新增成本：___万元（主要用于________）" 
                  />
-               </Form.Item>
-              
-              <Divider  orientation="left" orientationMargin="0">五、目标用户画像</Divider>
-              
+               </Form.Item>*/}
+
+              <Divider  orientation="left" orientationMargin="0">四、目标用户画像</Divider>
+
               <Form.Item
-                label="目标用户年龄段"
+                label="业务模式"
+                name="businessModel"
+              >
+                <Checkbox.Group>
+                  <Checkbox value="ToB(企业)">ToB(企业)</Checkbox>
+                  <Checkbox value="ToC(个人)">ToC(个人)</Checkbox>
+                  <Checkbox value="ToG(政府)">ToG(政府)</Checkbox>
+                </Checkbox.Group>
+              </Form.Item>
+
+              <Form.Item
+                label="用户年龄段"
                 name="targetAgeRange"
               >
                 <Checkbox.Group>
@@ -549,22 +628,39 @@ const KnowledgeBase2: React.FC = () => {
                   <Checkbox value="55+">55+</Checkbox>
                 </Checkbox.Group>
               </Form.Item>
-              
+
+              <Form.Item
+                label="用户性别占比"
+                name="genderRadio"
+              >
+                <Radio.Group>
+                  <Radio value="男性为主">男性为主</Radio>
+                  <Radio value="女性为主">女性为主</Radio>
+                </Radio.Group>
+              </Form.Item>
+
               <Form.Item
                 label="身份标签"
                 name="targetIdentity"
               >
                 <Input placeholder='如"90后宝妈""中小企业主"' />
               </Form.Item>
-              
+
               <Form.Item
                 label="决策者vs使用者"
                 name="decisionMaker"
               >
                 <Input placeholder='如"家长决策，孩子使用"' />
               </Form.Item>
-              
+
               <Form.Item
+                label="对用户的其他描述"
+                name="userDetails"
+              >
+                <TextArea rows={2} placeholder="描述目标用户的其他信息" />
+              </Form.Item>
+
+              {/*<Form.Item
                 label="他们最常抱怨什么"
                 name="userComplaints"
               >
@@ -579,11 +675,54 @@ const KnowledgeBase2: React.FC = () => {
                   rows={2} 
                   placeholder='如"行业避坑指南""成本优化案例"' 
                 />
-              </Form.Item>
-              
-              <Divider  orientation="left" orientationMargin="0">六、个人IP潜力挖掘</Divider>
-              
+              </Form.Item>*/}
+
+              <Divider  orientation="left" orientationMargin="0">五、个人IP潜力挖掘</Divider>
+
               <Form.Item
+                label="令人难忘的荣耀时光"
+                name="unforgettableStoryOfGlory"
+              >
+                <TextArea 
+                  rows={2} 
+                  placeholder='从业中最难忘的经历' 
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="从业中最扎心的经历"
+                name="theMostPainfulExperience"
+              >
+                <TextArea 
+                  rows={4} 
+                  placeholder='建议包含冲突与突破，如“曾因技术漏洞损失百万，后带领团队72小时逆转困局”' 
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="我对行业独特的认知或资源"
+                name="uniqueUnderstanding"
+              >
+                <TextArea 
+                  rows={2} 
+                  placeholder="我的内容不同于其他企业家" 
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="我打造个人IP的目的"
+                name="purposeOfMyIP"
+              >
+                <Checkbox.Group>
+                  <Checkbox value="卖货赚钱">卖货赚钱</Checkbox>
+                  <Checkbox value="立人设">立人设</Checkbox>
+                  <Checkbox value="展示自己">展示自己</Checkbox>
+                  <Checkbox value="玩玩">玩玩</Checkbox>
+                  <Checkbox value="其他">其他</Checkbox>
+                </Checkbox.Group>
+              </Form.Item>
+
+              {/*<Form.Item
                 label="您最想传递的价值观"
                 name="coreValues"
               >
@@ -592,7 +731,7 @@ const KnowledgeBase2: React.FC = () => {
                   placeholder='我希望用户提到我时，想到________。(例："科技向善""极致性价比")' 
                 />
               </Form.Item>
-              
+
               <Form.Item
                 label="一个只有您能讲的故事"
                 name="uniqueStory"
@@ -602,7 +741,7 @@ const KnowledgeBase2: React.FC = () => {
                   placeholder='从业中最难忘的经历(建议包含冲突与突破，如"曾因技术漏洞损失百万，后带领团队72小时逆转困局")' 
                 />
               </Form.Item>
-              
+
               <Form.Item
                 label="拒绝同质化的关键"
                 name="differentiationKey"
@@ -611,8 +750,8 @@ const KnowledgeBase2: React.FC = () => {
                   rows={2} 
                   placeholder="我的内容不同于其他企业家，因为我会侧重_________。(例：拆解技术黑匣子/直播工厂溯源)" 
                 />
-              </Form.Item>
-              
+              </Form.Item>*/}
+
               <Form.Item>
                 <Button 
                   type="primary" 
