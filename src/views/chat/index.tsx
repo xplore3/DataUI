@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import PromptPin from './prompt';
 import { useUserStore } from '@/stores/useUserStore';
 import { getRandomElements } from '@/utils/common';
+import ToggleButton from '@/components/ToggleButton';
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -45,13 +46,14 @@ const Chat = () => {
   //const [preText, setPreText] = useState('');
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
+  const [rawDataState, setRawDataState] = useState(true);
   //const { userProfile } = useUserStore();
   //let preText = '';
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['IP定位'];
+  const keyList = ['模板', '品牌定位', '今日文案', '爆款仿写'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -250,6 +252,19 @@ const Chat = () => {
       setLoading(true);
       setText('');
       setMessageList(prev => [...prev, { text: finalText, user: 'user', action: 'NONE', displayText: finalText }]);
+      if (rawDataState) {
+        chatApi
+          .dataHub(finalText)
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return true;
+          });
+        return;
+      }
       chatApi
         .createChat(finalText)
         .then(res => {
@@ -385,6 +400,29 @@ const Chat = () => {
       setLoading(true);
       const prompt =
         '根据我的产品/背景知识库等信息，生成IP定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
+      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
+      try {
+        chatApi
+          .routineTask(prompt, 'positioning_analysis')
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            //setLoading(false);
+            await handlerStatus();
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (key === '品牌定位') {
+      if (!checkUserProfile()) {
+        return;
+      }
+      if (loading) return;
+      toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
+      setLoading(true);
+      const prompt =
+        '根据我的产品/背景知识库等信息，生成品牌定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
       setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
         chatApi
@@ -665,6 +703,9 @@ const Chat = () => {
       {/* Bottom input area */}
       <div className="chat-page-bottom">
         <div className="chat-page-keys">
+          <ToggleButton active={rawDataState} onToggle={(val: boolean) => setRawDataState(val)}>
+            RawData
+          </ToggleButton>
           {keyList.map(item => (
             <div className="chat-page-items" key={item} onClick={() => handleKeyPress(item)}>
               {item}
