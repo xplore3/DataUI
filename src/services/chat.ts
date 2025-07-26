@@ -3,8 +3,21 @@ import { Chat, Message } from '../types/chat';
 import { useUserStore } from '@/stores/useUserStore';
 import { useUser } from '@/hooks/useUser';
 import { getRandomElements, getUnknownErrorDesc, getWaitTip } from '@/utils/common';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 export const chatApi = {
+  getFingerprint: async() => {
+    try {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      console.log('FingerPrint ID:', result.visitorId);
+      return result.visitorId;
+    } catch (error) {
+      console.error('FingerPrint failed:', error);
+      return null;
+    }
+  },
+
   getOrCreateUUID: () => {
     let uuid = localStorage.getItem('device_uuid');
     if (!uuid) {
@@ -14,12 +27,13 @@ export const chatApi = {
     return uuid;
   },
 
-  getUserId: ():string => {
+  getUserId: async (): Promise<string> => {
     const { userInfo } = useUser();
     //let userId = useUserStore.getState().getUserId();
     let userId = userInfo?.unionid;
     if (!userId) {
-      userId = chatApi.getOrCreateUUID();
+      //userId = chatApi.getOrCreateUUID();
+      userId = await chatApi.getFingerprint();
     }
     return userId;
   },
@@ -41,7 +55,7 @@ export const chatApi = {
       const result = await api.post(`/message`, {
         text: initialMessage,
         taskId,
-        userId: chatApi.getUserId(),
+        userId: await chatApi.getUserId(),
       });
       //let options: string[] = [];
       //let backup_options = [];
@@ -109,7 +123,7 @@ export const chatApi = {
       const result = await api.post(`/data_process`, {
         text: option,
         taskId,
-        userId: chatApi.getUserId(),
+        userId: await chatApi.getUserId(),
         fromOptions
       });
       //let options: string[] = [];
@@ -167,7 +181,7 @@ export const chatApi = {
       const result = await api.post(`/routine`, {
         text: text,
         option,
-        userId: chatApi.getUserId(),
+        userId: await chatApi.getUserId(),
       });
       response = result.data.text;
       let newTaskId = '';
@@ -210,7 +224,7 @@ export const chatApi = {
     try {
       const result = await api.post(`/datahub`, {
         text: text,
-        userId: chatApi.getUserId(),
+        userId: await chatApi.getUserId(),
       });
       response = result.data.text;
       let newTaskId = '';
@@ -354,7 +368,7 @@ export const chatApi = {
   getPromptTemplates: async (): Promise<Message> => {
     let debug = null;
     try {
-      const userId = chatApi.getUserId();
+      const userId = await chatApi.getUserId();
       const result = await api.get(`/prompt_templates?userId=${userId}`, {});
       console.log(result);
       let response = result.data;
@@ -381,7 +395,7 @@ export const chatApi = {
     let debug = null;
     try {
       const result = await api.post(`/add_knowledge`, {
-        userId: chatApi.getUserId(),
+        userId: await chatApi.getUserId(),
         knowledges: knowledges
       });
       console.log(result);
@@ -398,12 +412,12 @@ export const chatApi = {
   },
 
   getKnowledges: async (): Promise<string> => {
-    const response = await api.get(`/read_knowledge?userId=${chatApi.getUserId()}`, {});
+    const response = await api.get(`/read_knowledge?userId=${await chatApi.getUserId()}`, {});
     return response.data;
   },
 
   getQualityEvaluation: async (): Promise<string> => {
-    const response = await api.get(`/quality_evaluation?userId=${chatApi.getUserId()}`, {});
+    const response = await api.get(`/quality_evaluation?userId=${await chatApi.getUserId()}`, {});
     return response.data;
   },
 

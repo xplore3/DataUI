@@ -221,8 +221,8 @@ const KnowledgeBase2: React.FC = () => {
               >
                 <Input placeholder="请输入您的真实姓名" style={{ width: '200px' }} />
               </Form.Item>
-              
-                             <Form.Item
+
+              <Form.Item
                  label="朋友常称您"
                  name="friendsCall"
                >
@@ -633,10 +633,7 @@ const KnowledgeBase2: React.FC = () => {
                 label="用户性别占比"
                 name="genderRadio"
               >
-                <Radio.Group>
-                  <Radio value="男性为主">男性为主</Radio>
-                  <Radio value="女性为主">女性为主</Radio>
-                </Radio.Group>
+                男性占比：<InputNumber placeholder="请输入百分比" min={0} max={10} addonAfter="%" />
               </Form.Item>
 
               <Form.Item
@@ -720,6 +717,19 @@ const KnowledgeBase2: React.FC = () => {
                   <Checkbox value="玩玩">玩玩</Checkbox>
                   <Checkbox value="其他">其他</Checkbox>
                 </Checkbox.Group>
+                {/*purposeOfMyIpOtherChecked && <textarea
+                  className="question-custom-input"
+                  placeholder="请输入具体内容"
+                  value={customInputs[`${q.id}-${opt}`] || ''}
+                  onChange={(e) => handleCustomInputChange(`${q.id}-${opt}`, e.target.value)}
+                />*/}
+              </Form.Item>
+
+              <Form.Item
+                label="对标或学习的账号"
+                name="learningAccount"
+              >
+                <Input placeholder='输入账号链接或账号ID' />
               </Form.Item>
 
               {/*<Form.Item
