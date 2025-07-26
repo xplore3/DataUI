@@ -232,7 +232,7 @@ export const chatApi = {
         response = response.data_result || response.question_description || response;
       }
       return {
-        text: `\`\`\`json\n${response}\n\`\`\`\n\n${typeof response === 'string' ? response.substring(0, 10) : ''}...`,
+        text: `\`\`\`json\n${response}\n\`\`\`\n\n${response.slice(0, 60)}...`,
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,
