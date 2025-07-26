@@ -299,6 +299,19 @@ const Chat = () => {
       setText('');
       setMessageList(prev => [...prev, { text: finalText, user: 'user', action: 'NONE', displayText: finalText }]);
       //const origin_input = useUserStore.getState().getOriginInput() || '';
+      if (rawDataState) {
+        chatApi
+          .dataHub(finalText)
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return true;
+          });
+        return;
+      }
       chatApi
         .dataProcess(finalText, taskId, fromOptions)
         .then(res => {
