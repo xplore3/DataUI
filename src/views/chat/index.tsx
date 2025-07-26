@@ -703,7 +703,7 @@ const Chat = () => {
       {/* Bottom input area */}
       <div className="chat-page-bottom">
         <div className="chat-page-keys">
-          <ToggleButton active={rawDataState} onToggle={(val: boolean) => setRawDataState(val)}>
+          <ToggleButton defaultActive={rawDataState} onToggle={(val: boolean) => setRawDataState(val)}>
             RawData
           </ToggleButton>
           {keyList.map(item => (

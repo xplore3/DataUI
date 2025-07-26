@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ToggleButton.less';
+import './index.less';
 
 interface ToggleButtonProps {
   defaultActive?: boolean;

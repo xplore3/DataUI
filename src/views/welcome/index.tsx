@@ -106,7 +106,7 @@ const Welcome = () => {
       {/* Header */}
       <header className="welcome-page-header">
         <img src={Logo} alt="Logo" />
-        <h1>XData3：面向AI的商业数据引擎</h1>
+        <h1>DataMall：面向AI的商业数据引擎</h1>
         <p className="welcome-description">
           基于自然语言的商业数据搜索、获取、购买引擎
           <br />
