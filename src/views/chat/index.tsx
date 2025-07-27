@@ -396,7 +396,10 @@ const Chat = () => {
       if (!checkUserProfile()) {
         return;
       }
-      if (loading) return;
+      if (loading) {
+        toast('正在处理中，请稍候......');
+        return;
+      }
       toast('正在根据背景知识库等信息进行IP定位分析，请稍候......');
       setLoading(true);
       const prompt =
@@ -659,9 +662,9 @@ const Chat = () => {
                 }}
                 onRefresh={handleRefresh}
                 menuList={
-                  index === messageList.length - 1 && messageList.length > 1 && item.action !== 'bnbQuery'
-                    ? ['share', 'translate', 'copy', 'refresh']
-                    : ['share', 'translate', 'copy']
+                  index === messageList.length - 1 && messageList.length > 1
+                    ? (item.completed ? ['share', 'copy', 'refresh'] : ['copy', 'refresh'])
+                    : (item.completed ? ['share', 'copy'] : ['copy'])
                 }
               />
             )}
@@ -682,8 +685,8 @@ const Chat = () => {
       <div className="chat-page-bottom">
         <div className="chat-page-keys">
           {keyList.map(item => (
-            <div className="chat-page-items" key={item} onClick={() => handleKeyPress(item)}>
-              {item}
+            <div className={loading ? "chat-page-items loading" : "chat-page-items"} key={item} onClick={() => handleKeyPress(item)}>
+              {loading ? '正在处理...' : item}
             </div>
           ))}
         </div>
