@@ -738,7 +738,10 @@ const Chat = () => {
             </div>
           ))}
         </div>
-        {loading ? (<ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>) : (<></>)}
+        {loading ? (
+          <div className="chat-page-input">
+            <ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>
+          </div>) : (<></>)}
         {false && (
           <div className="chat-page-input">
             <textarea ref={textareaRef} placeholder={tips} value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
