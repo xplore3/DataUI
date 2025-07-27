@@ -73,7 +73,7 @@ export const chatApi = {
           response = (json.process_result + json.option_description) || json.data_result || json.question_description;
         }
       } catch (err) {
-        console.log(err);
+        //console.log(err);
         newTaskId = response.taskId || result.data.taskId;
         useUserStore.getState().setTaskId(newTaskId);
         //backup_options = response.intention_options || response.available_options;
@@ -142,7 +142,7 @@ export const chatApi = {
           response = (json.process_result + json.option_description) || json.data_result || json.question_description;
         }
       } catch (err) {
-        console.log(err);
+        //console.log(err);
         newTaskId = response.taskId || result.data.taskId;
         useUserStore.getState().setTaskId(newTaskId);
         //backup_options = response.intention_options;
@@ -196,7 +196,7 @@ export const chatApi = {
           response = (json.process_result + json.option_description) || json.data_result || json.question_description;
         }
       } catch (err) {
-        console.log(err);
+        //console.log(err);
         newTaskId = response.taskId || result.data.taskId;
         useUserStore.getState().setTaskId(newTaskId);
         response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
@@ -284,7 +284,7 @@ export const chatApi = {
         };
       }
       const result = await api.get(`/task_status?taskId=${taskId}`, {});
-      console.log(result);
+      //console.log(result);
       let response = result.data.task_status;
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
@@ -320,7 +320,7 @@ export const chatApi = {
               response = (json.process_result + json.option_description) || json.data_result || json.question_description;
             }
           } catch (err) {
-            console.log(err);
+            //console.log(err);
             newTaskId = response.taskId;
             if (newTaskId) {
               useUserStore.getState().setTaskId(newTaskId);
