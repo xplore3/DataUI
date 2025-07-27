@@ -34,7 +34,7 @@ const CodeGenPage: React.FC = () => {
       const code = response.code || response;
       
       setInviteCode(code);
-      await generateQRCode(window.location.origin + '/chat');
+      await generateQRCode(window.location.origin + '/chat?inviteCode=' + code);
       setCopySuccess(false);
     } catch (error) {
       console.error('生成邀请码失败:', error);

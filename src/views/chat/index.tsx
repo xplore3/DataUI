@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import PromptPin from './prompt';
 import { useUserStore } from '@/stores/useUserStore';
 import { getRandomElements } from '@/utils/common';
+import { CodeApi } from '@/services/code';
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -52,6 +53,16 @@ const Chat = () => {
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const keyList = ['开始定位'];
+  const [inviteCode, setInviteCode] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const inviteCode = params.get('inviteCode') || localStorage.getItem('invite_code') || '';
+    if (inviteCode) {
+      localStorage.setItem('invite_code', inviteCode);
+      setInviteCode(inviteCode);
+    }
+  }, []);
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -393,6 +404,15 @@ const Chat = () => {
         console.log(error);
       }
     } else if (key === '开始定位') {
+      if (inviteCode) {
+        const res = await CodeApi.codeValidate(inviteCode);
+        console.warn(res);
+        if(!res.valid){
+          return
+        }
+      } else {
+        return;
+      }
       if (!checkUserProfile()) {
         return;
       }
@@ -402,8 +422,7 @@ const Chat = () => {
       }
       toast('正在根据背景知识库等信息进行IP定位分析，请稍候......');
       setLoading(true);
-      const prompt =
-        '根据我的背景知识库等信息，生成IP定位分析报告。';
+      const prompt = '根据我的背景知识库等信息，生成IP定位分析报告。';
       setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
         chatApi
@@ -663,8 +682,12 @@ const Chat = () => {
                 onRefresh={handleRefresh}
                 menuList={
                   index === messageList.length - 1 && messageList.length > 1
-                    ? (item.completed ? ['share', 'copy', 'refresh'] : ['copy', 'refresh'])
-                    : (item.completed ? ['share', 'copy'] : ['copy'])
+                    ? item.completed
+                      ? ['share', 'copy', 'refresh']
+                      : ['copy', 'refresh']
+                    : item.completed
+                    ? ['share', 'copy']
+                    : ['copy']
                 }
               />
             )}
@@ -685,32 +708,34 @@ const Chat = () => {
       <div className="chat-page-bottom">
         <div className="chat-page-keys">
           {keyList.map(item => (
-            <div className={loading ? "chat-page-items loading" : "chat-page-items"} key={item} onClick={() => handleKeyPress(item)}>
+            <div className={loading ? 'chat-page-items loading' : 'chat-page-items'} key={item} onClick={() => handleKeyPress(item)}>
               {loading ? '正在处理...' : item}
             </div>
           ))}
         </div>
-        { false && (<div className="chat-page-input">
-          <textarea ref={textareaRef} placeholder={tips} value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
-          {loading ? (
-            <ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>
-          ) : (
-            // <img src={} className="chat-loading" alt="loading" />
-            <img
-              src={text ? SendActive : Send}
-              alt="Send"
-              onClick={() => {
-                const taskId = useUserStore.getState().getTaskId();
-                if (taskId) {
-                  onDataProcess(text, false);
-                } else {
-                  onSend();
-                }
-                useUserStore.getState().setOriginInput(text);
-              }}
-            />
-          )}
-        </div>)}
+        {false && (
+          <div className="chat-page-input">
+            <textarea ref={textareaRef} placeholder={tips} value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
+            {loading ? (
+              <ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>
+            ) : (
+              // <img src={} className="chat-loading" alt="loading" />
+              <img
+                src={text ? SendActive : Send}
+                alt="Send"
+                onClick={() => {
+                  const taskId = useUserStore.getState().getTaskId();
+                  if (taskId) {
+                    onDataProcess(text, false);
+                  } else {
+                    onSend();
+                  }
+                  useUserStore.getState().setOriginInput(text);
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
