@@ -136,6 +136,26 @@
         margin-right: 0;
       }
     }
+    .chat-loading {
+      animation: spin 0.7s linear infinite;
+      color: var(--text-color-2);
+      height: 22px;
+      width: 22px;
+      margin-top: 20px;
+      margin-left: 20px;
+      svg {
+        width: 22px !important;
+        height: 22px !important;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
   }
   &-input {
     display: flex;
