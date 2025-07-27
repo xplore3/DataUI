@@ -15,6 +15,7 @@ import { Cron } from 'croner';
 import { QuestionItem } from '@/components/Question';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
+import InviteCodeModal from './inviteCode';
 import { useUserStore } from '@/stores/useUserStore';
 import { getRandomElements } from '@/utils/common';
 import { CodeApi } from '@/services/code';
@@ -54,13 +55,24 @@ const Chat = () => {
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const keyList = ['开始定位'];
   const [inviteCode, setInviteCode] = useState('');
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const inviteCode = params.get('inviteCode') || localStorage.getItem('invite_code') || '';
-    if (inviteCode) {
-      localStorage.setItem('invite_code', inviteCode);
-      setInviteCode(inviteCode);
+
+    const localInviteCode = localStorage.getItem('invite_code') || '';
+    const paramInviteCode = params.get('inviteCode') || '';
+    if (paramInviteCode && paramInviteCode !== localInviteCode) {
+      CodeApi.codeUse(paramInviteCode).then(res => {
+        if (res.valid) {
+          localStorage.setItem('invite_code', paramInviteCode);
+          setInviteCode(paramInviteCode);
+        }
+      });
+    } else if (localInviteCode) {
+      setInviteCode(localInviteCode);
+    } else {
+      setInviteCode('');
     }
   }, []);
 
@@ -407,10 +419,14 @@ const Chat = () => {
       if (inviteCode) {
         const res = await CodeApi.codeValidate(inviteCode);
         console.warn(res);
-        if(!res.valid){
-          return
+        if (!res.valid) {
+          // 打开邀请码输入框
+          setShowInviteModal(true);
+          return;
         }
       } else {
+        // 打开邀请码输入框
+        setShowInviteModal(true);
         return;
       }
       if (!checkUserProfile()) {
@@ -612,6 +628,15 @@ const Chat = () => {
   return (
     <div className="chat-page ">
       <PromptPin open={showPinModal} promptText={pinPrompt} onClose={() => setShowPinModal(false)} />
+      <InviteCodeModal
+        open={showInviteModal}
+        onClose={() => setShowInviteModal(false)}
+        onSuccess={code => {
+          setInviteCode(code);
+          handleKeyPress('开始定位');
+          localStorage.setItem('invite_code', code);
+        }}
+      />
       {/* Header */}
       <header className="chat-page-header">
         {/* <img src={backLeft} alt="Back" onClick={() => navigate(-1)} /> */}
