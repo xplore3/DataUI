@@ -1,6 +1,6 @@
 import React from 'react';
 import { QRCode } from 'antd';
-import { toast } from 'react-toastify';
+//import { toast } from 'react-toastify';
 import './index.less';
 
 interface QRCodeModalProps {
@@ -12,7 +12,7 @@ interface QRCodeModalProps {
 const QRCodeModal: React.FC<QRCodeModalProps> = ({ visible, onClose, shareUrl }) => {
   const currentUrl = shareUrl || window.location.href;
 
-  const handleCopyUrl = async () => {
+  /*const handleCopyUrl = async () => {
     try {
       await navigator.clipboard.writeText(currentUrl);
       toast('链接复制成功！');
@@ -31,7 +31,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({ visible, onClose, shareUrl })
         console.error('复制链接失败:', fallbackErr);
       }
     }
-  };
+  };*/
 
   if (!visible) return null;
 

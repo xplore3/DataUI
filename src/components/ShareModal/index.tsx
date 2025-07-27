@@ -61,8 +61,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ visible, onClose, shareUrl, onW
           <div className="share-option" onClick={handleWechatShare}>
             <div className="share-icon wechat-icon">
               <svg
-                t="1753625358752"
-                class="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -87,8 +85,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ visible, onClose, shareUrl, onW
           <div className="share-option" onClick={handleQRCodeShare}>
             <div className="share-icon qr-icon">
               <svg
-                t="1753625446782"
-                class="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -113,8 +109,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ visible, onClose, shareUrl, onW
           <div className="share-option" onClick={handleCopyLink}>
             <div className="share-icon copy-icon">
               <svg
-                t="1753625634336"
-                class="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
