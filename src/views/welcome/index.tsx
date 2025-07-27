@@ -6,7 +6,7 @@ import SendActive from '@/assets/icons/send-active.svg';
 import LoadingImg from '@/assets/icons/loading.svg';
 import { useState, useCallback, useRef } from 'react';
 import { ReactSVG } from 'react-svg';
-import { chatApi } from '@/services/chat';
+//import { chatApi } from '@/services/chat';
 import { toast } from 'react-toastify';
 import { Collapse } from 'antd';
 
