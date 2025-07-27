@@ -417,13 +417,13 @@ const Chat = () => {
       }
     } else if (key === '开始定位') {
       if (inviteCode) {
-        const res = await CodeApi.codeValidate(inviteCode);
+        /*const res = await CodeApi.codeValidate(inviteCode);
         console.warn(res);
         if (!res.valid) {
           // 打开邀请码输入框
           setShowInviteModal(true);
           return;
-        }
+        }*/
       } else {
         // 打开邀请码输入框
         setShowInviteModal(true);
