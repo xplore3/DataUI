@@ -686,7 +686,7 @@ const Chat = () => {
         <div className="chat-page-keys">
           {keyList.map(item => (
             <div className={loading ? "chat-page-items loading" : "chat-page-items"} key={item} onClick={() => handleKeyPress(item)}>
-              {item}
+              {loading ? '正在处理...' : item}
             </div>
           ))}
         </div>
