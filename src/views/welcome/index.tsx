@@ -72,7 +72,7 @@ const Welcome = () => {
       // )}】上【${selectedTimeframe}】关于【${text.trim()}】的内容，数据类别包括【${selectedCategories.join('、')}】`;
       const submitText = text.trim();
 
-      await chatApi.dataHub(submitText);
+      //await chatApi.dataHub(submitText);
 
       // 跳转到Chat页面，并传递查询参数
       // const searchParams = new URLSearchParams({
