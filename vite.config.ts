@@ -21,14 +21,16 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
         '/dev': {
-          target: 'https://data3.site/dev',
+          // target: 'https://test.data3.site/dev',
+          target: 'http://97.64.21.158:3021',
           secure: false,
           ws: true,
           changeOrigin: true,
           rewrite: path => path.replace(/^\/dev/, ''),
         },
         '/api': {
-          target: 'https://data3.site/api',
+          // target: 'https://test.data3.site/api',
+          target: 'http://97.64.21.158:3021',
           secure: false,
           ws: true,
           changeOrigin: true,

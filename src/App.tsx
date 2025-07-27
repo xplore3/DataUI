@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { useThemeStore } from './stores/useThemeStore';
 import Welcome from './views/welcome';
+import CodeGen from './views/codeGen';
 //import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
@@ -48,6 +49,7 @@ function App() {
         <Route path="/user" element={<UserCenter />} />
         <Route path="/wecom" element={<WecomAuth />} />
         <Route path="/welcome" element={<Welcome />} />
+        <Route path="/codeGen" element={<CodeGen />} />
       </Routes>
     </Router>
   </div>);
