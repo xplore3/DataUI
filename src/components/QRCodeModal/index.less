@@ -1,0 +1,233 @@
+.qrcode-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.qrcode-modal {
+  background: white;
+  border-radius: 16px;
+  width: 360px;
+  max-width: 95vw;
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+}
+
+.qrcode-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #f0f0f0;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .qrcode-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #f5f5f5;
+      color: #666;
+    }
+  }
+}
+
+.qrcode-modal-content {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.qrcode-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+
+  /* 覆盖antd QRCode的默认样式 */
+  .ant-qrcode {
+    border: 4px solid #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.qrcode-info {
+  .primary-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 8px 0;
+  }
+
+  .secondary-text {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 24px 0;
+    line-height: 1.4;
+  }
+}
+
+.url-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 20px;
+}
+
+.url-display {
+  margin-bottom: 12px;
+
+  .url-text {
+    font-size: 12px;
+    color: #666;
+    word-break: break-all;
+    line-height: 1.4;
+    display: block;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+  }
+}
+
+.copy-url-btn {
+  background: #4080FF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+
+  &:hover {
+    background: #3366CC;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 暗色主题适配 */
+@media (prefers-color-scheme: dark) {
+  .qrcode-modal {
+    background: #1a1a1a;
+  }
+
+  .qrcode-modal-header {
+    border-bottom-color: #333;
+
+    h3 {
+      color: white;
+    }
+
+    .qrcode-modal-close {
+      color: #ccc;
+
+      &:hover {
+        background-color: #333;
+        color: white;
+      }
+    }
+  }
+
+  .qrcode-info {
+    .primary-text {
+      color: white;
+    }
+
+    .secondary-text {
+      color: #999;
+    }
+  }
+
+  .url-section {
+    background: #252525;
+  }
+
+  .url-display .url-text {
+    background: #333;
+    border-color: #444;
+    color: #ccc;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .qrcode-modal {
+    width: 320px;
+    margin: 0 16px;
+  }
+
+  .qrcode-modal-content {
+    padding: 24px 20px;
+  }
+
+  .qrcode-container {
+    .ant-qrcode {
+      canvas {
+        width: 180px !important;
+        height: 180px !important;
+      }
+    }
+  }
+
+  .qrcode-info {
+    .primary-text {
+      font-size: 15px;
+    }
+
+    .secondary-text {
+      font-size: 13px;
+    }
+  }
+} 
