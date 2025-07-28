@@ -633,7 +633,7 @@ const KnowledgeBase2: React.FC = () => {
                 label="用户性别占比"
                 name="genderRadio"
               >
-                男性占比：<InputNumber placeholder="请输入百分比" min={0} max={10} addonAfter="%" />
+                男性占比：<InputNumber placeholder="请输入百分比" min={0} max={100} addonAfter="%" />
               </Form.Item>
 
               <Form.Item
