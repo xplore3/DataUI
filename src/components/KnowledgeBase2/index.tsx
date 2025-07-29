@@ -307,7 +307,7 @@ const KnowledgeBase2: React.FC = () => {
                 label="联系方式（微信或电话）"
                 name="contractInfo"
               >
-                <Input placeholder='请输入微信或电话' style={{ width: '200px' }} />
+                <Input placeholder='请输入微信或电话' />
               </Form.Item>
 
               {/*<Form.Item
@@ -651,22 +651,22 @@ const KnowledgeBase2: React.FC = () => {
                 name="genderRadio"
               >
                 <Form.Item name="male" label="男性占比" noStyle>
-                  <InputNumber
+                  男性占比：<InputNumber
                     min={0}
                     max={100}
                     addonAfter="%"
                     onChange={(value) => handleGenderChange(value || 0, 'male')}
-                    style={{ width: '48%', marginRight: '4%' }}
+                    style={{ width: '28%', marginRight: '10%' }}
                   />
                 </Form.Item>
 
                 <Form.Item name="female" label="女性占比" noStyle>
-                  <InputNumber
+                  女性占比：<InputNumber
                     min={0}
                     max={100}
                     addonAfter="%"
                     onChange={(value) => handleGenderChange(value || 0, 'female')}
-                    style={{ width: '48%' }}
+                    style={{ width: '28%' }}
                   />
                 </Form.Item>
               </Form.Item>
