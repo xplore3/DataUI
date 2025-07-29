@@ -9,10 +9,12 @@ import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react
 import FooterOperation from '@/components/FooterOperation';
 import { chatApi } from '@/services/chat';
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import { ReactSVG } from 'react-svg';
 import { Cron } from 'croner';
 import { QuestionItem } from '@/components/Question';
+import InnerChart from '@/components/InnerChart';
 import { toast } from 'react-toastify';
 import PromptPin from './prompt';
 import InviteCodeModal from './inviteCode';
@@ -180,6 +182,7 @@ const Chat = () => {
       return (
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw as unknown as any]}
           components={{
             a: ({ href, children, ...props }) => (
               <a
@@ -194,6 +197,27 @@ const Chat = () => {
                 {children}
               </a>
             ),
+            code({ className, children }) {
+              const lang = className?.replace('language-', '');
+
+              if (lang === 'chart') {
+                try {
+                  const config = JSON.parse(children as string);
+                  console.log('chart-config', children);
+                  return <InnerChart {...config} />
+                } catch (e) {
+                  return <pre style={{color: 'red', fontWeight: 'bold'}} >图表配置格式错误</pre>
+                }
+              }
+
+              return (
+                <pre
+                  style={{backgroundColor: '#f3f4f6', borderRadius: '0.5rem', padding: '0.5rem', fontSize: '0.875rem', overflowX: 'auto', fontFamily: 'monospace'}}
+                >
+                  {children}
+                </pre>
+              );
+            }
           }}
         >
           {message.displayText}
