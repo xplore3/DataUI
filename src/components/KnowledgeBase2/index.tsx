@@ -650,25 +650,25 @@ const KnowledgeBase2: React.FC = () => {
                 label="用户性别占比"
                 name="genderRadio"
               >
-                <div style={{ align-items: center }}>男性占比：</div>
+                <div>男性占比：</div>
                 <Form.Item name="male" label="男性占比" noStyle>
                   <InputNumber
                     min={0}
                     max={100}
                     addonAfter="%"
                     onChange={(value) => handleGenderChange(value || 0, 'male')}
-                    style={{ width: '10px', marginRight: '5%' }}
+                    style={{ width: '100px', marginRight: '5%' }}
                   />
                 </Form.Item>
 
-                <div style={{ align-items: center }}>女性占比：</div>
+                <div>女性占比：</div>
                 <Form.Item name="female" label="女性占比" noStyle>
                   <InputNumber
                     min={0}
                     max={100}
                     addonAfter="%"
                     onChange={(value) => handleGenderChange(value || 0, 'female')}
-                    style={{ width: '10px' }}
+                    style={{ width: '100px' }}
                   />
                 </Form.Item>
               </Form.Item>
