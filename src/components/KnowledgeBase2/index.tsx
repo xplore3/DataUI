@@ -172,6 +172,16 @@ const KnowledgeBase2: React.FC = () => {
     setIsFormSubmitted(false);
   };
 
+  const handleGenderChange = (changedValue: number, field: 'male' | 'female') => {
+    const otherField = field === 'male' ? 'female' : 'male';
+    const otherValue = 100 - changedValue;
+
+    form.setFieldsValue({
+      [field]: changedValue,
+      [otherField]: otherValue < 0 ? 0 : otherValue, // 防止小于0
+    });
+  };
+
   return (
     <>
       {initialLoading ? (
@@ -223,11 +233,11 @@ const KnowledgeBase2: React.FC = () => {
               </Form.Item>
 
               <Form.Item
-                 label="朋友常称您"
-                 name="friendsCall"
-               >
-                 <Input placeholder='如"老张""慧姐"'  style={{ width: '200px' }}  />
-               </Form.Item>
+                label="朋友常称您"
+                name="friendsCall"
+              >
+                <Input placeholder='如"老张""慧姐"' style={{ width: '200px' }} />
+              </Form.Item>
                
                {/*<Form.Item
                  label="客户常称您"
@@ -292,7 +302,14 @@ const KnowledgeBase2: React.FC = () => {
               >
                 <Input placeholder="如：硕士/计算机科学" />
               </Form.Item>
-              
+
+              <Form.Item
+                label="联系方式（微信或电话）"
+                name="contractInfo"
+              >
+                <Input placeholder='请输入微信或电话' style={{ width: '200px' }} />
+              </Form.Item>
+
               {/*<Form.Item
                 label="从事什么行业"
                 name="industry"
@@ -633,7 +650,25 @@ const KnowledgeBase2: React.FC = () => {
                 label="用户性别占比"
                 name="genderRadio"
               >
-                男性占比：<InputNumber placeholder="请输入百分比" min={0} max={100} addonAfter="%" />
+                <Form.Item name="male" label="男性占比" noStyle>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    addonAfter="%"
+                    onChange={(value) => handleGenderChange(value || 0, 'male')}
+                    style={{ width: '48%', marginRight: '4%' }}
+                  />
+                </Form.Item>
+
+                <Form.Item name="female" label="女性占比" noStyle>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    addonAfter="%"
+                    onChange={(value) => handleGenderChange(value || 0, 'female')}
+                    style={{ width: '48%' }}
+                  />
+                </Form.Item>
               </Form.Item>
 
               <Form.Item
