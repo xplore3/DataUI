@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import QRCode from 'qrcode';
+import { useLocation } from 'react-router-dom';
 import { CodeApi } from '../../services/code';
 import './index.less';
+
+const useQueryParams = () => {
+  const { search } = useLocation();
+  return new URLSearchParams(search);
+};
 
 const CodeGenPage: React.FC = () => {
   const [inviteCode, setInviteCode] = useState<string>('');
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
+  const query = useQueryParams();
+  const adminCode = query.get('code') || '';
 
   // 生成二维码
   const generateQRCode = async (text: string) => {
@@ -30,7 +38,7 @@ const CodeGenPage: React.FC = () => {
   const handleGenerateCode = async () => {
     setLoading(true);
     try {
-      const response = await CodeApi.codeGen();
+      const response = await CodeApi.codeGen(adminCode);
       const code = response.code || response;
       
       setInviteCode(code);
@@ -70,6 +78,9 @@ const CodeGenPage: React.FC = () => {
       }
     }
   };
+
+  //useEffect(() => {
+  //}, [adminCode]);
 
   return (
     <div className="code-gen-container">
