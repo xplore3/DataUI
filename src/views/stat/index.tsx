@@ -23,11 +23,11 @@ const UserList: React.FC = () => {
       const response = await CodeApi.userList(adminCode, page, pageSize);
       try {
         const json = JSON.parse(response || '[]');
-        if (!Array.isArray(json.users)) {
+        if (!Array.isArray(json.list)) {
           throw new Error('Invalid user list format');
         }
-        setUserList(json.users.slice(0, pageSize));
-        setTotal(json.total || json.users.length);
+        setUserList(json.list.slice(0, pageSize));
+        setTotal(json.total || json.list.length);
       }
       catch (err) {
         message.error('用户列表格式错误');
@@ -43,7 +43,7 @@ const UserList: React.FC = () => {
 
   useEffect(() => {
     fetchUserList(currentPage);
-  }, [adminCode]); // 如果参数变了，重新请求
+  }, [adminCode, currentPage]); // 如果参数变了，重新请求
 
   const columns = [
     {
