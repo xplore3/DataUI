@@ -17,9 +17,9 @@ export const CodeApi = {
       { code, userId: await chatApi.getUserId() });
     return response.data;
   },
-  userList: async (code: string) => {
+  userList: async (code: string, page: number, pageSize: number) => {
     const response = await api.post('/userlist',
-      { code, userId: await chatApi.getUserId() });
+      { code, page, pageSize, userId: await chatApi.getUserId() });
     return response.data;
   },
 };

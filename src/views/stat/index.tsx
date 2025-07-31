@@ -11,19 +11,23 @@ const useQueryParams = () => {
 const UserList: React.FC = () => {
   const [userList, setUserList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 50;
   const query = useQueryParams();
   const adminCode = query.get('code') || '';
 
-  const fetchUserList = async () => {
+  const fetchUserList = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await CodeApi.userList(adminCode);
+      const response = await CodeApi.userList(adminCode, page, pageSize);
       try {
-        const users = JSON.parse(response);
+        const users = JSON.parse(response.list || '[]');
         if (!Array.isArray(users)) {
           throw new Error('Invalid user list format');
         }
-        setUserList(users.slice(0, 50));
+        setUserList(users.slice(0, pageSize));
+        setTotal(response.total || users.length);
       }
       catch (err) {
         message.error('用户列表格式错误');
@@ -38,14 +42,15 @@ const UserList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchUserList();
+    fetchUserList(currentPage);
   }, [adminCode]); // 如果参数变了，重新请求
 
   const columns = [
     {
       title: '序号',
       key: 'id',
-      render: (_: any, __: any, id: number) => id + 1,
+      render: (_: any, __: any, id: number) =>
+        (currentPage - 1) * pageSize + id + 1,
     },
     { title: '用户ID', dataIndex: 'userId', key: 'userId' },
     //{ title: '用户名', dataIndex: 'name', key: 'name' },
@@ -55,14 +60,20 @@ const UserList: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: 24 }}>
-      <h2>用户列表（最多显示50条）</h2>
+    <div style={{ padding: 10 }}>
+      <h2>用户列表</h2>
       <Table
         rowKey="id"
         columns={columns}
         dataSource={userList}
         loading={loading}
-        pagination={false}
+        pagination={{
+          current: currentPage,
+          pageSize,
+          total,
+          onChange: (page) => setCurrentPage(page),
+          showTotal: (total) => `共 ${total} 条`,
+        }}
       />
     </div>
   );
