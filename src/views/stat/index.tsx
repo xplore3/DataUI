@@ -22,12 +22,12 @@ const UserList: React.FC = () => {
     try {
       const response = await CodeApi.userList(adminCode, page, pageSize);
       try {
-        const users = JSON.parse(response.list || '[]');
-        if (!Array.isArray(users)) {
+        const json = JSON.parse(response.list || '[]');
+        if (!Array.isArray(json.users)) {
           throw new Error('Invalid user list format');
         }
-        setUserList(users.slice(0, pageSize));
-        setTotal(response.total || users.length);
+        setUserList(json.users.slice(0, pageSize));
+        setTotal(json.total || json.users.length);
       }
       catch (err) {
         message.error('用户列表格式错误');
