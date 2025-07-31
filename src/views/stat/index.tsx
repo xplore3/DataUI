@@ -42,6 +42,11 @@ const UserList: React.FC = () => {
   }, [adminCode]); // 如果参数变了，重新请求
 
   const columns = [
+    {
+      title: '序号',
+      key: 'id',
+      render: (_: any, __: any, id: number) => id + 1,
+    },
     { title: '用户ID', dataIndex: 'userId', key: 'userId' },
     //{ title: '用户名', dataIndex: 'name', key: 'name' },
     { title: '邀请码', dataIndex: 'code', key: 'code' },
