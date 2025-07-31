@@ -9,7 +9,7 @@ const useQueryParams = () => {
 };
 
 const UserList: React.FC = () => {
-  const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const query = useQueryParams();
   const adminCode = query.get('code') || '';
@@ -18,8 +18,18 @@ const UserList: React.FC = () => {
     setLoading(true);
     try {
       const response = await CodeApi.userList(adminCode);
-      const users = response.data;
-      setUserList(users.slice(0, 50));
+      try {
+        const users = JSON.parse(response);
+        if (!Array.isArray(users)) {
+          throw new Error('Invalid user list format');
+        }
+        setUserList(users.slice(0, 50));
+      }
+      catch (err) {
+        message.error('用户列表格式错误');
+        console.error('用户列表格式错误:', err);
+        return;
+      }
     } catch (error) {
       message.error('获取用户列表失败');
     } finally {
@@ -32,7 +42,7 @@ const UserList: React.FC = () => {
   }, [adminCode]); // 如果参数变了，重新请求
 
   const columns = [
-    { title: '用户ID', dataIndex: 'id', key: 'userId' },
+    { title: '用户ID', dataIndex: 'userId', key: 'userId' },
     //{ title: '用户名', dataIndex: 'name', key: 'name' },
     { title: '邀请码', dataIndex: 'code', key: 'code' },
     { title: '使用统计', dataIndex: 'count', key: 'count' },
