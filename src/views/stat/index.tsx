@@ -22,7 +22,7 @@ const UserList: React.FC = () => {
     try {
       const response = await CodeApi.userList(adminCode, page, pageSize);
       try {
-        const json = JSON.parse(response.list || '[]');
+        const json = JSON.parse(response || '[]');
         if (!Array.isArray(json.users)) {
           throw new Error('Invalid user list format');
         }
