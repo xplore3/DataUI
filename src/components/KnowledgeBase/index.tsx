@@ -264,7 +264,7 @@ const KnowledgeBase: React.FC = () => {
         })
       );
       console.log(result);
-      chatApi.addKnowledges(JSON.stringify(result)).then(res => {
+      /*chatApi.addKnowledges(JSON.stringify(result)).then(res => {
         console.log(res);
         // 保存成功后设置状态
         setSavedAnswers(answers);
@@ -273,7 +273,7 @@ const KnowledgeBase: React.FC = () => {
       })
       .finally(() => {
         setLoading(false);
-      });
+      });*/
     }
     catch (error) {
       console.error('Error sending question:', error);

@@ -4,7 +4,7 @@ import { Form, Input, Radio, Checkbox, Button, Card, Divider, InputNumber } from
 import { chatApi } from '@/services/chat';
 import { toast } from 'react-toastify';
 import LocalUpload from '../LocalUpload';
-import api from '@/services/axios';
+//import api from '@/services/axios';
 
 const { TextArea } = Input;
 
@@ -18,7 +18,7 @@ const KnowledgeBase2: React.FC = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string | string[]>>({});
   const [files, setFiles] = useState<File[]>([]);
-  const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
+  //const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
   
   // 解析从getKnowledges接口返回的数据格式
   const parseKnowledgeData = (knowledgeData: string | null | undefined): Record<string, string | string[]> => {
