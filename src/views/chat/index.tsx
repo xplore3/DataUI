@@ -203,7 +203,7 @@ const Chat = () => {
               if (lang === 'chart') {
                 try {
                   const config = JSON.parse(children as string);
-                  console.log('chart-config', children);
+                  // console.log('chart-config', children);
                   return <InnerChart {...config} />
                 } catch (e) {
                   return <pre style={{color: 'red', fontWeight: 'bold'}} >图表配置格式错误</pre>

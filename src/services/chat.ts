@@ -391,14 +391,33 @@ export const chatApi = {
     };
   },
 
-  addKnowledges: async (knowledges: string): Promise<any> => {
+  // addKnowledges: async (knowledges: string): Promise<any> => {
+  //   let debug = null;
+  //   try {
+  //     const result = await api.post(`/add_knowledge`, {
+  //       userId: await chatApi.getUserId(),
+  //       knowledges: knowledges
+  //     });
+  //     console.log(result);
+  //     let response = result.data;
+  //     if (result.status != 200) {
+  //       response = "Error in response " + result.statusText;
+  //     }
+  //     return response;
+  //   } catch (err) {
+  //     debug = err;
+  //     console.log(err);
+  //   }
+  //   return getUnknownErrorDesc(debug);
+  // },
+
+  addKnowledges: async (formData: FormData): Promise<any> => {
     let debug = null;
     try {
-      const result = await api.post(`/add_knowledge`, {
-        userId: await chatApi.getUserId(),
-        knowledges: knowledges
+      const result = await api.post(`/add_knowledge`, formData, {
+        headers: {'Content-Type': 'multipart/form-data'}
       });
-      console.log(result);
+      console.log('knowledge result', result);
       let response = result.data;
       if (result.status != 200) {
         response = "Error in response " + result.statusText;

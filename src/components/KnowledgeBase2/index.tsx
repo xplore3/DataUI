@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Input, Radio, Checkbox, Button, Card, Divider, InputNumber } from 'antd';
 import { chatApi } from '@/services/chat';
 import { toast } from 'react-toastify';
+import LocalUpload from '../LocalUpload';
+import api from '@/services/axios';
 
 const { TextArea } = Input;
 
@@ -15,7 +17,8 @@ const KnowledgeBase2: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string | string[]>>({});
-  //const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
   
   // 解析从getKnowledges接口返回的数据格式
   const parseKnowledgeData = (knowledgeData: string | null | undefined): Record<string, string | string[]> => {
@@ -61,7 +64,7 @@ const KnowledgeBase2: React.FC = () => {
     const loadSavedAnswers = async () => {
       try {
         const knowledgeData = await chatApi.getKnowledges();
-        console.log(knowledgeData);
+        console.log('knowledgeData', knowledgeData);
         if (knowledgeData) {
           const parsedAnswers = parseKnowledgeData(knowledgeData);
           setSavedAnswers(parsedAnswers);
@@ -91,6 +94,7 @@ const KnowledgeBase2: React.FC = () => {
     loadSavedAnswers();
   }, [form]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = async (values: Record<string, any>) => {
     try {
       if (loading || isFormSubmitted) return;
@@ -110,10 +114,29 @@ const KnowledgeBase2: React.FC = () => {
           return [key, answer];
         })
       );
-      console.log(result);
+      console.log('result', result);
 
-      await chatApi.addKnowledges(JSON.stringify(result)).then(res => {
-        console.log(res);
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('files', file);
+      });
+
+      const userId = await chatApi.getUserId();
+      formData.append('userId', userId);
+
+      const knowledges = JSON.stringify(result);
+      formData.append('knowledges', knowledges);
+
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      // await chatApi.addFiles(formData).then(res => {
+      //   console.log('formData return', res);
+      // })
+
+      await chatApi.addKnowledges(formData).then(res => {
+        console.log('return res', res);
         let summary = JSON.stringify(result);
         try {
           const json = JSON.parse(res);
@@ -798,6 +821,12 @@ const KnowledgeBase2: React.FC = () => {
                   placeholder="我的内容不同于其他企业家，因为我会侧重_________。(例：拆解技术黑匣子/直播工厂溯源)" 
                 />
               </Form.Item>*/}
+
+              <Divider  orientation="left" orientationMargin="0">六、知识库文件</Divider>
+
+              <Form.Item label="您可以上传自己的个人知识库文件" name={"knowledgeBase"}>
+                <LocalUpload files={ files } setFiles={ setFiles } />
+              </Form.Item>
 
               <Form.Item>
                 <Button 

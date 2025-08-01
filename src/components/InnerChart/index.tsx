@@ -16,6 +16,7 @@ interface ChartProps {
     title: string;
     xKey: string;
     yKey: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any[];
 }
 
@@ -26,7 +27,8 @@ const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#a28dd0', '#ffbb28'
 const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
     // console.log(typeof(data));
 
-    let chartData: any[] = data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const chartData: any[] = data;
     
     // try {
     //     chartData = JSON.parse(data);
@@ -127,8 +129,9 @@ const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
                     </ComposedChart>
                 );
 
-            case 'pyramid':
-                const sortedData = [...chartData].sort((a, b) => a[yKey] - b[yKey]);
+            case 'pyramid': {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const sortedData: any[] = [...chartData].sort((a, b) => a[yKey] - b[yKey]);
 
                 return (
                     <BarChart
@@ -161,6 +164,7 @@ const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
                         </Bar>
                     </BarChart>
                 )
+            }
         }
     };
 
