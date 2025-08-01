@@ -49,6 +49,7 @@ const UserCenter = () => {
         console.log(res);
       }).finally(() => {
         toast.success('IP信息已删除');
+        navigate('/user');
       });
     } catch (error) {
       console.error('Error clear data:', error);
