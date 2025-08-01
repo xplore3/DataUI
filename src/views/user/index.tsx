@@ -47,6 +47,7 @@ const UserCenter = () => {
       const formData = new FormData();
       const userId = await chatApi.getUserId();
       formData.append('userId', userId);
+      formData.append('knowledges', '{}');
       await chatApi.addKnowledges(formData).then(res => {
         console.log(res);
       }).finally(() => {
