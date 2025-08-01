@@ -7,6 +7,8 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { useUser } from '@/hooks/useUser';
 import { toast } from 'react-toastify';
 import { chatApi } from '@/services/chat';
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 //import { useUserStore } from '@/stores/useUserStore';
 
 
@@ -38,6 +40,24 @@ const UserCenter = () => {
   };
 
   const onLogout = async () => {
+    Modal.confirm({
+      title: '确定要删除IP信息吗?',
+      icon: <ExclamationCircleOutlined />,
+      content: '删除后IP信息将被清除，且无法恢复。',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        console.log('OK');
+        logoutImpl();
+      },
+      onCancel() {
+        console.log('Canceled');
+      },
+    });
+  }
+
+  const logoutImpl = async () => {
     //console.log('User logged out');
     localStorage.removeItem('userInfo');
     localStorage.removeItem('trendmuse_form_submitted');
