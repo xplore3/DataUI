@@ -45,6 +45,8 @@ const UserCenter = () => {
     toast('正在清理IP信息...');
     try {
       const formData = new FormData();
+      const userId = await chatApi.getUserId();
+      formData.append('userId', userId);
       await chatApi.addKnowledges(formData).then(res => {
         console.log(res);
       }).finally(() => {
