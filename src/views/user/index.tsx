@@ -5,6 +5,8 @@ import Profile from '@/assets/icons/profile.svg';
 import KnowledgeBase from '@/components/KnowledgeBase2';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useUser } from '@/hooks/useUser';
+import { toast } from 'react-toastify';
+import { chatApi } from '@/services/chat';
 //import { useUserStore } from '@/stores/useUserStore';
 
 
@@ -35,10 +37,22 @@ const UserCenter = () => {
     navigate('/help');
   };
 
-  const onLogout = () => {
+  const onLogout = async () => {
     //console.log('User logged out');
     localStorage.removeItem('userInfo');
-    navigate('/chat');
+    localStorage.removeItem('trendmuse_form_submitted');
+    //navigate('/chat');
+    toast('正在清理IP信息...');
+    try {
+      const formData = new FormData();
+      await chatApi.addKnowledges(formData).then(res => {
+        console.log(res);
+      }).finally(() => {
+        toast.success('IP信息已删除');
+      });
+    } catch (error) {
+      console.error('Error clear data:', error);
+    }
   };
 
   const onLogin = () => {
@@ -122,9 +136,9 @@ const UserCenter = () => {
         <button className="user-center-link" onClick={onAbout}>关于</button>
         <button className="user-center-link" onClick={onHelp}>帮助与说明</button>
       </div>
-      {/*<button className="user-center-logout" onClick={onLogout}>
-        退出登录
-      </button>*/}
+      <button className="user-center-logout" onClick={onLogout}>
+        删除IP信息
+      </button>
       </>) : (<div className="user-center-login">
         <img src={Profile} alt="profile" />
         <p>使用微信扫一扫，授权微信绑定实现与微信Bot的互通使用</p>
