@@ -41,6 +41,8 @@ const UserCenter = () => {
     //console.log('User logged out');
     localStorage.removeItem('userInfo');
     localStorage.removeItem('trendmuse_form_submitted');
+    localStorage.removeItem('local_knowledge_value');
+    localStorage.removeItem('local_knowledge_value_updated');
     //navigate('/chat');
     toast('正在清理IP信息...');
     try {
@@ -52,7 +54,7 @@ const UserCenter = () => {
         console.log(res);
       }).finally(() => {
         toast.success('IP信息已删除');
-        navigate('/user');
+        navigate('/ip');
       });
     } catch (error) {
       console.error('Error clear data:', error);
