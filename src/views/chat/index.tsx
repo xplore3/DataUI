@@ -469,6 +469,7 @@ const Chat = () => {
           setShowInviteModal(true);
           return;
         }
+        await CodeApi.codeUse(inviteCode);
       } else {
         // 打开邀请码输入框
         setShowInviteModal(true);
@@ -808,7 +809,7 @@ const Chat = () => {
       <div className="chat-page-bottom">
         <div className="chat-page-keys">
           {keyList.map(item => (
-            <div className={loading ? 'chat-page-items loading' : 'chat-page-items'} key={item} onClick={() => handleKeyPress(item)}>
+            <div className={loading ? 'chat-page-items loading' : 'chat-page-items'} key={item} onClick={() => handleKeyPress(hasGenerated ? '重新定位' : item)}>
               {loading ? '正在处理...' : (hasGenerated ? '重新定位' : item)}
             </div>
           ))}
