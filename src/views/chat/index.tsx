@@ -84,7 +84,7 @@ const Chat = () => {
     } else {
       setInviteCode('');
     }
-  }, []);
+  }, [inviteCode]);
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
