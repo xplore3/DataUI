@@ -1,5 +1,5 @@
 import { RawApi } from '@/services/raw';
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 
 const RawPage = () =>{
   const [inputText, setInputText] = useState('');
@@ -9,7 +9,7 @@ const RawPage = () =>{
     setInputText(e.target.value);
   };
 
-  const handleSubmit = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputText.trim()) {
       alert('请输入内容后再提交');
@@ -21,7 +21,7 @@ const RawPage = () =>{
     }
     catch (error) {
       console.error('提交失败:', error);
-      setSubmittedText(error.message || '提交失败，请稍后再试');
+      setSubmittedText('提交失败，请稍后再试');
       alert('提交失败，请稍后再试');
       return;
     }
