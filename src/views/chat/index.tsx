@@ -434,9 +434,9 @@ const Chat = () => {
     return set;
   };
 
-  const checkProfileChanged = () => {
+  const checkProfileChanged = async() => {
     if (profileUpdated) {
-      doPositioning();
+      await doPositioning();
     }
     else {
       Modal.confirm({
@@ -444,20 +444,20 @@ const Chat = () => {
         icon: <ExclamationCircleOutlined />,
         content: '个人IP定位信息没有修改，是否要先修改个人信息？',
         okText: '修改',
-        okType: 'normal',
+        okType: 'primary',
         cancelText: '继续定位',
         onOk() {
           console.log('OK');
           navigate('/user');
         },
-        onCancel() {
-          doPositioning();
+        async onCancel() {
+          await doPositioning();
         },
       });
     }
   }
 
-  const doPositioning = () => {
+  const doPositioning = async () => {
     try {
       if (inviteCode) {
         const res = await CodeApi.codeValidate(inviteCode);
@@ -522,9 +522,9 @@ const Chat = () => {
         console.log(error);
       }
     } else if (key === '开始定位') {
-      doPositioning();
+      await doPositioning();
     } else if (key === '重新定位') {
-      checkProfileChanged();
+      await checkProfileChanged();
     } else if (key === '口播文案') {
       if (!checkUserProfile()) {
         return;
