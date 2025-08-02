@@ -48,6 +48,9 @@ const Chat = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [profileUpdated, setProfileUpdated] = useState(false);
+  const [hasGenerated, setHasGenerated] = useState(() => {
+    return localStorage.getItem(POSITIONING_GENERATED_KEY) === 'true';
+  });
   const [messageList, setMessageList] = useState<Message[]>([]);
   const [text, setText] = useState('');
   const [tips, setTips] = useState('请输入你的数据处理指令');
@@ -60,7 +63,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  let keyList = ['开始定位'];
+  const keyList = ['开始定位'];
   const [inviteCode, setInviteCode] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
 
@@ -80,12 +83,6 @@ const Chat = () => {
       setInviteCode(localInviteCode);
     } else {
       setInviteCode('');
-    }
-
-    // Check if has generated
-    const hasGenerated = localStorage.getItem(POSITIONING_GENERATED_KEY) === 'true';
-    if (!hasGenerated) {
-      keyList = ['重新定位'];
     }
   }, []);
 
@@ -133,6 +130,11 @@ const Chat = () => {
 
     //handleKeyPress('开始定位');
     knowledgeCheck();
+
+    const hasGen = localStorage.getItem(POSITIONING_GENERATED_KEY) === 'true';
+    if (hasGen) {
+      setHasGenerated(true);
+    }
 
     setTips('请输入你的数据处理指令');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -488,6 +490,8 @@ const Chat = () => {
           .routineTask(prompt, 'positioning_analysis')
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+            localStorage.setItem(POSITIONING_GENERATED_KEY, 'true');
+            setHasGenerated(true);
           })
           .finally(async () => {
             //setLoading(false);
@@ -513,7 +517,6 @@ const Chat = () => {
           .getPromptTemplates()
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '', questions: [], hasSubmit: false }]);
-            localStorage.setItem(POSITIONING_GENERATED_KEY, 'true');
           })
           .finally(() => {
             setLoading(false);
@@ -806,7 +809,7 @@ const Chat = () => {
         <div className="chat-page-keys">
           {keyList.map(item => (
             <div className={loading ? 'chat-page-items loading' : 'chat-page-items'} key={item} onClick={() => handleKeyPress(item)}>
-              {loading ? '正在处理...' : item}
+              {loading ? '正在处理...' : (hasGenerated ? '重新定位' : item)}
             </div>
           ))}
           {loading ? (<ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>) : (<></>)}
