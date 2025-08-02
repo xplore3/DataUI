@@ -13,6 +13,8 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import { ReactSVG } from 'react-svg';
 import { Cron } from 'croner';
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { QuestionItem } from '@/components/Question';
 import InnerChart from '@/components/InnerChart';
 import { toast } from 'react-toastify';
@@ -40,9 +42,12 @@ type Message = {
   completed?: boolean;
 };
 
+const POSITIONING_GENERATED_KEY = 'positioning_generated_key';
+
 const Chat = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [profileUpdated, setProfileUpdated] = useState(false);
   const [messageList, setMessageList] = useState<Message[]>([]);
   const [text, setText] = useState('');
   const [tips, setTips] = useState('请输入你的数据处理指令');
@@ -55,7 +60,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['开始定位'];
+  let keyList = ['开始定位'];
   const [inviteCode, setInviteCode] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
 
@@ -75,6 +80,12 @@ const Chat = () => {
       setInviteCode(localInviteCode);
     } else {
       setInviteCode('');
+    }
+
+    // Check if has generated
+    const hasGenerated = localStorage.getItem(POSITIONING_GENERATED_KEY) === 'true';
+    if (!hasGenerated) {
+      keyList = ['重新定位'];
     }
   }, []);
 
@@ -245,8 +256,9 @@ const Chat = () => {
     console.log('knowledgeCheck');
     try {
       const knowledgeUpdated = localStorage.getItem('local_knowledge_value_updated');
-      console.log(knowledgeUpdated);
+      //console.log(knowledgeUpdated);
       if (knowledgeUpdated && knowledgeUpdated === 'true') {
+        setProfileUpdated(true);
         const newKnowledge = localStorage.getItem('local_knowledge_value');
         if (newKnowledge && newKnowledge != '') {
           setMessageList(prev => [...prev, { text: newKnowledge, user: 'user', action: 'NONE', displayText: newKnowledge }]);
@@ -422,32 +434,39 @@ const Chat = () => {
     return set;
   };
 
-  const handleKeyPress = async (key: string) => {
-    if (key === '模板') {
-      if (loading) return;
-      toast('正在获取模板，请稍候......');
-      setLoading(true);
-      try {
-        chatApi
-          .getPromptTemplates()
-          .then(res => {
-            setMessageList(prev => [...prev, { ...res, displayText: '', questions: [], hasSubmit: false }]);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (key === '开始定位') {
+  const checkProfileChanged = () => {
+    if (profileUpdated) {
+      doPositioning();
+    }
+    else {
+      Modal.confirm({
+        title: '是否要先修改个人信息?',
+        icon: <ExclamationCircleOutlined />,
+        content: '个人IP定位信息没有修改，是否要先修改个人信息？',
+        okText: '修改',
+        okType: 'normal',
+        cancelText: '继续定位',
+        onOk() {
+          console.log('OK');
+          navigate('/user');
+        },
+        onCancel() {
+          doPositioning();
+        },
+      });
+    }
+  }
+
+  const doPositioning = () => {
+    try {
       if (inviteCode) {
-        /*const res = await CodeApi.codeValidate(inviteCode);
+        const res = await CodeApi.codeValidate(inviteCode);
         console.warn(res);
         if (!res.valid) {
           // 打开邀请码输入框
           setShowInviteModal(true);
           return;
-        }*/
+        }
       } else {
         // 打开邀请码输入框
         setShowInviteModal(true);
@@ -477,6 +496,35 @@ const Chat = () => {
       } catch (error) {
         console.log(error);
       }
+    }
+    catch (error) {
+      console.error('Error during positioning:', error);
+      toast.error('定位分析失败，请稍后再试或联系人工客服获取支持。');
+    }
+  }
+
+  const handleKeyPress = async (key: string) => {
+    if (key === '模板') {
+      if (loading) return;
+      toast('正在获取模板，请稍候......');
+      setLoading(true);
+      try {
+        chatApi
+          .getPromptTemplates()
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '', questions: [], hasSubmit: false }]);
+            localStorage.setItem(POSITIONING_GENERATED_KEY, 'true');
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (key === '开始定位') {
+      doPositioning();
+    } else if (key === '重新定位') {
+      checkProfileChanged();
     } else if (key === '口播文案') {
       if (!checkUserProfile()) {
         return;
