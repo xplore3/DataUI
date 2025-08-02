@@ -5,11 +5,11 @@ const RawPage = () =>{
   const [inputText, setInputText] = useState('');
   const [submittedText, setSubmittedText] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     if (!inputText.trim()) {
       alert('请输入内容后再提交');
@@ -21,7 +21,7 @@ const RawPage = () =>{
     }
     catch (error) {
       console.error('提交失败:', error);
-      setSubmittedText(error || '提交失败，请稍后再试');
+      setSubmittedText(error.message || '提交失败，请稍后再试');
       alert('提交失败，请稍后再试');
       return;
     }
