@@ -17,7 +17,7 @@ const RawPage = () =>{
     }
     try {
       const response = await RawApi.rawdata(inputText);
-      setSubmittedText(response.data);
+      setSubmittedText(response.data || response);
     }
     catch (error) {
       console.error('提交失败:', error);
