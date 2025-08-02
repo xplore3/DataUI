@@ -60,7 +60,7 @@ const RawPage = () =>{
             id="multiline-input"
             value={inputText}
             onChange={handleInputChange}
-            rows={8}
+            rows={18}
             style={{ 
               width: '100%', 
               padding: '10px',
@@ -117,7 +117,7 @@ const RawPage = () =>{
         <textarea
           readOnly
           value={submittedText}
-          rows={8}
+          rows={5}
           style={{ 
             width: '100%', 
             padding: '10px',
