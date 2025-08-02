@@ -15,6 +15,7 @@ import { useThemeStore } from './stores/useThemeStore';
 import Welcome from './views/welcome';
 import CodeGen from './views/codeGen';
 import UserList from './views/stat';
+import RawPage from './views/raw';
 //import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
@@ -42,16 +43,17 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/ip" replace />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/download" element={<DownloadWithCode />} />
         <Route path="/about" element={<About />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/codeGen" element={<CodeGen />} />
+        <Route path="/download" element={<DownloadWithCode />} />
         <Route path="/help" element={<Help />} />
         <Route path="/ip" element={<IpHome />} />
+        <Route path="/raw" element={<RawPage />} />
         <Route path="/user" element={<UserCenter />} />
+        <Route path="/userlist" element={<UserList />} />
         <Route path="/wecom" element={<WecomAuth />} />
         <Route path="/welcome" element={<Welcome />} />
-        <Route path="/codeGen" element={<CodeGen />} />
-        <Route path="/userlist" element={<UserList />} />
       </Routes>
     </Router>
   </div>);
