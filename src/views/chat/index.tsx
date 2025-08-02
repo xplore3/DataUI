@@ -459,17 +459,18 @@ const Chat = () => {
     }
   }
 
-  const doPositioning = async () => {
+  const doPositioning = async (code?:string) => {
     try {
-      if (inviteCode) {
-        const res = await CodeApi.codeValidate(inviteCode);
+      const newInviteCode = code || inviteCode;
+      if (newInviteCode) {
+        const res = await CodeApi.codeValidate(newInviteCode);
         console.warn(res);
         if (!res.valid) {
           // 打开邀请码输入框
           setShowInviteModal(true);
           return;
         }
-        await CodeApi.codeUse(inviteCode);
+        await CodeApi.codeUse(newInviteCode);
       } else {
         // 打开邀请码输入框
         setShowInviteModal(true);
@@ -508,7 +509,7 @@ const Chat = () => {
     }
   }
 
-  const handleKeyPress = async (key: string) => {
+  const handleKeyPress = async (key: string,code?:string) => {
     if (key === '模板') {
       if (loading) return;
       toast('正在获取模板，请稍候......');
@@ -526,7 +527,7 @@ const Chat = () => {
         console.log(error);
       }
     } else if (key === '开始定位') {
-      await doPositioning();
+      await doPositioning(code);
     } else if (key === '重新定位') {
       await checkProfileChanged();
     } else if (key === '口播文案') {
@@ -709,7 +710,7 @@ const Chat = () => {
         onClose={() => setShowInviteModal(false)}
         onSuccess={code => {
           setInviteCode(code);
-          handleKeyPress('开始定位');
+          handleKeyPress('开始定位',code);
           localStorage.setItem('invite_code', code);
         }}
       />

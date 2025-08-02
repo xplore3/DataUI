@@ -30,11 +30,10 @@ export default defineConfig({
         },
         '/api': {
           // target: 'https://test.data3.site/api',
-          target: 'http://97.64.21.158:3021',
+          target: 'https://ipbot.chat',
           secure: false,
           ws: true,
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, ''),
         },
     },
   },
