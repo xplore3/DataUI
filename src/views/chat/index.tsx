@@ -461,6 +461,9 @@ const Chat = () => {
 
   const checkInviteCode = async (code?:string) => {
     try {
+      if (!checkUserProfile()) {
+        return;
+      }
       const newInviteCode = code || inviteCode;
       if (newInviteCode) {
         const res = await CodeApi.codeValidate(newInviteCode);
@@ -488,9 +491,7 @@ const Chat = () => {
 
   const doPositioning = async (code?:string) => {
     try {
-      if (!checkUserProfile()) {
-        return;
-      }
+      console.log(code);
       if (loading) {
         toast('正在处理中，请稍候......');
         return;
