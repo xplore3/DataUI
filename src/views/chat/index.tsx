@@ -438,7 +438,7 @@ const Chat = () => {
 
   const checkProfileChanged = async() => {
     if (profileUpdated) {
-      await doPositioning();
+      await checkInviteCode();
     }
     else {
       Modal.confirm({
@@ -453,13 +453,13 @@ const Chat = () => {
           navigate('/user');
         },
         async onCancel() {
-          await doPositioning();
+          await checkInviteCode();
         },
       });
     }
   }
 
-  const doPositioning = async (code?:string) => {
+  const checkInviteCode = async (code?:string) => {
     try {
       const newInviteCode = code || inviteCode;
       if (newInviteCode) {
@@ -470,12 +470,24 @@ const Chat = () => {
           setShowInviteModal(true);
           return;
         }
-        await CodeApi.codeUse(newInviteCode);
+        else {
+          await CodeApi.codeUse(newInviteCode);
+        }
       } else {
         // 打开邀请码输入框
         setShowInviteModal(true);
         return;
       }
+      await doPositioning(newInviteCode);
+    }
+    catch (error) {
+      console.error('Error during code check:', error);
+      toast.error('邀请码验证失败，请稍后再试或联系人工客服获取支持。');
+    }
+  }
+
+  const doPositioning = async (code?:string) => {
+    try {
       if (!checkUserProfile()) {
         return;
       }
@@ -527,7 +539,7 @@ const Chat = () => {
         console.log(error);
       }
     } else if (key === '开始定位') {
-      await doPositioning(code);
+      await checkInviteCode(code);
     } else if (key === '重新定位') {
       await checkProfileChanged();
     } else if (key === '口播文案') {
@@ -710,7 +722,8 @@ const Chat = () => {
         onClose={() => setShowInviteModal(false)}
         onSuccess={code => {
           setInviteCode(code);
-          handleKeyPress('开始定位',code);
+          //handleKeyPress('开始定位', code);
+          doPositioning(code);
           localStorage.setItem('invite_code', code);
         }}
       />
