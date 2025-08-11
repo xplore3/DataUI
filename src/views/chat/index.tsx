@@ -70,7 +70,7 @@ const Chat = () => {
     } else {
       setMessageList([
         {
-          text: `你好，我是DataMall —— 面向AI的商业数据引擎。
+          text: `你好，我是SeekInsight —— 面向AI的商业数据引擎。
                 \r\n\r\n为了更好的实现数据获取和数据处理的功能效果，输入内容须是如下格式：
                 \r\n🚩【平台】【时间期限】【关键词】【数量】【过滤条件】【排序相关】
                 \r\n如：
@@ -629,7 +629,7 @@ const Chat = () => {
       <header className="chat-page-header">
         {/* <img src={backLeft} alt="Back" onClick={() => navigate(-1)} /> */}
         <img src={Logo} alt="Logo" />
-        <span>DataMall</span>
+        <span>SeekInsight</span>
         <div className="flex-1"></div>
         <img src={User} alt="User" onClick={() => handleUserSettings()} />
         {/* <Lang
