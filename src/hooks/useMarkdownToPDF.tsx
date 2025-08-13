@@ -40,7 +40,7 @@ export const useMarkdownToPDF = () => {
 
       // 计算图像尺寸 (保持宽高比)
       const imgWidth = pageWidth - 20; // 左右各10mm边距
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width - 20; // 减去上下各10mm边距
 
       // 分页处理
       let heightLeft = imgHeight;

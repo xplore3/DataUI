@@ -72,8 +72,9 @@ const FooterOperation = React.memo<FooterOperationProps>(
 
     const handlePdfClick = async () => {
       try {
+        toast('开始生成PDF文件...');
         await downloadPDF(text);
-        toast('PDF File downloaded successfully!');
+        toast('PDF生成并下载成功!');
       } catch {
         toast.error('Failed to download!');
       }

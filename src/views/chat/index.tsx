@@ -791,7 +791,7 @@ const Chat = () => {
             )}
             {item.user === 'agent' && item.displayText === item.text && (
               <FooterOperation
-                text={item.text + `|||||${item.note}`}
+                text={item.text}
                 onTranslate={translatedText => {
                   handleTranslate(translatedText, index);
                 }}
