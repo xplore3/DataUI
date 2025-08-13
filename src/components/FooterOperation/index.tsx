@@ -5,16 +5,18 @@ import Refresh from '@/assets/icons/refresh.svg';
 import ImgTrue from '@/assets/icons/true.svg';
 import Copy from '@/assets/icons/copy.svg';
 import Pined from '@/assets/icons/pined.svg';
+import Pdf from '@/assets/icons/pdf.svg';
 import './index.less';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import ShareModal from '@/components/ShareModal';
 import WechatShareGuide from '@/components/WechatShareGuide';
 import QRCodeModal from '@/components/QRCodeModal';
+import { useMarkdownToPDF } from '@/hooks/useMarkdownToPDF';
 //import { useUserStore } from '@/stores/useUserStore';
 
 interface FooterOperationProps {
-  menuList?: Array<'pined' | 'share' | 'bookmark' | 'translate' | 'copy' | 'refresh'>;
+  menuList?: Array<'pined' | 'share' | 'bookmark' | 'translate' | 'copy' | 'refresh' | 'pdf'>;
   text?: string;
   onPin?: (text: string) => void;
   onShare?: () => void;
@@ -25,13 +27,14 @@ interface FooterOperationProps {
 }
 
 const FooterOperation = React.memo<FooterOperationProps>(
-  ({ menuList = ['pined', 'share', 'bookmark', 'translate', 'copy'], text = '', onPin, onShare, onBookmark, onCopy, onRefresh }) => {
+  ({ menuList = ['pined', 'share', 'bookmark', 'translate', 'copy', 'pdf'], text = '', onPin, onShare, onBookmark, onCopy, onRefresh, onPdf }) => {
     const [isBookMark, setIsBookMark] = useState(false);
     const [isCopied, setIsCopied] = useState(false);
     const [shareModalVisible, setShareModalVisible] = useState(false);
     const [wechatGuideVisible, setWechatGuideVisible] = useState(false);
     const [qrcodeModalVisible, setQrcodeModalVisible] = useState(false);
     //const { userProfile } = useUserStore();
+    const { downloadPDF } = useMarkdownToPDF();
 
     const handleShareClick = () => {
       if (onShare) {
@@ -66,6 +69,18 @@ const FooterOperation = React.memo<FooterOperationProps>(
       }
     };
 
+    const handlePdfClick = async () => {
+      try {
+        await downloadPDF(markdownText);
+        toast('PDF File downloaded successfully!');
+      } catch {
+        toast.error('Failed to download!');
+      }
+      if (onPdf) {
+        onPdf();
+      }
+    };
+
     return (
       <>
         <div className="footer-operation">
@@ -86,6 +101,7 @@ const FooterOperation = React.memo<FooterOperationProps>(
             ))}
 
           {menuList.includes('refresh') && <ReactSVG className="footer-operation-item" src={Refresh} onClick={onRefresh} />}
+          {menuList.includes('pdf') && <ReactSVG className="footer-operation-item" src={Pdf} onClick={handlePdfClick} />}
         </div>
         
         <ShareModal 

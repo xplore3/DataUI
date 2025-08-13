@@ -799,10 +799,10 @@ const Chat = () => {
                 menuList={
                   index === messageList.length - 1 && messageList.length > 1
                     ? item.completed
-                      ? ['share', 'copy', 'refresh']
+                      ? ['share', 'copy', 'refresh', 'pdf']
                       : ['copy', 'refresh']
                     : item.completed
-                    ? ['share', 'copy']
+                    ? ['share', 'copy', 'pdf']
                     : ['copy']
                 }
               />
