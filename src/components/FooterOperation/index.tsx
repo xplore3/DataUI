@@ -24,6 +24,7 @@ interface FooterOperationProps {
   onTranslate?: (text: string) => void;
   onCopy?: () => void;
   onRefresh?: () => void;
+  onPdf?: () => void;
 }
 
 const FooterOperation = React.memo<FooterOperationProps>(
