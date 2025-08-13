@@ -34,7 +34,7 @@ export const useMarkdownToPDF = () => {
       });
 
       const imgWidth = 210; // A4宽度(mm)
-      const pageHeight = 295; // A4高度(mm)
+      //const pageHeight = 295; // A4高度(mm)
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);

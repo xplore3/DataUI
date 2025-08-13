@@ -72,7 +72,7 @@ const FooterOperation = React.memo<FooterOperationProps>(
 
     const handlePdfClick = async () => {
       try {
-        await downloadPDF(markdownText);
+        await downloadPDF(text);
         toast('PDF File downloaded successfully!');
       } catch {
         toast.error('Failed to download!');
