@@ -22,23 +22,52 @@ export const useMarkdownToPDF = () => {
     hiddenDiv.innerHTML = markdownHTML;
 
     try {
-      const canvas = await html2canvas(hiddenDiv, {
-        scale: 2,
-        useCORS: true,
-      });
-
+      const canvas = await html2canvas(hiddenDiv, { scale: 2 });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
+        orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
+        unit: 'mm'
       });
+      pdf.setFont('helvetica', 'normal');
 
-      const imgWidth = 210; // A4宽度(mm)
-      //const pageHeight = 295; // A4高度(mm)
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save('markdown-export.pdf');
+      // PDF页面尺寸（A4）
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // 图片尺寸（保持比例）
+      const imgRatio = canvas.width / canvas.height;
+      let imgWidth = pageWidth - 20; // 左右留白10mm
+      let imgHeight = imgWidth / imgRatio;
+
+      // 多页处理
+      let position = 0;
+      let remainingHeight = imgHeight;
+
+      while (remainingHeight > 0) {
+        // 添加新页（第一页除外）
+        if (position > 0) {
+          pdf.addPage();
+        }
+
+        // 当前页可显示的高度
+        const viewportHeight = Math.min(remainingHeight, pageHeight - 20);
+
+        pdf.addImage(
+          imgData,
+          'PNG',
+          10, // x坐标（左留白）
+          position > 0 ? 10 : position + 10, // y坐标
+          imgWidth,
+          viewportHeight,
+          undefined,
+          'FAST' // 渲染模式
+        );
+
+        remainingHeight -= viewportHeight;
+        position += viewportHeight;
+      }
+
+      pdf.save('My-IP-Report.pdf');
     } catch (error) {
       console.error('Error generating PDF:', error);
     } finally {
