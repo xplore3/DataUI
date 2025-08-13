@@ -6,13 +6,15 @@ import { renderToString } from 'react-dom/server';
 
 export const useMarkdownToPDF = () => {
   const downloadPDF = async (markdownText: string) => {
+    // 创建隐藏容器并设置打印友好样式
     const hiddenDiv = document.createElement('div');
-    hiddenDiv.style.width = '190mm'; // 匹配A4宽度
-    hiddenDiv.style.padding = '25mm 20mm';
+    hiddenDiv.style.width = '190mm'; // A4宽度减去边距
+    hiddenDiv.style.padding = '25mm 20mm'; // 上下25mm，左右20mm边距
     hiddenDiv.style.background = 'white';
-    hiddenDiv.style.fontFamily = 'Arial, sans-serif';
+    hiddenDiv.style.fontFamily = "'Arial', sans-serif";
     hiddenDiv.style.fontSize = '12pt';
     hiddenDiv.style.lineHeight = '1.6';
+    hiddenDiv.style.boxSizing = 'border-box';
     document.body.appendChild(hiddenDiv);
 
     // 渲染Markdown
@@ -26,7 +28,6 @@ export const useMarkdownToPDF = () => {
         scale: 2,
         useCORS: true,
         logging: true,
-        allowTaint: true,
         windowHeight: hiddenDiv.scrollHeight + 50,
       });
 
@@ -34,58 +35,54 @@ export const useMarkdownToPDF = () => {
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
-        format: 'a4',
+        format: 'a4'
       });
 
-      // PDF页面尺寸 (A4)
+      // PDF页面尺寸
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
 
-      // 计算图像尺寸 (保持宽高比)
-      const imgWidth = pageWidth - 40; // 左右各10mm边距
+      // 图像尺寸计算（保持宽高比）
+      const imgWidth = pageWidth - 40; // 左右各20mm边距
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       // 分页参数
       const marginTop = 25; // 顶部边距
-      //const marginBottom = 25; // 底部边距
-      //const pageContentHeight = pageHeight - marginTop - marginBottom; // 每页可用高度
+      const usablePageHeight = pageHeight - marginTop; // 每页可用高度
 
-      // 分页处理
-      let heightLeft = imgHeight;
-      let position = 10; // 起始y坐标 (顶部边距)
-      let pageNum = 1;
+      let currentPosition = 0;
+      let pageNumber = 1;
 
-      // 第一页
-      pdf.addImage(
-        imgData,
-        'PNG',
-        10, // x坐标
-        position,
-        imgWidth,
-        imgHeight,
-        undefined,
-        'FAST'
-      );
-      heightLeft -= pageHeight - 50; // 减去已使用的页面高度 (保留底部边距)
-      //const viewportHeight = Math.min(pageContentHeight, imgHeight - position);
+      while (currentPosition < imgHeight) {
+        if (pageNumber > 1) {
+          pdf.addPage();
+        }
 
-      // 额外页面
-      while (heightLeft >= 0) {
-        pdf.addPage();
-        pageNum++;
-        position = marginTop - ((pageNum - 1) * (pageHeight - 50));
-
+        // 计算当前页应该显示的内容部分
+        const viewportHeight = Math.min(usablePageHeight, imgHeight - currentPosition);
+  
+        // 关键修正：使用canvas裁剪功能
         pdf.addImage(
           imgData,
           'PNG',
-          10, // x坐标
-          position,
+          20, // 左边界20mm
+          marginTop, // 固定从顶部边距开始
           imgWidth,
-          imgHeight,
-          undefined,
-          'FAST'
+          viewportHeight,
+          // 以下参数实现图像裁剪
+          undefined, undefined,
+          {
+            // 源图像裁剪区域
+            width: canvas.width,
+            height: (viewportHeight * canvas.width) / imgWidth,
+            // 源图像起始点
+            x: 0,
+            y: (currentPosition * canvas.width) / imgWidth
+          }
         );
-        heightLeft -= pageHeight - 20;
+
+        currentPosition += viewportHeight;
+        pageNumber++;
       }
 
       pdf.save('我的IP定位.pdf');
