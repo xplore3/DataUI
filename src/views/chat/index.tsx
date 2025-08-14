@@ -254,8 +254,8 @@ const Chat = () => {
     setTips('请输入你的数据处理指令');
   }, []);
 
-  const knowledgeCheck = () => {
-    console.log('knowledgeCheck');
+  const knowledgeCheck = async () => {
+    //console.log('knowledgeCheck');
     try {
       const knowledgeUpdated = localStorage.getItem('local_knowledge_value_updated');
       //console.log(knowledgeUpdated);
@@ -264,6 +264,7 @@ const Chat = () => {
         const newKnowledge = localStorage.getItem('local_knowledge_value');
         if (newKnowledge && newKnowledge != '') {
           setMessageList(prev => [...prev, { text: newKnowledge, user: 'user', action: 'NONE', displayText: newKnowledge }]);
+          await doPositioning();
         }
         localStorage.setItem('local_knowledge_value_updated', 'false');
       }
