@@ -62,24 +62,19 @@ export const useMarkdownToPDF = () => {
         const viewportHeight = Math.min(usablePageHeight, imgHeight - currentPosition);
   
         // 关键修正：使用canvas裁剪功能
-        pdf.addImage(
-          imgData,
-          'PNG',
-          20, // 左边界20mm
-          marginTop, // 固定从顶部边距开始
-          imgWidth,
-          viewportHeight,
-          // 以下参数实现图像裁剪
-          undefined,
-          'FAST', // compression
-          0, // rotation
-          0, // 无特殊属性
+        pdf.addImage({
+          imageData: imgData,
+          x: 20,
+          y: marginTop,
+          width: imgWidth,
+          height: viewportHeight,
+          compression: 'FAST',
           // 裁剪参数
-          0, // sourceX
-          (currentPosition * canvas.width) / imgWidth, // sourceY
-          canvas.width, // sourceWidth
-          (viewportHeight * canvas.width) / imgWidth // sourceHeight
-        );
+          sourceX: 0,
+          sourceY: (currentPosition * canvas.width) / imgWidth,
+          sourceWidth: canvas.width,
+          sourceHeight: (viewportHeight * canvas.width) / imgWidth
+        });
 
         currentPosition += viewportHeight;
         pageNumber++;
