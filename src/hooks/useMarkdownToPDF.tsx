@@ -70,15 +70,15 @@ export const useMarkdownToPDF = () => {
           imgWidth,
           viewportHeight,
           // 以下参数实现图像裁剪
-          undefined, undefined,
-          {
-            // 源图像裁剪区域
-            width: canvas.width,
-            height: (viewportHeight * canvas.width) / imgWidth,
-            // 源图像起始点
-            x: 0,
-            y: (currentPosition * canvas.width) / imgWidth
-          }
+          undefined,
+          'FAST', // compression
+          0, // rotation
+          0, // 无特殊属性
+          // 裁剪参数
+          0, // sourceX
+          (currentPosition * canvas.width) / imgWidth, // sourceY
+          canvas.width, // sourceWidth
+          (viewportHeight * canvas.width) / imgWidth // sourceHeight
         );
 
         currentPosition += viewportHeight;
