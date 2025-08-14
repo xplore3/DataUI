@@ -2,88 +2,99 @@
 import ReactMarkdown from 'react-markdown';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { renderToString } from 'react-dom/server';
+import ReactDOM from 'react-dom/client';
+//import { renderToString } from 'react-dom/server';
 
 export const useMarkdownToPDF = () => {
   const downloadPDF = async (markdownText: string) => {
-    // 创建隐藏容器并设置打印友好样式
     const hiddenDiv = document.createElement('div');
-    hiddenDiv.style.width = '190mm'; // A4宽度减去边距
-    hiddenDiv.style.padding = '25mm 20mm'; // 上下25mm，左右20mm边距
+    hiddenDiv.style.width = '210mm';
+    hiddenDiv.style.padding = '20mm';
     hiddenDiv.style.background = 'white';
     hiddenDiv.style.fontFamily = "'Arial', sans-serif";
     hiddenDiv.style.fontSize = '12pt';
     hiddenDiv.style.lineHeight = '1.6';
     hiddenDiv.style.boxSizing = 'border-box';
+    hiddenDiv.style.position = 'fixed';
+    hiddenDiv.style.left = '-9999px';
     document.body.appendChild(hiddenDiv);
 
-    // 渲染Markdown
-    const markdownHTML = renderToString(
-      <ReactMarkdown>{markdownText}</ReactMarkdown>
-    );
-    hiddenDiv.innerHTML = markdownHTML;
+    const root = ReactDOM.createRoot(hiddenDiv);
+    root.render(<ReactMarkdown>{markdownText}</ReactMarkdown>);
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     try {
-      const canvas = await html2canvas(hiddenDiv, {
-        scale: 2,
-        useCORS: true,
-        logging: true,
-        windowHeight: hiddenDiv.scrollHeight + 50,
+      const fullCanvas = await html2canvas(hiddenDiv, {
+        scale: 1.5, // 降低scale
+        useCORS: true
       });
 
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4'
       });
 
-      // PDF页面尺寸
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
+      const pageWidthMm = pdf.internal.pageSize.getWidth();
+      const pageHeightMm = pdf.internal.pageSize.getHeight();
+      const marginX = 10;
+      const marginY = 10;
+      const pxPerMm = fullCanvas.width / pageWidthMm;
 
-      // 图像尺寸计算（保持宽高比）
-      const imgWidth = pageWidth - 40; // 左右各20mm边距
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      // 每页的像素高度
+      const rawPageHeightPx = (pageHeightMm - marginY * 2) * pxPerMm;
 
-      // 分页参数
-      const marginTop = 25; // 顶部边距
-      const usablePageHeight = pageHeight - marginTop; // 每页可用高度
+      // 计算行高（像素）
+      const lineHeightPx = parseInt(window.getComputedStyle(hiddenDiv).lineHeight, 10) || 20;
 
-      let currentPosition = 0;
-      let pageNumber = 1;
+      let position = 0;
+      let pageIndex = 0;
 
-      while (currentPosition < imgHeight) {
-        if (pageNumber > 1) {
-          pdf.addPage();
+      while (position < fullCanvas.height) {
+        // 按整行对齐
+        let pageHeightPx = rawPageHeightPx;
+        if (position + pageHeightPx < fullCanvas.height) {
+          const overflow = pageHeightPx % lineHeightPx;
+          if (overflow > 0) {
+            pageHeightPx -= overflow; // 向下取整到整行
+          }
         }
 
-        // 计算当前页应该显示的内容部分
-        const viewportHeight = Math.min(usablePageHeight, imgHeight - currentPosition);
-  
-        // 关键修正：使用canvas裁剪功能
-        pdf.addImage({
-          imageData: imgData,
-          x: 20,
-          y: marginTop,
-          width: imgWidth,
-          height: viewportHeight,
-          compression: 'FAST',
-          // 裁剪参数
-          sourceX: 0,
-          sourceY: (currentPosition * canvas.width) / imgWidth,
-          sourceWidth: canvas.width,
-          sourceHeight: (viewportHeight * canvas.width) / imgWidth
-        });
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = fullCanvas.width;
+        pageCanvas.height = Math.min(pageHeightPx, fullCanvas.height - position);
 
-        currentPosition += viewportHeight;
-        pageNumber++;
+        const ctx = pageCanvas.getContext('2d');
+        if (!ctx) throw new Error('无法获取 Canvas context');
+
+        ctx.drawImage(
+          fullCanvas,
+          0, position, fullCanvas.width, pageCanvas.height,
+          0, 0, pageCanvas.width, pageCanvas.height
+        );
+
+        // JPEG 压缩（0.8质量）
+        const imgData = pageCanvas.toDataURL('image/jpeg', 0.8);
+
+        if (pageIndex > 0) pdf.addPage();
+        pdf.addImage(
+          imgData,
+          'JPEG',
+          marginX,
+          marginY,
+          pageWidthMm - marginX * 2,
+          (pageCanvas.height / pxPerMm)
+        );
+
+        position += pageHeightPx;
+        pageIndex++;
       }
 
-      pdf.save('我的IP定位.pdf');
+      pdf.save('我的IP定位报告.pdf');
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('PDF 生成失败:', error);
     } finally {
+      root.unmount();
       document.body.removeChild(hiddenDiv);
     }
   };
