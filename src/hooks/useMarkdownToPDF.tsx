@@ -3,6 +3,9 @@ import ReactMarkdown from 'react-markdown';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import ReactDOM from 'react-dom/client';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import InnerChart from '@/components/InnerChart';
 //import { renderToString } from 'react-dom/server';
 
 export const useMarkdownToPDF = () => {
@@ -20,13 +23,55 @@ export const useMarkdownToPDF = () => {
     document.body.appendChild(hiddenDiv);
 
     const root = ReactDOM.createRoot(hiddenDiv);
-    root.render(<ReactMarkdown>{markdownText}</ReactMarkdown>);
+    root.render(<ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      rehypePlugins={[rehypeRaw as unknown as any]}
+      components={{
+        a: ({ href, children, ...props }) => (
+          <a
+            href={href}
+            onClick={e => {
+              e.preventDefault();
+              window.open(href, '_blank');
+            }}
+            style={{ cursor: 'pointer' }}
+            {...props}
+          >
+            {children}
+          </a>
+        ),
+        code({ className, children }) {
+          const lang = className?.replace('language-', '');
+
+          if (lang === 'chart') {
+            try {
+              const config = JSON.parse(children as string);
+              // console.log('chart-config', children);
+              return <InnerChart {...config} />
+            } catch (e) {
+              return <pre style={{color: 'red', fontWeight: 'bold'}} >图表配置格式错误</pre>
+            }
+          }
+
+          return (
+            <pre
+              style={{backgroundColor: '#f3f4f6', borderRadius: '0.5rem', padding: '0.5rem', fontSize: '0.875rem', overflowX: 'auto', fontFamily: 'monospace'}}
+            >
+              {children}
+            </pre>
+          );
+        }
+      }}
+    >
+      {markdownText}
+    </ReactMarkdown>);
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     try {
       const fullCanvas = await html2canvas(hiddenDiv, {
         scale: 1.5, // 降低scale
-        useCORS: true
+        useCORS: true,
       });
 
       const pdf = new jsPDF({

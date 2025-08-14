@@ -49,7 +49,7 @@ const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey={yKey} fill={COLORS[0]} />
+                        <Bar dataKey={yKey} fill={COLORS[0]} isAnimationActive={false} />
                     </BarChart>
                 );
 
@@ -60,7 +60,7 @@ const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Line type="monotone" dataKey={yKey} stroke={COLORS[1]} />
+                        <Line type="monotone" dataKey={yKey} stroke={COLORS[1]} isAnimationActive={false}/>
                     </LineChart>
                 );
 
@@ -71,7 +71,7 @@ const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Area type={"monotone"} dataKey={yKey} stroke={COLORS[2]} fill={COLORS[2]} />
+                        <Area type={"monotone"} dataKey={yKey} stroke={COLORS[2]} fill={COLORS[2]} isAnimationActive={false}/>
                     </AreaChart>
                 );
 
@@ -86,6 +86,7 @@ const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
                             cy={"50%"}
                             outerRadius={80}
                             label
+                            isAnimationActive={false}
                         >
                             {chartData.map((_, i) => (
                                 <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
@@ -108,6 +109,7 @@ const InnerChart: React.FC<ChartProps> = ({type, title, xKey, yKey, data}) => {
                             stroke={COLORS[3]}
                             fill={COLORS[3]}
                             fillOpacity={0.6}
+                            isAnimationActive={false}
                         />
                         <Legend />
                         <Tooltip />
