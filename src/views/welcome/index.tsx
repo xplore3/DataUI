@@ -21,10 +21,10 @@ const Welcome = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   // 数据类别选项
-  const categoryOptions = ['社媒', '电商', '生活', '问答', '金融', '游戏', '健康', '制造', '广告', '科学'];
+  const categoryOptions = ['社媒', '电商', '生活', '问答', '金融', '游戏', '医疗', '科学', '制造', '广告', 'AI医生', 'AI工具'];
 
   // 平台选项
-  const platformOptions = ['微信公众号', '抖音', '微博', '小红书', '快手', 'Tiktok', 'X', '亚马逊', '淘宝', '京东', '美团'];
+  const platformOptions = ['微信公众号', '抖音', '微博', '小红书', '快手', 'Tiktok', 'X/Twitter', '亚马逊', '淘宝', '京东', 'Yelp点评', 'Tripadvisor', 'Instagram', 'GoogleMaps'];
 
   // 时效选项
   const timeframeOptions = ['24小时内', '3天内', '一周内', '一月内', '三个月内', '半年内'];
@@ -110,7 +110,7 @@ const Welcome = () => {
         <p className="welcome-description">
           基于自然语言的商业数据搜索、获取、购买引擎
           <br />
-          获取直接交付AI的数据，赋能每个Agent
+          提供直接交付AI和Agent的数据、工具和能力，赋能每个Agent
         </p>
       </header>
 
