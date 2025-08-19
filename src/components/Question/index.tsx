@@ -144,8 +144,9 @@ const QuestionForm: React.FC<DynamicFormProps> = ({ questions, hasSubmit, loadin
             )}
             {q.type === 'text' && (
               <div className="question-sub-div">
-                <input
+                <textarea
                   className="question-input"
+                  rows={6}
                   type="text"
                   value={typeof answers[q.id] === 'string' ? (answers[q.id] as string) : ''}
                   onChange={(e) => handleChange(q.id, e.target.value)}
