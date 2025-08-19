@@ -124,11 +124,6 @@ const KnowledgeBase2: React.FC = () => {
   
   const questions = [
     {
-      id: 'accountName',
-      question: '账号名称',
-      type: 'text' as const
-    },
-    {
       id: 'accountType',
       question: '1、您是一个企业主（老板、创业者、企业家）吗？',
       type: 'single' as const,
