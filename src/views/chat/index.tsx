@@ -264,7 +264,8 @@ const Chat = () => {
         const newKnowledge = localStorage.getItem('local_knowledge_value');
         if (newKnowledge && newKnowledge != '') {
           setMessageList(prev => [...prev, { text: newKnowledge, user: 'user', action: 'NONE', displayText: newKnowledge }]);
-          await doPositioning();
+          //await doPositioning();
+          await checkInviteCode();
         }
         localStorage.setItem('local_knowledge_value_updated', 'false');
       }
