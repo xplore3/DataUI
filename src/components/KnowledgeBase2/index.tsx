@@ -210,6 +210,38 @@ const KnowledgeBase2: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });*/
+      const formData = new FormData();
+      const userId = await chatApi.getUserId();
+      formData.append('userId', userId);
+
+      const knowledges = JSON.stringify(result);
+      formData.append('knowledges', knowledges);
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
+      await chatApi.addKnowledges(formData).then(res => {
+        console.log('return res', res);
+        let summary = JSON.stringify(result);
+        try {
+          const json = JSON.parse(res);
+          summary = json.summary || '';
+        }
+        catch (err) {
+          console.log(err);
+          summary = res.summary || '';
+        }
+        console.log(summary);
+        const preAnswers = localStorage.getItem('local_knowledge_value') || '';
+        if (preAnswers !== summary) {
+          localStorage.setItem('local_knowledge_value', summary);
+          localStorage.setItem('local_knowledge_value_updated', 'true');
+        }
+        // 保存成功后设置状态
+        setSavedAnswers(answers);
+        setIsFormSubmitted(true);
+        localStorage.setItem('trendmuse_form_submitted', 'true');
+        toast.success('信息保存成功！');
+      })
     }
     catch (error) {
       console.error('Error sending question:', error);
