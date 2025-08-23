@@ -39,11 +39,51 @@ const UserCenter = () => {
     navigate('/help');
   };
 
-  const onLogout = async () => {
+  const onDeleteProfile = async () => {
     Modal.confirm({
       title: '确定要删除IP信息吗?',
       icon: <ExclamationCircleOutlined />,
       content: '删除后IP信息将被清除，且无法恢复。',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        console.log('OK');
+        deleteImpl();
+      },
+      onCancel() {
+        console.log('Canceled');
+      },
+    });
+  }
+
+  const deleteImpl = async () => {
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('trendmuse_form_submitted');
+    localStorage.removeItem('local_knowledge_value');
+    localStorage.removeItem('local_knowledge_value_updated');
+    toast('正在清理IP信息...');
+    try {
+      const formData = new FormData();
+      const userId = await chatApi.getUserId();
+      formData.append('userId', userId);
+      formData.append('knowledges', '{}');
+      await chatApi.addKnowledges(formData).then(res => {
+        console.log(res);
+      }).finally(() => {
+        toast.success('IP信息已删除');
+        navigate('/ip');
+      });
+    } catch (error) {
+      console.error('Error clear data:', error);
+    }
+  };
+
+  const onLogout = async () => {
+    Modal.confirm({
+      title: '确定要退出登录吗?',
+      icon: <ExclamationCircleOutlined />,
+      content: '退出后可以随时再微信扫码登录。',
       okText: '确定',
       okType: 'danger',
       cancelText: '取消',
@@ -61,24 +101,7 @@ const UserCenter = () => {
     //console.log('User logged out');
     localStorage.removeItem('userInfo');
     localStorage.removeItem('trendmuse_form_submitted');
-    localStorage.removeItem('local_knowledge_value');
-    localStorage.removeItem('local_knowledge_value_updated');
-    //navigate('/chat');
-    toast('正在清理IP信息...');
-    try {
-      const formData = new FormData();
-      const userId = await chatApi.getUserId();
-      formData.append('userId', userId);
-      formData.append('knowledges', '{}');
-      await chatApi.addKnowledges(formData).then(res => {
-        console.log(res);
-      }).finally(() => {
-        toast.success('IP信息已删除');
-        navigate('/ip');
-      });
-    } catch (error) {
-      console.error('Error clear data:', error);
-    }
+    navigate('/chat');
   };
 
   const onLogin = () => {
@@ -162,8 +185,11 @@ const UserCenter = () => {
         <button className="user-center-link" onClick={onAbout}>关于</button>
         <button className="user-center-link" onClick={onHelp}>帮助与说明</button>
       </div>
-      <button className="user-center-logout" onClick={onLogout}>
+      <button className="user-center-logout" onClick={onDeleteProfile}>
         删除IP信息
+      </button>
+      <button className="user-center-logout" onClick={onLogout}>
+        退出登录
       </button>
       </>) : (<div className="user-center-login">
         <img src={Profile} alt="profile" />
