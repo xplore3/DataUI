@@ -232,8 +232,10 @@ export const chatApi = {
         response = response.data_result || response.question_description || response;
       }
       return {
-        text: `\`\`\`json\n${response}\n\`\`\`\n\n----------------\n\n
-          ${JSON.stringify(response).slice(0, 300)}...`,
+        // text: `\`\`\`json\n${response}\n\`\`\`\n\n----------------\n\n
+        //   ${JSON.stringify(response).slice(0, 300)}...`,
+        // @ts-ignore
+        text:response.map((item)=>JSON.stringify(item)).join('\n'),
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,
