@@ -235,7 +235,10 @@ export const chatApi = {
         // text: `\`\`\`json\n${response}\n\`\`\`\n\n----------------\n\n
         //   ${JSON.stringify(response).slice(0, 300)}...`,
         // @ts-ignore
-        text: response.slice(0, 3).map((item)=>JSON.stringify(item)).join('\n'),
+        text: response
+            .slice(0, 3)
+            .map((item) => JSON.stringify(item))
+            .join('\n') + (response.length > 3 ? '\n...' : ''),
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,
