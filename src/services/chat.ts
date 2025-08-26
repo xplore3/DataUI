@@ -237,7 +237,7 @@ export const chatApi = {
         // @ts-ignore
         text: response
             .slice(0, 2)
-            .map((item) => JSON.stringify(item))
+            .map((item: any) => JSON.stringify(item))
             .join('\n') + (response.length > 2 ? '\n\n----------------\n\n......' : ''),
         user: 'agent',
         action: 'NONE',
