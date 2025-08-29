@@ -1,9 +1,11 @@
 import { RawApi } from '@/services/raw';
 import React, { useState, FormEvent } from 'react';
+import { toast } from 'react-toastify';
 
 const RawPage = () =>{
   const [inputText, setInputText] = useState('');
   const [submittedText, setSubmittedText] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
@@ -15,11 +17,19 @@ const RawPage = () =>{
       alert('请输入内容后再提交');
       return;
     }
+    if (loading) {
+      toast('正在处理中，请稍候......');
+      return;
+    }
+    toast('正在进行内容处理，请稍候......');
+    setLoading(true);
     try {
       const response = await RawApi.rawdata(inputText);
       setSubmittedText(response.data || response);
+      setLoading(false);
     }
     catch (error) {
+      setLoading(false);
       console.error('提交失败:', error);
       setSubmittedText('提交失败，请稍后再试');
       alert('提交失败，请稍后再试');
@@ -87,7 +97,7 @@ const RawPage = () =>{
               fontSize: '16px',
               flex: 1
             }}
-            disabled={!inputText.trim()}
+            disabled={!inputText.trim() || loading}
           >
             提交
           </button>
