@@ -313,6 +313,7 @@ export const chatApi = {
           let options: string[] = [];
           let backup_options = [];
           let newTaskId = '';
+          let pdfUrl = '';
           try {
             const json = JSON.parse(response);
             if (json) {
@@ -322,6 +323,7 @@ export const chatApi = {
               }
               backup_options = json.intention_options;
               response = (json.process_result + json.option_description) || json.data_result || json.question_description;
+              pdfUrl = json.pdf_url || '';
             }
           } catch (err) {
             //console.log(err);
@@ -331,6 +333,7 @@ export const chatApi = {
             }
             backup_options = response.intention_options;
             response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
+            pdfUrl = response.pdf_url || result.data.pdf_url || '';
           }
           // Task Ended
           if (completed) {
@@ -344,6 +347,7 @@ export const chatApi = {
             user: 'agent',
             action: 'NONE',
             taskId: newTaskId,
+            pdfUrl: pdfUrl,
             options: options,
             backup_options: backup_options,
             completed,
