@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import QuestionForm from '@/components/Question';
 import { chatApi } from '@/services/chat';
 import { toast } from 'react-toastify';
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const KnowledgeBase2: React.FC = () => {
   const navigate = useNavigate();
@@ -246,6 +248,22 @@ const KnowledgeBase2: React.FC = () => {
         //setIsFormSubmitted(true);
         localStorage.setItem('trendmuse_form_submitted', 'true');
         toast.success('信息保存成功！');
+
+        Modal.confirm({
+          title: '是否优化一下个人信息?',
+          icon: <ExclamationCircleOutlined />,
+          content: feedback,
+          okText: '优化',
+          okType: 'primary',
+          cancelText: '不优化了，去定位',
+          onOk() {
+            setIsFormSubmitted(false);
+          },
+          async onCancel() {
+            setIsFormSubmitted(true);
+            navigate('/chat');
+          },
+        });
       })
     }
     catch (error) {
