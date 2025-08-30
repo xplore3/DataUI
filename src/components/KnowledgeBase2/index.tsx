@@ -121,7 +121,7 @@ const KnowledgeBase2: React.FC = () => {
 
     loadSavedAnswers();
   }, []);
-  
+
   const questions = [
     {
       id: 'accountType',
@@ -222,15 +222,20 @@ const KnowledgeBase2: React.FC = () => {
       await chatApi.addKnowledges(formData).then(res => {
         console.log('return res', res);
         let summary = JSON.stringify(result);
+        let feedback = '';
         try {
           const json = JSON.parse(res);
           summary = json.summary || '';
+          feedback = json.feedback || '';
         }
         catch (err) {
           console.log(err);
           summary = res.summary || '';
+          feedback = res.feedback || '';
         }
         console.log(summary);
+        console.log(feedback);
+        questions[7].tips = feedback;
         const preAnswers = localStorage.getItem('local_knowledge_value') || '';
         if (preAnswers !== summary) {
           localStorage.setItem('local_knowledge_value', summary);
@@ -238,7 +243,7 @@ const KnowledgeBase2: React.FC = () => {
         }
         // 保存成功后设置状态
         setSavedAnswers(answers);
-        setIsFormSubmitted(true);
+        //setIsFormSubmitted(true);
         localStorage.setItem('trendmuse_form_submitted', 'true');
         toast.success('信息保存成功！');
       })
