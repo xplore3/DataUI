@@ -122,6 +122,7 @@ const FooterOperation = React.memo<FooterOperationProps>(
         
         <QRCodeModal
           visible={qrcodeModalVisible}
+          shareUrl={pdfUrl}
           onClose={() => setQrcodeModalVisible(false)}
         />
       </>
