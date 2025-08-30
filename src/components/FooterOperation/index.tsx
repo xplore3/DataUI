@@ -18,6 +18,7 @@ import { useMarkdownToPDF } from '@/hooks/useMarkdownToPDF';
 interface FooterOperationProps {
   menuList?: Array<'pined' | 'share' | 'bookmark' | 'translate' | 'copy' | 'refresh' | 'pdf'>;
   text?: string;
+  pdfUrl?: string;
   onPin?: (text: string) => void;
   onShare?: () => void;
   onBookmark?: () => void;

@@ -206,6 +206,7 @@ export const chatApi = {
       }
       return {
         text: response,
+        pdfUrl: pdfUrl,
         user: 'agent',
         action: 'NONE',
         taskId: newTaskId,

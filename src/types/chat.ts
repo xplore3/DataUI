@@ -9,6 +9,7 @@ export interface Message {
   user: 'user' | 'agent' | 'client';
   action: 'NONE' | 'CONTINUE';
   taskId?: string,
+  pdfUrl?: string,
   options?: string[];
   backup_options?: string[];
   title?: string;
