@@ -28,7 +28,7 @@ interface FooterOperationProps {
 }
 
 const FooterOperation = React.memo<FooterOperationProps>(
-  ({ menuList = ['pined', 'share', 'bookmark', 'translate', 'copy', 'pdf'], text = '', onPin, onShare, onBookmark, onCopy, onRefresh, onPdf }) => {
+  ({ menuList = ['pined', 'share', 'bookmark', 'translate', 'copy', 'pdf'], text = '', pdfUrl = '', onPin, onShare, onBookmark, onCopy, onRefresh, onPdf }) => {
     const [isBookMark, setIsBookMark] = useState(false);
     const [isCopied, setIsCopied] = useState(false);
     const [shareModalVisible, setShareModalVisible] = useState(false);
@@ -107,7 +107,8 @@ const FooterOperation = React.memo<FooterOperationProps>(
         </div>
         
         <ShareModal 
-          visible={shareModalVisible} 
+          visible={shareModalVisible}
+          shareUrl={pdfUrl}
           onClose={() => setShareModalVisible(false)}
           onWechatGuide={() => setWechatGuideVisible(true)}
           onQRCode={() => setQrcodeModalVisible(true)}

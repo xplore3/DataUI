@@ -185,6 +185,7 @@ export const chatApi = {
       });
       response = result.data.text;
       let newTaskId = '';
+      let pdfUrl = '';
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
@@ -194,12 +195,14 @@ export const chatApi = {
           newTaskId = json.taskId;
           useUserStore.getState().setTaskId(newTaskId);
           response = (json.process_result + json.option_description) || json.data_result || json.question_description;
+          pdfUrl = json.pdf_url || '';
         }
       } catch (err) {
         //console.log(err);
         newTaskId = response.taskId || result.data.taskId;
         useUserStore.getState().setTaskId(newTaskId);
         response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
+        pdfUrl = response.pdf_url || result.data.pdf_url || '';
       }
       return {
         text: response,

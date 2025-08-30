@@ -34,6 +34,7 @@ type Message = {
   displayText: string;
   taskId?: string;
   note?: string;
+  pdfUrl?: string;
   options?: string[];
   backup_options?: string[];
   questions?: QuestionItem[];
@@ -794,6 +795,7 @@ const Chat = () => {
             {item.user === 'agent' && item.displayText === item.text && (
               <FooterOperation
                 text={item.text}
+                pdfUrl={item.pdfUrl}
                 onTranslate={translatedText => {
                   handleTranslate(translatedText, index);
                 }}
