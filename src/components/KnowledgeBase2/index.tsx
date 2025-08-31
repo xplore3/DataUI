@@ -235,9 +235,9 @@ const KnowledgeBase2: React.FC = () => {
           summary = res.summary || '';
           feedback = res.feedback || '';
         }
-        console.log(summary);
-        console.log(feedback);
-        questions[7].tips = feedback;
+        //console.log(summary);
+        //console.log(feedback);
+        //questions[7].tips = feedback;
         const preAnswers = localStorage.getItem('local_knowledge_value') || '';
         if (preAnswers !== summary) {
           localStorage.setItem('local_knowledge_value', summary);
@@ -255,9 +255,11 @@ const KnowledgeBase2: React.FC = () => {
           icon: <ExclamationCircleOutlined />,
           width: '80%',
           bodyStyle: { 
-            padding: 24,
+            padding: 28,
           },
-          content: feedback,
+          content: (
+            <div style={{ whiteSpace: 'pre-line' }}>{feedback}</div>
+          ),
           okText: '优化',
           okType: 'primary',
           cancelText: '不优化了，去定位',
