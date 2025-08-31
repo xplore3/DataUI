@@ -246,12 +246,14 @@ const KnowledgeBase2: React.FC = () => {
         // 保存成功后设置状态
         setSavedAnswers(answers);
         //setIsFormSubmitted(true);
+        setLoading(false);
         localStorage.setItem('trendmuse_form_submitted', 'true');
         toast.success('信息保存成功！');
 
         Modal.confirm({
           title: '是否优化一下个人信息?',
           icon: <ExclamationCircleOutlined />,
+          width: 900,
           content: feedback,
           okText: '优化',
           okType: 'primary',
