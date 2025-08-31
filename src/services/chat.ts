@@ -210,6 +210,7 @@ export const chatApi = {
     try {
       const result = await api.post(`/datahub`, {
         text: text,
+        key: import.meta.env.VITE_API_KEY,
         userId: chatApi.getUserId(),
       });
       response = result.data.text;
