@@ -253,7 +253,10 @@ const KnowledgeBase2: React.FC = () => {
         Modal.confirm({
           title: '是否优化一下个人信息?',
           icon: <ExclamationCircleOutlined />,
-          width: 900,
+          width: '80%',
+          bodyStyle: { 
+            padding: 24,
+          },
           content: feedback,
           okText: '优化',
           okType: 'primary',
