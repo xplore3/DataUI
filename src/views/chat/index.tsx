@@ -5,7 +5,7 @@ import Send from '@/assets/icons/send.svg';
 import SendActive from '@/assets/icons/send-active.svg';
 import LoadingImg from '@/assets/icons/loading.svg';
 import User from '@/assets/icons/user.svg';
-import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useLayoutEffect, useState, useCallback, useRef, memo } from 'react';
 import FooterOperation from '@/components/FooterOperation';
 import { chatApi } from '@/services/chat';
 import ReactMarkdown from 'react-markdown';
@@ -36,6 +36,89 @@ type Message = {
   hasSubmit?: boolean;
   completed?: boolean;
 };
+
+// AIMessage component with requestAnimationFrame typing animation - 抽取到外部避免重新渲染
+const AIMessage = memo(({ message, onDisplayUpdate }: { message: Message; onDisplayUpdate: (text: string) => void }) => {
+  const animationFrameRef = useRef<number | null>(null);
+  const [renderError, setRenderError] = useState(false);
+
+  useEffect(() => {
+    // Skip if the content is already complete
+    if (message.displayText === message.text) return;
+    let currentIndex = message.displayText.length;
+    const chunkSize = 300; // Number of characters to add per frame
+    const updateText = () => {
+      if (currentIndex < message.text.length) {
+        const nextIndex = Math.min(currentIndex + chunkSize, message.text.length);
+        onDisplayUpdate(message.text.substring(0, nextIndex));
+        currentIndex = nextIndex;
+        animationFrameRef.current = requestAnimationFrame(updateText);
+      }
+    };
+    animationFrameRef.current = requestAnimationFrame(updateText);
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [message.text, message.displayText, onDisplayUpdate]);
+
+  // 错误边界：如果 ReactMarkdown 出错，显示纯文本内容
+  if (renderError) {
+    return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message.displayText}</pre>;
+  }
+
+  try {
+    return (
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          a: ({ href, children, ...props }) => (
+            <a
+              href={href}
+              onClick={e => {
+                e.preventDefault();
+                window.open(href, '_blank');
+              }}
+              style={{ cursor: 'pointer' }}
+              {...props}
+            >
+              {children}
+            </a>
+          ),
+        }}
+      >
+        {message.displayText}
+      </ReactMarkdown>
+    );
+  } catch (error) {
+    // 如果 ReactMarkdown 渲染失败，切换到纯文本模式
+    console.warn('ReactMarkdown render failed, falling back to plain text:', error);
+    setRenderError(true);
+    return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message.displayText}</pre>;
+  }
+}, (prevProps, nextProps) => {
+  // 自定义比较函数：只有关键属性变化时才重新渲染
+  const prev = prevProps.message;
+  const next = nextProps.message;
+  
+  // 如果是同一个对象引用，直接返回true（不重新渲染）
+  if (prev === next) return true;
+  
+  // 比较影响显示的核心属性
+  const isSameMessage = (
+    prev.text === next.text &&
+    prev.displayText === next.displayText &&
+    prev.user === next.user &&
+    prev.action === next.action
+  );
+  
+  // 比较onDisplayUpdate回调函数（虽然这个可能每次都不同，但我们还是检查一下）
+  const isSameCallback = prevProps.onDisplayUpdate === nextProps.onDisplayUpdate;
+  
+  // 只有消息内容相同且回调相同时才不重新渲染
+  return isSameMessage && isSameCallback;
+});
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -126,67 +209,7 @@ const Chat = () => {
     }
   }, [messageList]);
 
-  // AIMessage component with requestAnimationFrame typing animation
-  const AIMessage = ({ message, onDisplayUpdate }: { message: Message; onDisplayUpdate: (text: string) => void }) => {
-    const animationFrameRef = useRef<number | null>(null);
-    const [renderError, setRenderError] = useState(false);
 
-    useEffect(() => {
-      // Skip if the content is already complete
-      if (message.displayText === message.text) return;
-      let currentIndex = message.displayText.length;
-      const chunkSize = 300; // Number of characters to add per frame
-      const updateText = () => {
-        if (currentIndex < message.text.length) {
-          const nextIndex = Math.min(currentIndex + chunkSize, message.text.length);
-          onDisplayUpdate(message.text.substring(0, nextIndex));
-          currentIndex = nextIndex;
-          animationFrameRef.current = requestAnimationFrame(updateText);
-        }
-      };
-      animationFrameRef.current = requestAnimationFrame(updateText);
-      return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-      };
-    }, [message.text, message.displayText, onDisplayUpdate]);
-
-    // 错误边界：如果 ReactMarkdown 出错，显示纯文本内容
-    if (renderError) {
-      return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message.displayText}</pre>;
-    }
-
-    try {
-      return (
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={{
-            a: ({ href, children, ...props }) => (
-              <a
-                href={href}
-                onClick={e => {
-                  e.preventDefault();
-                  window.open(href, '_blank');
-                }}
-                style={{ cursor: 'pointer' }}
-                {...props}
-              >
-                {children}
-              </a>
-            ),
-          }}
-        >
-          {message.displayText}
-        </ReactMarkdown>
-      );
-    } catch (error) {
-      // 如果 ReactMarkdown 渲染失败，切换到纯文本模式
-      console.warn('ReactMarkdown render failed, falling back to plain text:', error);
-      setRenderError(true);
-      return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message.displayText}</pre>;
-    }
-  };
 
   // Handle input changes in the text area
   const onInput = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
