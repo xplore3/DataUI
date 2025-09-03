@@ -45,11 +45,17 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
     recognition.interimResults = false;
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const transcript = event.results[0][0].transcript;
-      const current = form.getFieldValue(name) || "";
-      form.setFieldsValue({
-        [name]: current + transcript,
-      });
+      console.log('onresult');
+      try {
+        console.log(event);
+        const transcript = event.results[0][0].transcript;
+        const current = form.getFieldValue(name) || "";
+        form.setFieldsValue({
+          [name]: current + transcript,
+        });
+      } catch (e) {
+        console.error('语音识别结果处理失败', e);
+      }
     };
 
     recognition.onend = () => {
@@ -79,13 +85,31 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
   };
 
   return (
-    <Form.Item name={name} label={label}>
-      <div style={{ display: "flex", gap: "8px" }}>
-        <TextArea rows={rows} placeholder={placeholder} />
+    <Form.Item label={label}>
+      <div style={{ position: "relative", width: "100%" }}>
+        {/* 真正绑定字段 */}
+        <Form.Item name={name} noStyle>
+          <TextArea
+            rows={rows}
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ paddingRight: 60 }} // 给按钮留出空间
+          />
+        </Form.Item>
+
+        {/* 浮动按钮 */}
         <Button
+          onClick={handleVoiceClick}
           type={listening ? "primary" : "default"}
           danger={listening}
-          onClick={handleVoiceClick}
+          disabled={disabled || !supported}
+          size="small"
+          style={{
+            position: "absolute",
+            bottom: 8,
+            right: 8,
+            zIndex: 10,
+          }}
         >
           {listening ? "🎙️ 录音中" : "🎤 语音输入"}
         </Button>

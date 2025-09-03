@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Radio, Checkbox, Button, Card, Divider, Typography } from 'antd';
+import { Form, Radio, Checkbox, Button, Card, Divider, Typography } from 'antd';
 import { chatApi } from '@/services/chat';
 import { toast } from 'react-toastify';
 import LocalUpload from '../LocalUpload';
