@@ -25,7 +25,7 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
   name,
   label,
   rows = 4,
-  placeholder = "点击右侧按钮语音输入...",
+  placeholder = "点击语音按钮语音输入...",
 }) => {
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
