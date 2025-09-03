@@ -58,7 +58,7 @@ const KnowledgeBase2: React.FC = () => {
       console.log('Raw knowledge data:', knowledgeData);
     }
 
-    console.log('Parsed answers:', answers);
+    //console.log('Parsed answers:', answers);
     return answers;
   };
 

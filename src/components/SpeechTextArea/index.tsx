@@ -44,11 +44,11 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onstart = () => console.log("Voice recognition started");
+    //recognition.onstart = () => console.log("Voice recognition started");
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      console.log('onresult');
+      //console.log('onresult');
       try {
-        console.log(event);
+        //console.log(event);
         const transcript = event.results[0][0].transcript;
         const current = form.getFieldValue(name) || "";
         form.setFieldsValue({
@@ -60,7 +60,7 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
     };
 
     recognition.onend = () => {
-      console.log("Voice recognition ended");
+      //console.log("Voice recognition ended");
       setListening(false);
     };
 
