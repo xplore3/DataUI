@@ -266,7 +266,7 @@ const KnowledgeBase2: React.FC = () => {
               <Form.Item
                 label="1、您是一个企业主（老板、创业者、企业家）吗？"
                 name="accountType"
-                rules={[{ required: true, message: '请选择' }]}
+                rules={[{ required: true, message: '请选择是否是企业主' }]}
               >
                 <Radio.Group>
                   <Radio value="是">A：是</Radio>
@@ -277,7 +277,7 @@ const KnowledgeBase2: React.FC = () => {
               <Form.Item
                 label="2、如果你是一个企业主，你是否有明确的产品或服务？"
                 name="productOrServiceIntroduction"
-                rules={[{ required: true, message: '请选择' }]}
+                rules={[{ required: true, message: '请选择是否有明确的产品或服务' }]}
               >
                 <Radio.Group>
                   <Radio value="是的，我有">A：是的，我有</Radio>
@@ -288,6 +288,7 @@ const KnowledgeBase2: React.FC = () => {
               <Form.Item
                 label="3、如果你是一个企业主，你认为个人IP对业务的作用是什么？"
                 name="ipPurpose"
+                rules={[{ required: true, message: '请选择你认为个人IP对业务的作用' }]}
               >
                 <Checkbox.Group>
                   <Checkbox value="A：提高成交效率">A：提高成交效率</Checkbox>
@@ -301,6 +302,7 @@ const KnowledgeBase2: React.FC = () => {
               <Form.Item
                 label="4、如果你是一个企业主，你认为你的IP应该展示什么内容？"
                 name="ipContent"
+                rules={[{ required: true, message: '请选择你认为个人IP应该展示什么内容' }]}
               >
                 <Checkbox.Group>
                   <Checkbox value="A：介绍自己的业务，展示产品或服务">A：介绍自己的业务，展示产品或服务</Checkbox>
@@ -314,7 +316,7 @@ const KnowledgeBase2: React.FC = () => {
               <Form.Item
                 label="5、如果你是一个企业主，你想打造自己的IP，你认为以下什么是对的？"
                 name="ipBuilding"
-                rules={[{ required: true, message: '请选择' }]}
+                rules={[{ required: true, message: '请选择IP目标' }]}
               >
                 <Radio.Group>
                   <Radio value="A：展示真实的自己">A：展示真实的自己</Radio>
@@ -326,7 +328,6 @@ const KnowledgeBase2: React.FC = () => {
               <Form.Item
                 label="6、作为一个企业主，你可以准确描述你卖的产品或服务吗？"
                 name="prodectOrServiceDetails"
-                rules={[{ required: true, message: '请选择' }]}
               >
                 <Radio.Group>
                   <Radio value="A：可以">A：可以</Radio>
@@ -336,9 +337,8 @@ const KnowledgeBase2: React.FC = () => {
               </Form.Item>
 
               <Form.Item
-                label="7、你认为别人对你的个性评价是？？"
+                label="7、你认为别人对你的个性评价是？"
                 name="selfDescription"
-                rules={[{ required: true, message: '请选择' }]}
               >
                 <Radio.Group>
                   <Radio value="A：我很有个性">A：我很有个性</Radio>
@@ -352,22 +352,28 @@ const KnowledgeBase2: React.FC = () => {
               <Form.Item
                  label="请从个人信息（姓名、性别、年龄、爱好、学历）、行业履历（行业、从业年限、行业地位、对行业的理解、优势等）、个性特征、用户画像（你对你客户的描述）、做个人IP的目的等方向对自己进行描述："
                  name="detailedDescription"
-               >
-                 <TextArea 
+              >
+                 <TextArea
                   rows={8} 
-                  placeholder='请输入具体内容' 
+                  placeholder='请输入具体的个人信息、行业履历、个性特征、用户画像、做个人IP的目的等方面的内容' 
                  />
-                 <Typography.Text style={{ whiteSpace: 'pre-line' }}>参考案例：
-      \n“我叫郭文文，男，36岁，北理工本科毕业；行业称郭总，老郭，连锁按摩店老板，入行8年，比较有亲和力，思维活跃，勤奋，勇于探索，曾经是某科技公司产品经理；
+              </Form.Item>
+
+              <Form.Item
+                 label="参考案例："
+                 name="exampleDescription"
+              >
+                 <Typography.Text style={{ whiteSpace: 'pre-line' }}>{`
+      \n我叫郭文文，男，36岁，北理工本科毕业；行业称郭总，老郭，连锁按摩店老板，入行8年，比较有亲和力，思维活跃，勤奋，勇于探索，曾经是某科技公司产品经理；
       喜欢研究各行各业的商业模式；善于分析零售行业的商业模式，也投资过多家线下零售项目；
       在按摩店运营领域深耕多年，曾开发行业领先的连锁按摩店管理软件，拥有成熟的按摩店运营管理经验；
       目前企业10人左右，500万营收，毛利300万，纯利100万，主营连锁安按摩店，核心产品是肩颈按摩、全身按摩；
       核心优势是多年从业经验和人脉资源、善于做选址和网络营销；
       我的主要客户是：位北京中高端社区附近的人， 28-55岁的人，一般工作比较累，需要按摩解压，男女各半。
-      我做个人IP的目标是：1、给我按摩店获取更多客户，提高成交效率；2、打造自己个性化人设，开拓更多商业机会。”\n</Typography.Text>
-               </Form.Item>
+      我做个人IP的目标是：1、给我按摩店获取更多客户，提高成交效率；2、打造自己个性化人设，开拓更多商业机会。\n`}</Typography.Text>
+              </Form.Item>
 
-              <Divider  orientation="left" orientationMargin="0">8. 知识库文件</Divider>
+              <Divider  orientation="left" orientationMargin="0">知识库文件</Divider>
 
               <Form.Item label="您可以上传自己的个人知识库文件" name={"knowledgeBase"}>
                 <LocalUpload files={ files } setFiles={ setFiles } />
