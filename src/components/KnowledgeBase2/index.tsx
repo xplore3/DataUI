@@ -25,7 +25,7 @@ const KnowledgeBase2: React.FC = () => {
   
   // 解析从getKnowledges接口返回的数据格式
   const parseKnowledgeData = (knowledgeData: string | null | undefined): Record<string, string | string[]> => {
-    console.log(knowledgeData);
+    //console.log(knowledgeData);
     const answers: Record<string, string | string[]> = {};
 
     if (!knowledgeData) {
@@ -67,7 +67,7 @@ const KnowledgeBase2: React.FC = () => {
     const loadSavedAnswers = async () => {
       try {
         const knowledgeData = await chatApi.getKnowledges();
-        console.log('knowledgeData', knowledgeData);
+        //console.log('knowledgeData', knowledgeData);
         if (knowledgeData) {
           const parsedAnswers = parseKnowledgeData(knowledgeData);
           setSavedAnswers(parsedAnswers);
@@ -117,7 +117,7 @@ const KnowledgeBase2: React.FC = () => {
           return [key, answer];
         })
       );
-      console.log('result', result);
+      //console.log('result', result);
 
       const formData = new FormData();
       files.forEach((file) => {
@@ -139,7 +139,7 @@ const KnowledgeBase2: React.FC = () => {
       // })
 
       await chatApi.addKnowledges(formData).then(res => {
-        console.log('return res', res);
+        //console.log('return res', res);
         let summary = JSON.stringify(result);
         let feedback = '';
         try {

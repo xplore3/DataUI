@@ -44,6 +44,7 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
     recognition.continuous = false;
     recognition.interimResults = false;
 
+    recognition.onstart = () => console.log("Voice recognition started");
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       console.log('onresult');
       try {
@@ -59,6 +60,7 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
     };
 
     recognition.onend = () => {
+      console.log("Voice recognition ended");
       setListening(false);
     };
 
@@ -92,7 +94,6 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
           <TextArea
             rows={rows}
             placeholder={placeholder}
-            disabled={disabled}
             style={{ paddingRight: 60 }} // 给按钮留出空间
           />
         </Form.Item>
@@ -102,13 +103,13 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
           onClick={handleVoiceClick}
           type={listening ? "primary" : "default"}
           danger={listening}
-          disabled={disabled || !supported}
           size="small"
           style={{
             position: "absolute",
             bottom: 8,
             right: 8,
             zIndex: 10,
+            color: "gray",
           }}
         >
           {listening ? "🎙️ 录音中" : "🎤 语音输入"}
