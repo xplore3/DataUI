@@ -6,9 +6,10 @@ import { toast } from 'react-toastify';
 import LocalUpload from '../LocalUpload';
 import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import SpeechTextArea from '../SpeechTextArea';
 //import api from '@/services/axios';
 
-const { TextArea } = Input;
+//const { TextArea } = Input;
 
 const KnowledgeBase2: React.FC = () => {
   const navigate = useNavigate();

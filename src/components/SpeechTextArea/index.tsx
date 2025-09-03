@@ -29,7 +29,7 @@ const SpeechTextArea: React.FC<SpeechTextAreaProps> = ({
 }) => {
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const [form] = Form.useFormInstance(); // 拿到外层 Form 的实例
+  const form = Form.useFormInstance(); // 拿到外层 Form 的实例
 
   // 初始化语音识别
   if (
