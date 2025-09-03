@@ -21,6 +21,56 @@ const KnowledgeBase2: React.FC = () => {
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string | string[]>>({});
   const [files, setFiles] = useState<File[]>([]);
   //const [selectedEndorsements, setSelectedEndorsements] = useState<string[]>([]);
+
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  // 初始化 SpeechRecognition
+  if (
+    !recognitionRef.current &&
+    (window.SpeechRecognition || window.webkitSpeechRecognition)
+  ) {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "zh-CN"; // 中文，可以改成 "en-US"
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const transcript = event.results[0][0].transcript;
+      const current = form.getFieldValue("detailedDescription") || "";
+      form.setFieldsValue({
+        content: current + transcript,
+      });
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("语音识别错误:", event.error);
+      setListening(false);
+    };
+
+    recognitionRef.current = recognition;
+  }
+
+  const handleVoiceClick = () => {
+    if (recognitionRef.current) {
+      if (!listening) {
+        recognitionRef.current.start();
+        setListening(true);
+      } else {
+        recognitionRef.current.stop();
+        setListening(false);
+      }
+    } else {
+      alert("当前浏览器不支持语音识别，请使用 Chrome/Edge 等。");
+    }
+  };
   
   // 解析从getKnowledges接口返回的数据格式
   const parseKnowledgeData = (knowledgeData: string | null | undefined): Record<string, string | string[]> => {
@@ -353,10 +403,20 @@ const KnowledgeBase2: React.FC = () => {
                  label="请从个人信息（姓名、性别、年龄、爱好、学历）、行业履历（行业、从业年限、行业地位、对行业的理解、优势等）、个性特征、用户画像（你对你客户的描述）、做个人IP的目的等方向对自己进行描述："
                  name="detailedDescription"
               >
-                 <TextArea
+                {/*<TextArea
                   rows={8} 
                   placeholder='请输入具体的个人信息、行业履历、个性特征、用户画像、做个人IP的目的等方面的内容' 
-                 />
+                />*/}
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <TextArea rows={8} placeholder="点击右侧按钮语音输入...\n请输入具体的个人信息、行业履历、个性特征、用户画像、做个人IP的目的等方面的内容" />
+                  <Button
+                    type={listening ? "primary" : "default"}
+                    danger={listening}
+                    onClick={handleVoiceClick}
+                  >
+                    {listening ? "🎙️ 录音中" : "🎤 语音输入"}
+                  </Button>
+                </div>
               </Form.Item>
 
               <Form.Item
