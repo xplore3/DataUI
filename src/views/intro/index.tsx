@@ -41,7 +41,7 @@ const Introduce: React.FC = () => {
           重要的是，与AI的快捷无缝连接。`}
         </p>
 
-        <button className="start-button" onClick={onStart}>立即使用</button>
+        <button className="start-button" onClick={onStart}>开始使用</button>
       </main>
     </div>
   );
