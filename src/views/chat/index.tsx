@@ -136,7 +136,7 @@ const Chat = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '今日热门', '趋势洞察'];
+  const keyList = ['模板', '热门话题', '热门视频', '热门新闻', '热门商品', 'HotToken'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -424,22 +424,21 @@ const Chat = () => {
       } catch (error) {
         console.log(error);
       }
-    } else if (key === '今日热门') {
+    } else if (key === '热门话题' || key === '热门视频' || key === '热门新闻' || key === '热门商品' || key === 'HotToken') {
       if (loading) return;
-      toast('正在获取今日热门内容，请稍候......');
+      toast(`正在获取今日${key}，请稍候......`);
       setLoading(true);
-      const prompt =
-        '根据我的产品/背景知识库等信息，获取相关热门商业数据、生态数据等。';
+      const prompt = `获取今天的${key}，用列表形式展示`;
       setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
         chatApi
-          .routineTask(prompt, 'hot_posts')
+          .dataHub(prompt)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
           .finally(async () => {
-            //setLoading(false);
-            await handlerStatus();
+            setText('');
+            setLoading(false);
           });
       } catch (error) {
         console.log(error);
@@ -448,6 +447,8 @@ const Chat = () => {
       toast('功能正在开发中，请耐心等待~，如有问题请回复【人工】获取支持~~');
     } else if (key === '人工') {
       window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
+    } else {
+      toast('功能正在开发中，请耐心等待~，如有问题请回复【人工】获取支持~~');
     }
   };
 
