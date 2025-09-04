@@ -312,13 +312,14 @@ const Chat = () => {
       if (fixCommand(finalText)) {
         return;
       }
-      try {
+      console.log('onDataProcess', fromOptions, msgIndex);
+      /*try {
         if (msgIndex < messageList.length) {
           taskId = messageList[msgIndex].taskId || '';
         }
       } catch (err) {
         console.error(err);
-      }
+      }*/
 
       setLoading(true);
       setText('');

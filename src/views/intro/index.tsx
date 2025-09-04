@@ -1,5 +1,4 @@
 import React from 'react';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import './index.less';
