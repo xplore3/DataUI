@@ -26,7 +26,7 @@ const Introduce: React.FC = () => {
 
         <h1 className="section-title">数据能力</h1>
 
-        <p className="description">{`
+        <p className="description" style={{ whiteSpace: "pre-wrap" }}>{`
           最简洁最快捷的方式获取多类数据，免费数据、收费数据都能获取：
           1. 搜索数据，包括百度/必应/博查/Tavily等；
           2. API数据，各类传统AI数据均可获取，从数据宝等公共数据、到多种API聚合提供者，到微博、知乎等各类生态数据；
