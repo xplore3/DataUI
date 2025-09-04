@@ -10,7 +10,7 @@ import { useUser } from '@/hooks/useUser';
 
 //const defModelList = ['GPT-3.1', 'GPT-4o', 'DeepSeek'];
 //const defCurrentModel = 'GPT-3.1';
-const defaultAvatar = 'https://test.data3.site/icon128.png';
+const defaultAvatar = 'https://seekin.chat/icon128.png';
 const defaultNickname = 'SeekInsight';
 
 const UserCenter = () => {

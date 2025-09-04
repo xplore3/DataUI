@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { useThemeStore } from './stores/useThemeStore';
 import Welcome from './views/welcome';
+import Introduce from './views/intro';
 //import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
@@ -40,6 +41,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/welcome" replace />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/intro" element={<Introduce />} />
         <Route path="/download" element={<DownloadWithCode />} />
         <Route path="/about" element={<About />} />
         <Route path="/help" element={<Help />} />

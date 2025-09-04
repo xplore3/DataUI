@@ -4,7 +4,7 @@ import Logo from '@/assets/icons/logo.png';
 import Send from '@/assets/icons/send.svg';
 import SendActive from '@/assets/icons/send-active.svg';
 import LoadingImg from '@/assets/icons/loading.svg';
-import User from '@/assets/icons/user.svg';
+import Setting from '@/assets/icons/setting.svg';
 import { useEffect, useLayoutEffect, useState, useCallback, useRef, memo } from 'react';
 import FooterOperation from '@/components/FooterOperation';
 import { chatApi } from '@/services/chat';
@@ -129,14 +129,14 @@ const Chat = () => {
   //const [preText, setPreText] = useState('');
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
-  const [rawDataState, setRawDataState] = useState(true);
+  const [rawDataState, setRawDataState] = useState(false);
   //const { userProfile } = useUserStore();
   //let preText = '';
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isTranslatingRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const keyList = ['模板', '品牌定位', '今日文案', '爆款仿写'];
+  const keyList = ['模板', '今日热门', '趋势洞察'];
 
   // Load saved messages from local storage and initialize displayText
   useEffect(() => {
@@ -154,10 +154,10 @@ const Chat = () => {
       setMessageList([
         {
           text: `你好，我是SeekInsight —— 面向AI的商业数据引擎。
-                \r\n\r\n为了更好的实现数据获取和数据处理的功能效果，输入内容须是如下格式：
+                \r\n\r\n为了更好的实现数据获取和数据处理的功能效果，输入内容最好是如下格式：
                 \r\n🚩【平台】【时间期限】【关键词】【数量】【过滤条件】【排序相关】
                 \r\n如：
-                \r\n帮我找一下【小红书】上【一周内】关于【足球】的【100条】内容，要求【点赞数】大于【1000】
+                \r\n找一下【知乎】上关于【AI应用】的【10条】内容
                 \r\n
           `,
           displayText: '',
@@ -288,15 +288,18 @@ const Chat = () => {
           });
         return;
       }
-      chatApi
-        .createChat(finalText)
-        .then(res => {
-          setMessageList(prev => [...prev, { ...res, displayText: '' }]);
-        })
-        .finally(async () => {
-          //setLoading(false);
-          await handlerStatus();
-        });
+      else {
+        chatApi
+          .dataHub(finalText + `|||||需对数据进行文本化总结整理，如果内容过长，需要控制在1000字符以内`)
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return true;
+          });
+      }
     },
     [text, loading]
   );
@@ -309,7 +312,6 @@ const Chat = () => {
       if (fixCommand(finalText)) {
         return;
       }
-      let taskId = '';
       try {
         if (msgIndex < messageList.length) {
           taskId = messageList[msgIndex].taskId || '';
@@ -335,15 +337,18 @@ const Chat = () => {
           });
         return;
       }
-      chatApi
-        .dataProcess(finalText, taskId, fromOptions)
-        .then(res => {
-          setMessageList(prev => [...prev, { ...res, displayText: '' }]);
-        })
-        .finally(async () => {
-          //setLoading(false);
-          await handlerStatus();
-        });
+      else {
+        chatApi
+          .dataHub(finalText + `|||||需对数据进行文本化总结整理，如果内容过长，需要控制在1000字符以内`)
+          .then(res => {
+            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
+          })
+          .finally(async () => {
+            setText('');
+            setLoading(false);
+            return true;
+          });
+      }
     },
     [text, loading]
   );
@@ -398,16 +403,7 @@ const Chat = () => {
   };
 
   const handleUserSettings = async () => {
-    navigate('/user');
-  };
-
-  const checkUserProfile = () => {
-    const set = localStorage.getItem('trendmuse_form_submitted') === 'true';
-    if (!set) {
-      toast.error('请在设置页面输入产品品牌/介绍/兴趣/偏好等');
-      navigate('/user');
-    }
-    return set;
+    navigate('/intro');
   };
 
   const handleKeyPress = async (key: string) => {
@@ -427,64 +423,16 @@ const Chat = () => {
       } catch (error) {
         console.log(error);
       }
-    } else if (key === 'IP定位') {
-      if (!checkUserProfile()) {
-        return;
-      }
+    } else if (key === '今日热门') {
       if (loading) return;
-      toast('正在根据背景知识库等信息进行IP定位分析，请稍候......');
+      toast('正在获取今日热门内容，请稍候......');
       setLoading(true);
       const prompt =
-        '根据我的产品/背景知识库等信息，生成IP定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
+        '根据我的产品/背景知识库等信息，获取相关热门商业数据、生态数据等。';
       setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
         chatApi
-          .routineTask(prompt, 'positioning_analysis')
-          .then(res => {
-            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
-          })
-          .finally(async () => {
-            //setLoading(false);
-            await handlerStatus();
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (key === '品牌定位') {
-      if (!checkUserProfile()) {
-        return;
-      }
-      if (loading) return;
-      toast('正在根据背景知识库等信息进行品牌定位分析，请稍候......');
-      setLoading(true);
-      const prompt =
-        '根据我的产品/背景知识库等信息，生成品牌定位分析报告，包括市场分析、竞品分析、品牌定位、目标人群洞察、品牌建设内容等。';
-      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
-      try {
-        chatApi
-          .routineTask(prompt, 'positioning_analysis')
-          .then(res => {
-            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
-          })
-          .finally(async () => {
-            //setLoading(false);
-            await handlerStatus();
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (key === '口播文案') {
-      if (!checkUserProfile()) {
-        return;
-      }
-      if (loading) return;
-      toast('正在根据你的今日任务生成文案，请稍候......');
-      setLoading(true);
-      const prompt = '根据我的产品信息，生成今日的一些内容文案，包括标题、正文、标签等。';
-      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
-      try {
-        chatApi
-          .routineTask(prompt, 'today_posts')
+          .routineTask(prompt, 'hot_posts')
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
@@ -497,81 +445,6 @@ const Chat = () => {
       }
     } else if (key === '趋势洞察') {
       toast('功能正在开发中，请耐心等待~，如有问题请回复【人工】获取支持~~');
-      /*if (loading) return;
-      toast('正在获取内容趋势，请稍候......');
-      setLoading(true);
-      let prompt = '根据我的产品信息，获取并预测下周社交媒体平台的内容趋势，包括热门话题、热搜词等。';
-      setMessageList(prev => [
-        ...prev,
-        { text: prompt, user: 'user', action: 'NONE', displayText: prompt },
-      ]);
-      try {
-        chatApi.routineTask(prompt, 'trend_prediction').then(res => {
-          setMessageList(prev => [
-            ...prev,
-            { ...res, displayText: '' },
-          ]);
-        })
-        .finally(async () => {
-          //setLoading(false);
-          await handlerStatus();
-        });
-      } catch (error) {
-        console.log(error);
-      }*/
-    } else if (key === '爆款仿写') {
-      if (!checkUserProfile()) {
-        return;
-      }
-      if (loading) return;
-      toast('正在获取相关热门内容，并进行分析和仿写，请稍候......');
-      setLoading(true);
-      const prompt = `找到所在行业/赛道的热门内容（包括低粉爆文）并汇集成数据表格，并基于这些爆款，生成10篇高仿写但原创表达的内容文案`;
-      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
-      try {
-        chatApi
-          .routineTask(prompt, 'hot_posts')
-          .then(res => {
-            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
-          })
-          .finally(async () => {
-            //setText('');
-            //setLoading(false);
-            await handlerStatus();
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (key === '达人评估') {
-      if (!checkUserProfile()) {
-        return;
-      }
-      toast(`正在根据我的信息，寻找潜在合作达人，并进行合作评估，请稍候......`);
-      if (loading) return;
-      setLoading(true);
-      const prompt = `根据我的产品/产品类型/使用场景/目标群体/内容风格等，
-        找到潜在合作达人画像，对其进行合作评估，包括：
-        \r\n1. 根据达人内容与互动质量，评估每位达人的合作优先级（
-          - 高：调性高度契合 + 内容稳定 + 互动率高
-          - 中：部分调性契合 + 内容有潜力
-          - 低：调性边缘或互动一般，待观察）；
-        \r\n2. 达人内容调性分析与匹配判断，输出"内容调性匹配度打分"+ 内容风格简评；
-        \r\n3. 合作投放建议，包括合作形式、内容方向、适合投放时间段、预算建议等`;
-      setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
-      try {
-        chatApi
-          .routineTask(prompt, 'search_koc')
-          .then(res => {
-            setMessageList(prev => [...prev, { ...res, displayText: '' }]);
-          })
-          .finally(async () => {
-            setText('');
-            //setLoading(false);
-            await handlerStatus();
-          });
-      } catch (error) {
-        console.log(error);
-      }
     } else if (key === '人工') {
       window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
     }
@@ -654,7 +527,7 @@ const Chat = () => {
         <img src={Logo} alt="Logo" />
         <span>SeekInsight</span>
         <div className="flex-1"></div>
-        <img src={User} alt="User" onClick={() => handleUserSettings()} />
+        <img src={Setting} alt="Setting" onClick={() => handleUserSettings()} />
         {/* <Lang
           onChange={lang => {
             setMessageList(pre => {
