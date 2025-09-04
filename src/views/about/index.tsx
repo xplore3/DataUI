@@ -1,5 +1,6 @@
 import React from 'react';
 import Sidebar from '@/components/Sidebar';
+import './index.less';
 
 const About: React.FC = () => (
   <div className="about-page">
