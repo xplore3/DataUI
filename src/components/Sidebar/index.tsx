@@ -21,8 +21,8 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside className="sidebar">
-      <div className="nav-item" onClick={onIntro}>SeekIn介绍</div>
-      <div className="nav-item" onClick={onApiDocs}>SeekIn API文档</div>
+      <div className="nav-item" onClick={onIntro}>能力介绍</div>
+      <div className="nav-item" onClick={onApiDocs}>API文档</div>
       <div className="nav-item" onClick={onAbout}>联系我们</div>
     </aside>
   );

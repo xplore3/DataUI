@@ -26,7 +26,7 @@ const Introduce: React.FC = () => {
 
         <h1 className="section-title">数据能力</h1>
 
-        <p className="description">
+        <p className="description">{`
           最简洁最快捷的方式获取多类数据，免费数据、收费数据都能获取：
           1. 搜索数据，包括百度/必应/博查/Tavily等；
           2. API数据，各类传统AI数据均可获取，从数据宝等公共数据、到多种API聚合提供者，到微博、知乎等各类生态数据；
@@ -38,7 +38,7 @@ const Introduce: React.FC = () => {
           2. 避免查找和整合各种数据源的耗时耗力；
           3. 避免为API的稳定性而做的多种额外沟通；
           4. 像使用内部数据一样使用外部数据，外部数据的使用快捷透明；
-          重要的是，与AI的快捷无缝连接。
+          重要的是，与AI的快捷无缝连接。`}
         </p>
 
         <button className="start-button" onClick={onStart}>立即使用</button>
