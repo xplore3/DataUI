@@ -150,7 +150,7 @@ const Welcome = () => {
                       <label key={category} className="checkbox-item">
                         <input 
                           type="checkbox"
-                          disable={true}
+                          disabled={true}
                           checked={selectedCategories.includes(category)}
                           onChange={() => handleCategoryChange(category)}
                         />
@@ -169,7 +169,7 @@ const Welcome = () => {
                       <label key={platform} className="checkbox-item">
                         <input
                           type="checkbox"
-                          disable={true}
+                          disabled={true}
                           checked={selectedPlatforms.includes(platform)}
                           onChange={() => handlePlatformChange(platform)}
                         />
@@ -189,7 +189,7 @@ const Welcome = () => {
                         <input
                           type="radio"
                           name="timeframe"
-                          disable={true}
+                          disabled={true}
                           value={timeframe}
                           checked={selectedTimeframe === timeframe}
                           onChange={() => handleTimeframeChange(timeframe)}
