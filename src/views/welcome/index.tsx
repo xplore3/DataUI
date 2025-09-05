@@ -21,10 +21,10 @@ const Welcome = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   // 数据类别选项
-  const categoryOptions = ['社媒', '电商', '生活', '问答', '金融', '游戏', '医疗', '科学', '制造', '广告', 'AI工具', 'AI-API'];
+  const categoryOptions = ['社媒', '电商', '生活', '问答', '金融', '游戏', '医疗', '科学', '制造', '广告', 'Web3', 'AI工具', 'AI-API'];
 
   // 平台选项
-  const platformOptions = ['百度百科', '微博', '知乎', 'Tiktok', 'X/Twitter', '亚马逊', 'Reddit', 'Yelp点评', 'Tripadvisor', 'Instagram', 'GoogleMaps', 'LinkedIn'];
+  const platformOptions = ['...', '知乎...', '微博...', '...', '亚马逊', 'Maps', '...'];
 
   // 时效选项
   const timeframeOptions = ['24小时内', '3天内', '一周内', '一月内', '三个月内', '半年内'];
@@ -149,9 +149,10 @@ const Welcome = () => {
                     {categoryOptions.map(category => (
                       <label key={category} className="checkbox-item">
                         <input 
-                          type="checkbox" 
-                          checked={selectedCategories.includes(category)} 
-                          onChange={() => handleCategoryChange(category)} 
+                          type="checkbox"
+                          disable={true}
+                          checked={selectedCategories.includes(category)}
+                          onChange={() => handleCategoryChange(category)}
                         />
                         <span>{category}</span>
                       </label>
@@ -166,10 +167,11 @@ const Welcome = () => {
                   <div className="option-checkboxes">
                     {platformOptions.map(platform => (
                       <label key={platform} className="checkbox-item">
-                        <input 
-                          type="checkbox" 
-                          checked={selectedPlatforms.includes(platform)} 
-                          onChange={() => handlePlatformChange(platform)} 
+                        <input
+                          type="checkbox"
+                          disable={true}
+                          checked={selectedPlatforms.includes(platform)}
+                          onChange={() => handlePlatformChange(platform)}
                         />
                         <span>{platform}</span>
                       </label>
@@ -187,6 +189,7 @@ const Welcome = () => {
                         <input
                           type="radio"
                           name="timeframe"
+                          disable={true}
                           value={timeframe}
                           checked={selectedTimeframe === timeframe}
                           onChange={() => handleTimeframeChange(timeframe)}
