@@ -1,6 +1,6 @@
 import './index.less';
 import { useNavigate } from 'react-router-dom';
-import Logo from '@/assets/icons/logo.png';
+import Logo from '@/assets/icons/logo1.png';
 import Send from '@/assets/icons/send.svg';
 import SendActive from '@/assets/icons/send-active.svg';
 import LoadingImg from '@/assets/icons/loading.svg';
