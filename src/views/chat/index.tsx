@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import PromptPin from './prompt';
 import { useUserStore } from '@/stores/useUserStore';
 import { getRandomElements } from '@/utils/common';
-import ToggleButton from '@/components/ToggleButton';
+//import ToggleButton from '@/components/ToggleButton';
 //import Lang from './lang';
 //import welcome from './welcome';
 
@@ -129,7 +129,7 @@ const Chat = () => {
   //const [preText, setPreText] = useState('');
   const [pinPrompt, setPinPrompt] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
-  const [rawDataState, setRawDataState] = useState(false);
+  const [rawDataState/*, setRawDataState*/] = useState(false);
   //const { userProfile } = useUserStore();
   //let preText = '';
 
