@@ -277,7 +277,7 @@ const Chat = () => {
       setMessageList(prev => [...prev, { text: finalText, user: 'user', action: 'NONE', displayText: finalText }]);
       if (rawDataState) {
         chatApi
-          .dataHub(finalText)
+          .dataHub(finalText + `|||||用中文回答`)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
@@ -290,7 +290,7 @@ const Chat = () => {
       }
       else {
         chatApi
-          .dataHub(finalText + `|||||需对数据进行表格化整理，如果内容过长，需要控制在1000字符以内`)
+          .dataHub(finalText + `|||||需对数据进行表格化整理，如果内容过长，需要控制在2000字符以内；用中文回答`)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
@@ -327,7 +327,7 @@ const Chat = () => {
       //const origin_input = useUserStore.getState().getOriginInput() || '';
       if (rawDataState) {
         chatApi
-          .dataHub(finalText)
+          .dataHub(finalText + `|||||用中文回答`)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
@@ -340,7 +340,7 @@ const Chat = () => {
       }
       else {
         chatApi
-          .dataHub(finalText + `|||||需对数据进行表格化整理，如果内容过长，需要控制在1000字符以内`)
+          .dataHub(finalText + `|||||需对数据进行表格化整理，如果内容过长，需要控制在2000字符以内；用中文回答`)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
@@ -432,7 +432,7 @@ const Chat = () => {
       setMessageList(prev => [...prev, { text: prompt, user: 'user', action: 'NONE', displayText: prompt }]);
       try {
         chatApi
-          .dataHub(prompt)
+          .dataHub(prompt + `|||||用中文回答`)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
