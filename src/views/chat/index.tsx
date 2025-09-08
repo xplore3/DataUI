@@ -290,7 +290,7 @@ const Chat = () => {
       }
       else {
         chatApi
-          .dataHub(finalText + `|||||需对数据进行文本化总结整理，如果内容过长，需要控制在1000字符以内`)
+          .dataHub(finalText + `|||||需对数据进行表格化整理，如果内容过长，需要控制在1000字符以内`)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
@@ -340,7 +340,7 @@ const Chat = () => {
       }
       else {
         chatApi
-          .dataHub(finalText + `|||||需对数据进行文本化总结整理，如果内容过长，需要控制在1000字符以内`)
+          .dataHub(finalText + `|||||需对数据进行表格化整理，如果内容过长，需要控制在1000字符以内`)
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
