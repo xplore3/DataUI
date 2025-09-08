@@ -614,9 +614,9 @@ const Chat = () => {
       {/* Bottom input area */}
       <div className="chat-page-bottom">
         <div className="chat-page-keys">
-          <ToggleButton defaultActive={rawDataState} onToggle={(val: boolean) => setRawDataState(val)}>
-            RawData
-          </ToggleButton>
+          {/*<ToggleButton defaultActive={rawDataState} onToggle={(val: boolean) => setRawDataState(val)}>
+            原始数据
+          </ToggleButton>*/}
           {keyList.map(item => (
             <div className="chat-page-items" key={item} onClick={() => handleKeyPress(item)}>
               {item}
