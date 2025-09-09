@@ -80,7 +80,14 @@ const RawPage = () =>{
               resize: 'vertical',
               boxSizing: 'border-box'
             }}
-            placeholder="在这里输入多行..."
+            placeholder={`这是****的接口，
+              platform需设为为****;"
+              接口名称需要设置为****; 
+              其doc link是****；
+              其header是 {
+                "x-****-key": "......",
+              }
+              ......`}
           />
         </div>
         
