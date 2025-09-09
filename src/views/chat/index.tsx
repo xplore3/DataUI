@@ -223,7 +223,9 @@ const Chat = () => {
 
   const fixCommand = (finalText: string) => {
     try {
-      if (finalText === '人工' || finalText === '人工服务' || finalText === '人工客服') {
+      if (finalText === '人工' || finalText === '客服' || finalText === '人工服务' || finalText === '人工客服') {
+        setMessageList(prev => [...prev, { text: finalText, user: 'user', action: 'NONE', displayText: finalText }]);
+        setText('');
         window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
         return true;
       }
@@ -446,6 +448,8 @@ const Chat = () => {
     } else if (key === '趋势洞察') {
       toast('功能正在开发中，请耐心等待~，如有问题请回复【人工】获取支持~~');
     } else if (key === '人工') {
+      setMessageList(prev => [...prev, { text: key, user: 'user', action: 'NONE', displayText: key }]);
+      setText('');
       window.open('https://work.weixin.qq.com/kfid/kfc24a58f16a24c1eaf', '_blank');
     } else {
       toast('功能正在开发中，请耐心等待~，如有问题请回复【人工】获取支持~~');
