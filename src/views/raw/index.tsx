@@ -4,10 +4,12 @@ import { toast } from 'react-toastify';
 
 const RawPage = () =>{
   const [inputText, setInputText] = useState(`这是****的接口，
-    platform需设为为****;"
-    接口名称需要设置为****; 
-    其doc link是****；
-    其header是 {
+    platform需设为：****;"
+    接口名称需要设置为：****;
+    调用URL为：https://api.****.com/v1/......；
+    其doc link是：****；
+    其类别为：****；
+    其header是： {
       "x-****-key": "......",
     }
     ......`);
@@ -88,10 +90,12 @@ const RawPage = () =>{
               boxSizing: 'border-box'
             }}
             placeholder={`这是****的接口，
-              platform需设为为****;"
-              接口名称需要设置为****; 
-              其doc link是****；
-              其header是 {
+              platform需设为：****;"
+              接口名称需要设置为：****;
+              调用URL为：https://api.****.com/v1/......；
+              其doc link是：****；
+              其类别为：****；
+              其header是： {
                 "x-****-key": "......",
               }
               ......`}
