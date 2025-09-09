@@ -3,7 +3,14 @@ import React, { useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
 
 const RawPage = () =>{
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState(`这是****的接口，
+    platform需设为为****;"
+    接口名称需要设置为****; 
+    其doc link是****；
+    其header是 {
+      "x-****-key": "......",
+    }
+    ......`);
   const [submittedText, setSubmittedText] = useState('');
   const [loading, setLoading] = useState(false);
 
