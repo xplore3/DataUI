@@ -37,11 +37,13 @@ const RawPage = () =>{
       const response = await RawApi.rawdata(inputText);
       setSubmittedText(response.data || response);
       setLoading(false);
+      toast('数据添加成功');
     }
     catch (error) {
       setLoading(false);
       console.error('提交失败:', error);
       setSubmittedText('提交失败，请稍后再试');
+      toast('数据提交失败');
       alert('提交失败，请稍后再试');
       return;
     }
@@ -105,11 +107,10 @@ const RawPage = () =>{
         
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button 
-            type="submit"
+            type="primary"
             htmlType="submit"
             loading={loading}
             style={{
-              padding: '10px 20px',
               backgroundColor: '#4CAF50',
               color: 'white',
               border: 'none',
@@ -124,10 +125,9 @@ const RawPage = () =>{
           </Button>
           
           <Button 
-            type="button"
+            type="default"
             onClick={handleClear}
             style={{
-              padding: '10px 20px',
               backgroundColor: '#f44336',
               color: 'white',
               border: 'none',
