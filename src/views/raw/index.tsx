@@ -1,10 +1,11 @@
 import { RawApi } from '@/services/raw';
 import React, { useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
+import { Button } from "antd";
 
 const RawPage = () =>{
   const [inputText, setInputText] = useState(`这是****的接口，
-    platform需设为：****;"
+    platform需设为：****;
     接口名称需要设置为：****;
     调用URL为：https://api.****.com/v1/......；
     其doc link是：****；
@@ -90,7 +91,7 @@ const RawPage = () =>{
               boxSizing: 'border-box'
             }}
             placeholder={`这是****的接口，
-              platform需设为：****;"
+              platform需设为：****;
               接口名称需要设置为：****;
               调用URL为：https://api.****.com/v1/......；
               其doc link是：****；
@@ -103,8 +104,10 @@ const RawPage = () =>{
         </div>
         
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button 
+          <Button 
             type="submit"
+            htmlType="submit"
+            loading={loading}
             style={{
               padding: '10px 20px',
               backgroundColor: '#4CAF50',
@@ -117,10 +120,10 @@ const RawPage = () =>{
             }}
             disabled={!inputText.trim() || loading}
           >
-            提交
-          </button>
+            {loading ? "处理中..." : "提交"}
+          </Button>
           
-          <button 
+          <Button 
             type="button"
             onClick={handleClear}
             style={{
@@ -136,7 +139,7 @@ const RawPage = () =>{
             disabled={!inputText && !submittedText}
           >
             清空
-          </button>
+          </Button>
         </div>
       </form>
 

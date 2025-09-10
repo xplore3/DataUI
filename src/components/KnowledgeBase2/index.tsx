@@ -381,9 +381,9 @@ const KnowledgeBase2: React.FC = () => {
               </Form.Item>
 
               <Form.Item>
-                <Button 
-                  type="primary" 
-                  htmlType="submit" 
+                <Button
+                  type="primary"
+                  htmlType="submit"
                   loading={loading}
                   size="large"
                   style={{ width: '100%' }}
