@@ -222,12 +222,13 @@ export const chatApi = {
     };
   },
 
-  dataHub: async (text: string): Promise<Message> => {
+  dataHub: async (text: string, category: string): Promise<Message> => {
     let response = null;
     let debug = null;
     try {
       const result = await api.post(`/datahub`, {
         text: text,
+        category: category,
         key: import.meta.env.VITE_API_KEY,
         userId: await chatApi.getUserId(),
       });

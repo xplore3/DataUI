@@ -301,7 +301,7 @@ const Chat = () => {
         toast('正在获取测试信息002，请稍候......');
         setLoading(true);
         chatApi
-          .dataHub(finalText.slice(5))
+          .dataHub(finalText.slice(5), '')
           .then(res => {
             setMessageList(prev => [...prev, { ...res, displayText: '' }]);
           })
