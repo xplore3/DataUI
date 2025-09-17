@@ -7,8 +7,8 @@ const RawPage = () =>{
   const [inputText, setInputText] = useState(`这是****的接口，
     platform需设为：****;
     接口名称需要设置为：****;
-    调用URL为：https://api.****.com/v1/......；
-    其doc link是：****；
+    调用URL为：https://......，默认参考使用示例；
+    其doc link是：****, 可以为空；
     其类别为：****；
     其header是： {
       "x-****-key": "......",
@@ -95,8 +95,8 @@ const RawPage = () =>{
             placeholder={`这是****的接口，
               platform需设为：****;
               接口名称需要设置为：****;
-              调用URL为：https://api.****.com/v1/......；
-              其doc link是：****；
+              调用URL为：https://......，默认参考使用示例；
+              其doc link是：****, 可以为空；
               其类别为：****；
               其header是： {
                 "x-****-key": "......",
