@@ -7,6 +7,7 @@ import LocalUpload from '../LocalUpload';
 import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import SpeechTextArea from '../SpeechTextArea';
+import { pinyin } from "pinyin-pro";
 //import api from '@/services/axios';
 
 //const { TextArea } = Input;
@@ -121,7 +122,22 @@ const KnowledgeBase2: React.FC = () => {
 
       const formData = new FormData();
       files.forEach((file) => {
-        formData.append('files', file);
+        let newFileName = file.name;
+        try {
+          const dotIndex = file.name.lastIndexOf(".");
+          const baseName = dotIndex !== -1 ? file.name.slice(0, dotIndex) : file.name;
+          const ext = dotIndex !== -1 ? file.name.slice(dotIndex) : "";
+
+          const baseNamePinyin = pinyin(baseName, { toneType: "none" })
+            .replace(/\s+/g, "_") // 可替换为 - 或直接去掉
+            .toLowerCase();
+          newFileName = baseNamePinyin + ext;
+        } catch (e) {
+          console.error('Error encoding file name:', e);
+          newFileName = encodeURIComponent(file.name);
+        }
+
+        formData.append('files', file, newFileName);
       });
 
       const userId = await chatApi.getUserId();
