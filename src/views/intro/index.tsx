@@ -19,7 +19,7 @@ const Introduce: React.FC = () => {
         <div className="header">
           <img src="/logo.png" alt="Logo" className="logo" />
           <div className="header-text">
-            <div className="title">SeekInsight</div>
+            <div className="title">SeekInsight 稀视数据</div>
             <div className="subtitle">不仅是AI搜索，SeekInsight是AI数据引擎，自定义AI搜索，自定义AI数据处理</div>
           </div>
         </div>
