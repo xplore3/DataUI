@@ -9,6 +9,7 @@ const ImagePage = () =>{
   const [submittedText, setSubmittedText] = useState('');
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
+  const [taskId, setTaskId] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
@@ -63,10 +64,14 @@ const ImagePage = () =>{
   };
 
   const handleVideoRead = async () => {
+    if (taskId === '') {
+      return;
+    }
     setLoading(true);
     try {
-      let response = await ImageApi.readVideo(inputText);
-      setSubmittedText(response.data || response);
+      let response = await ImageApi.readVideo(taskId);
+      setSubmittedText(response + ' RUNNING');
+      setTaskId(response);
       setLoading(false);
       toast('获取成功');
     }
@@ -104,7 +109,7 @@ const ImagePage = () =>{
             id="multiline-input"
             value={inputText}
             onChange={handleInputChange}
-            rows={8}
+            rows={4}
             style={{ 
               width: '100%', 
               padding: '10px',
@@ -178,6 +183,7 @@ const ImagePage = () =>{
       </form>
 
       <div style={{ marginTop: '30px' }}>
+        <div>{taskId}</div>
         <h3 style={{ color: '#333', marginBottom: '10px' }}>生成结果：</h3>
         <textarea
           readOnly
