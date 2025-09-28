@@ -184,7 +184,6 @@ const ImagePage = () =>{
       </form>
 
       <div style={{ marginTop: '30px' }}>
-        <div>{taskId}</div>
         <h3 style={{ color: '#333', marginBottom: '10px' }}>生成结果：</h3>
         <textarea
           readOnly
