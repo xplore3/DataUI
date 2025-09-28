@@ -71,7 +71,7 @@ const ImagePage = () =>{
     setLoading(true);
     try {
       let response = await ImageApi.readVideo(taskId);
-      setSubmittedText(response + ' RUNNING');
+      setSubmittedText(response);
       setTaskId(response);
       setLoading(false);
       toast('获取成功');
