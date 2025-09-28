@@ -44,6 +44,8 @@ const ImagePage = () =>{
         setLoading(false);
         return;
       }
+      const fileUrl = URL.createObjectURL(files[0]);
+      setSubmittedText(fileUrl);
       let response = null;
       if (images === 1) {
         response = await ImageApi.imageEdit(inputText, [files[0]]);
