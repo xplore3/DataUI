@@ -91,17 +91,18 @@ const ImagePage = () =>{
     try {
       let response = await ImageApi.readVideo(taskId);
       setSubmittedText(response);
+      console.log(response);
       if (response && response != 'Error' && response.length === 35) {
         setTaskId(response);
       }
       setLoading(false);
-      toast('获取成功');
+      //toast('获取成功');
       return response;
     }
     catch (error) {
       setLoading(false);
       toast('提交失败');
-      alert('提交失败，请稍后再试');
+      //alert('提交失败，请稍后再试');
       return '';
     }
   };
@@ -109,8 +110,10 @@ const ImagePage = () =>{
   const readTaskStatus = async () => {
     try {
       let jobSkip = false;
+      let count = 0;
       const job = new Cron('*/10 * * * * *', async () => {
-        if (jobSkip) {
+        if (jobSkip || count++ > 50) {
+          job.stop();
           return;
         }
         try {
