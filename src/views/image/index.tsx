@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useEffect, useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from "antd";
 import { ImageApi } from '@/services/image';
@@ -6,7 +6,7 @@ import LocalUpload from '@/components/LocalUpload';
 
 const ImagePage = () =>{
   const [inputText, setInputText] = useState(`把图片中的宠物提取出来，保持其基本特征不变，
-    生成一个像素风（或迪士尼风）的站立图片，背景为透明色。
+    生成一个像素风（或迪士尼风）的头左向、面部正向、四腿站立；横向身体与屏幕成5度角的图片，背景为透明色。
     ......
     【指令2】根据图片中宠物形象，为其生成一个动作：从左向站立到左向行走（抬头、低头、摇晃尾巴、...），
     背景为透明色，动作前后都有0.5秒的姿势静止时间。
@@ -17,6 +17,14 @@ const ImagePage = () =>{
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [taskId, setTaskId] = useState('');
+
+  // Image preview
+  useEffect(() => {
+    if (files.length > 0) {
+      const fileUrl = URL.createObjectURL(files[0]);
+      setSubmittedText(fileUrl);
+    }
+  }, [files]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
