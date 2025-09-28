@@ -102,7 +102,7 @@ const ImagePage = () =>{
               ......`}
           />
         </div>
-        <div>
+        <div style={{ marginBottom: '15px' }}>
           <LocalUpload files={ files } setFiles={ setFiles } />
         </div>
         
@@ -122,7 +122,7 @@ const ImagePage = () =>{
             }}
             disabled={!inputText.trim() || loading}
           >
-            {loading ? "处理中..." : "单图生成动作"}
+            {loading ? "处理中..." : "图生图"}
           </Button>
 
           <Button 
@@ -139,7 +139,7 @@ const ImagePage = () =>{
             }}
             disabled={!inputText && !submittedText}
           >
-            首尾两张图生成动作
+            图生动作
           </Button>
         </div>
       </form>
