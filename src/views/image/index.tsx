@@ -91,7 +91,7 @@ const ImagePage = () =>{
       margin: '0 auto',
       fontFamily: 'Arial, sans-serif'
     }}>
-      <h2 style={{ color: '#333' }}>输入图片/动作生成指令</h2>
+      {/*<h2 style={{ color: '#333' }}>输入图片/动作生成指令</h2>*/}
       
       <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
         <div style={{ marginBottom: '15px' }}>
@@ -185,6 +185,7 @@ const ImagePage = () =>{
 
       <div style={{ marginTop: '30px' }}>
         <h3 style={{ color: '#333', marginBottom: '10px' }}>生成结果：</h3>
+        <video style={{height: '180px'}} src={submittedText} poster={submittedText} controls></video>
         <textarea
           readOnly
           value={submittedText}
