@@ -32,10 +32,7 @@ export const ImageApi = {
         headers: {'Content-Type': 'multipart/form-data'}
       });
       console.log('image result', result);
-      let response = result.data;
-      if (result.status != 200) {
-        response = "Error in response " + result.statusText;
-      }
+      let response = result.data || result;
       return response;
     } catch (e) {
       console.error('Error preparing form data:', e);
@@ -56,10 +53,7 @@ export const ImageApi = {
         headers: {'Content-Type': 'multipart/form-data'}
       });
       console.log('video result', result);
-      let response = result.data;
-      if (result.status != 200) {
-        response = "Error in response " + result.statusText;
-      }
+      let response = result.data || result;
       return response;
     } catch (e) {
       console.error('Error preparing form data:', e);
