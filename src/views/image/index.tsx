@@ -1,6 +1,7 @@
 import React, { useEffect, useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from "antd";
+import { Cron } from 'croner';
 import { ImageApi } from '@/services/image';
 import LocalUpload from '@/components/LocalUpload';
 
@@ -77,13 +78,14 @@ const ImagePage = () =>{
     // 这里可以添加提交到服务器的逻辑
   };
 
-  const handleImage2 = () => {
+  const handleVideo = async () => {
     handleGenerate(2);
+    readTaskStatus();
   };
 
   const handleVideoRead = async () => {
     if (taskId === '') {
-      return;
+      return '';
     }
     setLoading(true);
     try {
@@ -92,12 +94,35 @@ const ImagePage = () =>{
       setTaskId(response);
       setLoading(false);
       toast('获取成功');
+      return response;
     }
     catch (error) {
       setLoading(false);
       toast('提交失败');
       alert('提交失败，请稍后再试');
-      return;
+      return '';
+    }
+  };
+
+  const readTaskStatus = async () => {
+    try {
+      let jobSkip = false;
+      const job = new Cron('*/10 * * * * *', async () => {
+        if (jobSkip) {
+          return;
+        }
+        try {
+          const resp = await handleVideoRead();
+          if (resp && resp.length > 60) {
+            jobSkip = true;
+            job.stop();
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -166,7 +191,7 @@ const ImagePage = () =>{
 
           <Button 
             type="default"
-            onClick={handleImage2}
+            onClick={handleVideo}
             style={{
               backgroundColor: '#4CAF50',
               color: 'white',
