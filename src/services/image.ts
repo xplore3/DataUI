@@ -60,4 +60,16 @@ export const ImageApi = {
     }
     return 'Error';
   },
+
+  readVideo: async (taskId: string) => {
+    try {
+      const result = await api.get(`/get_video_result?task_id=${taskId}`, {});
+      console.log('video result', result);
+      let response = result.data || result;
+      return response;
+    } catch (e) {
+      console.error('Error preparing form data:', e);
+    }
+    return 'Error';
+  },
 };

@@ -62,6 +62,22 @@ const ImagePage = () =>{
     handleGenerate(2);
   };
 
+  const handleVideoRead = async () => {
+    setLoading(true);
+    try {
+      let response = await ImageApi.readVideo(inputText);
+      setSubmittedText(response.data || response);
+      setLoading(false);
+      toast('获取成功');
+    }
+    catch (error) {
+      setLoading(false);
+      toast('提交失败');
+      alert('提交失败，请稍后再试');
+      return;
+    }
+  };
+
   return (
     <div style={{ 
       padding: '20px', 
@@ -139,7 +155,24 @@ const ImagePage = () =>{
             }}
             disabled={!inputText && !submittedText}
           >
-            图生动作
+            {loading ? "处理中..." : "图生动作"}
+          </Button>
+
+          <Button 
+            type="default"
+            onClick={handleVideoRead}
+            style={{
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              flex: 1
+            }}
+            disabled={!inputText && !submittedText}
+          >
+            {loading ? "处理中..." : "动作读取"}
           </Button>
         </div>
       </form>
