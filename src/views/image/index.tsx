@@ -44,6 +44,7 @@ const ImagePage = () =>{
         response = await ImageApi.imageToVideo(inputText, files);
       }
       setSubmittedText(response.data || response);
+      setTaskId(response);
       setLoading(false);
       toast('生成成功');
     }
