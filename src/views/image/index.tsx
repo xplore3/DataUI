@@ -5,7 +5,14 @@ import { ImageApi } from '@/services/image';
 import LocalUpload from '@/components/LocalUpload';
 
 const ImagePage = () =>{
-  const [inputText, setInputText] = useState(`动作描述指令......`);
+  const [inputText, setInputText] = useState(`把图片中的宠物提取出来，保持其基本特征不变，
+    生成一个像素风（或迪士尼风）的站立图片，背景为透明色。
+    ......
+    【指令2】根据图片中宠物形象，为其生成一个动作：从左向站立到左向行走（抬头、低头、摇晃尾巴、...），
+    背景为透明色，动作前后都有0.5秒的姿势静止时间。
+    ......
+    【指令3】根据图片中宠物的两个图片，为其生成一个从第一个图片的姿势变化为第二个图片的姿势的动作，
+    背景为透明色，动作前后都有0.5秒的姿势静止时间。`);
   const [submittedText, setSubmittedText] = useState('');
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -93,7 +100,7 @@ const ImagePage = () =>{
     }}>
       {/*<h2 style={{ color: '#333' }}>输入图片/动作生成指令</h2>*/}
       
-      <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+      <form onSubmit={handleSubmit} style={{ marginBottom: '15px' }}>
         <div style={{ marginBottom: '15px' }}>
           <label 
             htmlFor="multiline-input"
@@ -104,13 +111,13 @@ const ImagePage = () =>{
               color: '#555'
             }}
           >
-            请输入指令：
+            请输入图片/动作生成的指令：
           </label>
           <textarea
             id="multiline-input"
             value={inputText}
             onChange={handleInputChange}
-            rows={4}
+            rows={6}
             style={{ 
               width: '100%', 
               padding: '10px',
@@ -184,8 +191,9 @@ const ImagePage = () =>{
       </form>
 
       <div style={{ marginTop: '30px' }}>
-        <h3 style={{ color: '#333', marginBottom: '10px' }}>生成结果：</h3>
+        <h3 style={{ color: '#333', marginBottom: '5px' }}>生成结果：</h3>
         <video style={{height: '180px'}} src={submittedText} poster={submittedText} controls></video>
+        <h3 style={{ color: '#333', marginBottom: '5px' }}>下载链接：</h3>
         <textarea
           readOnly
           value={submittedText}
@@ -193,13 +201,13 @@ const ImagePage = () =>{
           style={{ 
             width: '100%', 
             padding: '10px',
-            fontSize: '16px',
+            fontSize: '14px',
             border: '1px solid #ddd',
             borderRadius: '4px',
             backgroundColor: '#f9f9f9',
             boxSizing: 'border-box'
           }}
-          placeholder="生成结果显示在这里..."
+          placeholder="生成结果的链接显示在这里..."
         />
       </div>
     </div>
