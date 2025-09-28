@@ -60,9 +60,9 @@ const ImagePage = () =>{
         response = await ImageApi.imageEdit(inputText, [files[0]]);
       } else if (images === 2) {
         response = await ImageApi.imageToVideo(inputText, files);
+        setTaskId(response);
       }
       setSubmittedText(response.data || response);
-      setTaskId(response);
       setLoading(false);
       toast('生成成功');
     }
@@ -80,7 +80,7 @@ const ImagePage = () =>{
 
   const handleVideo = async () => {
     handleGenerate(2);
-    readTaskStatus();
+    await readTaskStatus();
   };
 
   const handleVideoRead = async () => {
@@ -91,7 +91,9 @@ const ImagePage = () =>{
     try {
       let response = await ImageApi.readVideo(taskId);
       setSubmittedText(response);
-      setTaskId(response);
+      if (response && response != 'Error' && response.length === 35) {
+        setTaskId(response);
+      }
       setLoading(false);
       toast('获取成功');
       return response;
@@ -227,7 +229,7 @@ const ImagePage = () =>{
 
       <div style={{ marginTop: '30px' }}>
         <h3 style={{ color: '#333', marginBottom: '5px' }}>生成结果：</h3>
-        <video style={{height: '180px'}} src={submittedText} poster={submittedText} controls></video>
+        <video style={{height: '180px'}} src={submittedText} poster={submittedText} autoPlay controls></video>
         <h3 style={{ color: '#333', marginBottom: '5px' }}>下载链接：</h3>
         <textarea
           readOnly
