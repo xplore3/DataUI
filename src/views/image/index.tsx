@@ -64,7 +64,8 @@ const ImagePage = () =>{
       }
       setSubmittedText(response.data || response);
       setLoading(false);
-      toast('生成成功');
+      toast('提交成功');
+      return response;
     }
     catch (error) {
       setLoading(false);
@@ -74,22 +75,21 @@ const ImagePage = () =>{
       alert('提交失败，请稍后再试');
       return;
     }
-    console.log('提交的内容:', inputText);
-    // 这里可以添加提交到服务器的逻辑
   };
 
   const handleVideo = async () => {
-    handleGenerate(2);
-    await readTaskStatus();
+    const _task = await handleGenerate(2);
+    await readTaskStatus(_task);
   };
 
-  const handleVideoRead = async () => {
-    if (taskId === '') {
+  const handleVideoRead = async (_task: string = taskId) => {
+    console.log("handleVideoRead", _task);
+    if (_task === '') {
       return '';
     }
     setLoading(true);
     try {
-      let response = await ImageApi.readVideo(taskId);
+      let response = await ImageApi.readVideo(_task);
       setSubmittedText(response);
       console.log(response);
       if (response && response != 'Error' && response.length === 35) {
@@ -107,17 +107,17 @@ const ImagePage = () =>{
     }
   };
 
-  const readTaskStatus = async () => {
+  const readTaskStatus = async (_task: string) => {
     try {
       let jobSkip = false;
       let count = 0;
       const job = new Cron('*/10 * * * * *', async () => {
-        if (jobSkip || count++ > 50) {
+        if (jobSkip || count++ > 30) {
           job.stop();
           return;
         }
         try {
-          const resp = await handleVideoRead();
+          const resp = await handleVideoRead(_task);
           if (resp && resp.length > 60) {
             jobSkip = true;
             job.stop();
