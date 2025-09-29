@@ -82,14 +82,14 @@ const ImagePage = () =>{
     await readTaskStatus(_task);
   };
 
-  const handleVideoRead = async (_task: string = taskId) => {
-    console.log("handleVideoRead", _task);
-    if (_task === '') {
+  const handleVideoRead = async () => {
+    console.log("handleVideoRead", taskId);
+    if (taskId === '') {
       return '';
     }
     setLoading(true);
     try {
-      let response = await ImageApi.readVideo(_task);
+      let response = await ImageApi.readVideo(taskId);
       setSubmittedText(response);
       console.log(response);
       if (response && response != 'Error' && response.length === 35) {
@@ -117,8 +117,14 @@ const ImagePage = () =>{
           return;
         }
         try {
-          const resp = await handleVideoRead(_task);
-          if (resp && resp.length > 60) {
+          console.log("Job ", _task);
+          let response = await ImageApi.readVideo(_task);
+          setSubmittedText(response);
+          console.log(response);
+          if (response && response != 'Error' && response.length === 35) {
+            setTaskId(response);
+          }
+          if (response && response.length > 60) {
             jobSkip = true;
             job.stop();
           }
