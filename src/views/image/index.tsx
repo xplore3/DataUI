@@ -13,6 +13,7 @@ const ImagePage = () =>{
     背景为透明色，动作前后都有0.5秒的姿势静止时间。
     ......
     【指令3】根据图片中宠物的两个图片，为其生成一个从第一个图片的姿势变化为第二个图片的姿势的动作，
+    注意是宠物本身的运动动作，而不是简单的图片画面变化；
     背景为透明色，动作前后都有0.5秒的姿势静止时间。`);
   const [submittedText, setSubmittedText] = useState('');
   const [loading, setLoading] = useState(false);
@@ -109,11 +110,13 @@ const ImagePage = () =>{
 
   const readTaskStatus = async (_task: string) => {
     try {
+      setLoading(true);
       let jobSkip = false;
       let count = 0;
       const job = new Cron('*/10 * * * * *', async () => {
         if (jobSkip || count++ > 30) {
           job.stop();
+          setLoading(false);
           return;
         }
         try {
@@ -127,13 +130,16 @@ const ImagePage = () =>{
           if (response && response.length > 60) {
             jobSkip = true;
             job.stop();
+            setLoading(false);
           }
         } catch (err) {
           console.log(err);
+          setLoading(false);
         }
       });
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
 
