@@ -6,8 +6,10 @@ import { ImageApi } from '@/services/image';
 import LocalUpload from '@/components/LocalUpload';
 
 const ImagePage = () =>{
-  const [inputText, setInputText] = useState(`把图片中的宠物提取出来，保持其基本特征不变，
-    生成一个像素风（或迪士尼风）的头左向、面部正向、四腿站立；横向身体与屏幕成5度角的图片，背景为透明色。
+  const [inputText, setInputText] = useState(`把图片中的宠物提取出来，保持其基本特征不变；
+    同时把宠物的独特特征（如毛色、花纹、耳朵形状、眼睛颜色、两只脚有不同毛色等）进行强化；
+    生成一个3D卡通风格图，高辨识度；融合迪士尼萌宠可爱元素；
+    头正向直面镜头；后腿并拢，坐立姿势；保持宠物的毛流感；纯白色背景。
     ......
     【指令2】根据图片中宠物形象，为其生成一个动作：从左向站立到左向行走（抬头、低头、摇晃尾巴、...），
     背景为透明色，动作前后都有0.5秒的姿势静止时间。
