@@ -21,10 +21,10 @@ const ImagePage = () =>{
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [taskId, setTaskId] = useState('');
-  const [model, setModel] = useState('bailin');
+  const [model, setModel] = useState('bailian');
 
   const modelOptions = [
-    { value: 'bailian', label: '通义' },
+    { value: 'bailian', label: 'Bailian' },
     { value: 'volce', label: '即梦' },
   ];
 
@@ -80,6 +80,7 @@ const ImagePage = () =>{
         response = await ImageApi.imageToAnimate(inputText, files, model);
         setTaskId(response);
       }
+      console.log(taskId);
       setSubmittedText(response.data || response);
       setLoading(false);
       toast('提交成功');
@@ -105,7 +106,7 @@ const ImagePage = () =>{
     await readTaskStatus(_task);
   };
 
-  const handleVideoRead = async () => {
+  /*const handleVideoRead = async () => {
     console.log("handleVideoRead", taskId);
     if (taskId === '') {
       return '';
@@ -128,7 +129,7 @@ const ImagePage = () =>{
       //alert('提交失败，请稍后再试');
       return '';
     }
-  };
+  };*/
 
   const readTaskStatus = async (_task: string) => {
     try {
