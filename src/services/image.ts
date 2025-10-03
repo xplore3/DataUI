@@ -19,7 +19,7 @@ export const ImageApi = {
     return newFileName;
   },
 
-  imageEdit: async (text: string, files: File[]) => {
+  imageEdit: async (text: string, files: File[], model: string = 'bailian') => {
     try {
       const formData = new FormData();
       files.forEach((file) => {
@@ -27,6 +27,7 @@ export const ImageApi = {
         formData.append('files', file, newFileName);
       });
       formData.append('text', text);
+      formData.append('model', model);
 
       const result = await api.post('/gen_image', formData, {
         headers: {'Content-Type': 'multipart/form-data'}
@@ -40,7 +41,7 @@ export const ImageApi = {
     return 'Error';
   },
 
-  imageToVideo: async (text: string, files: File[]) => {
+  imageToVideo: async (text: string, files: File[], model: string = 'bailian') => {
     try {
       const formData = new FormData();
       files.forEach((file) => {
@@ -48,6 +49,7 @@ export const ImageApi = {
         formData.append('files', file, newFileName);
       });
       formData.append('text', text);
+      formData.append('model', model);
 
       const result = await api.post('/gen_video', formData, {
         headers: {'Content-Type': 'multipart/form-data'}
@@ -61,9 +63,31 @@ export const ImageApi = {
     return 'Error';
   },
 
-  readVideo: async (taskId: string) => {
+  imageToAnimate: async (text: string, files: File[], model: string = 'bailian') => {
     try {
-      const result = await api.get(`/get_video_result?task_id=${taskId}`, {});
+      const formData = new FormData();
+      files.forEach((file) => {
+        let newFileName = ImageApi.getFileName(file);
+        formData.append('files', file, newFileName);
+      });
+      formData.append('text', text);
+      formData.append('model', model);
+
+      const result = await api.post('/gen_animate', formData, {
+        headers: {'Content-Type': 'multipart/form-data'}
+      });
+      console.log('video result', result);
+      let response = result.data || result;
+      return response;
+    } catch (e) {
+      console.error('Error preparing form data:', e);
+    }
+    return 'Error';
+  },
+
+  readVideo: async (taskId: string, model: string = 'bailian') => {
+    try {
+      const result = await api.get(`/get_video_result?task_id=${taskId}&model=${model}`, {});
       console.log('video result', result);
       let response = result.data || result;
       return response;

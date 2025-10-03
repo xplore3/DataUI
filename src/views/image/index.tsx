@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
-import { Button } from "antd";
+import { Select, Button } from 'antd';
 import { Cron } from 'croner';
 import { ImageApi } from '@/services/image';
 import LocalUpload from '@/components/LocalUpload';
@@ -21,6 +21,12 @@ const ImagePage = () =>{
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [taskId, setTaskId] = useState('');
+  const [model, setModel] = useState('bailin');
+
+  const modelOptions = [
+    { value: 'bailian', label: '通义' },
+    { value: 'volce', label: '即梦' },
+  ];
 
   // Image preview
   useEffect(() => {
@@ -32,6 +38,11 @@ const ImagePage = () =>{
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
+  };
+
+  const handleSelectChange = (value: any) => {
+    console.log(value);
+    setModel(value);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -56,13 +67,17 @@ const ImagePage = () =>{
         setLoading(false);
         return;
       }
+      console.log('Submitting:', { model });
       const fileUrl = URL.createObjectURL(files[0]);
       setSubmittedText(fileUrl);
       let response = null;
       if (images === 1) {
-        response = await ImageApi.imageEdit(inputText, [files[0]]);
+        response = await ImageApi.imageEdit(inputText, [files[0]], model);
       } else if (images === 2) {
-        response = await ImageApi.imageToVideo(inputText, files);
+        response = await ImageApi.imageToVideo(inputText, files, model);
+        setTaskId(response);
+      } else if (images === 3) {
+        response = await ImageApi.imageToAnimate(inputText, files, model);
         setTaskId(response);
       }
       setSubmittedText(response.data || response);
@@ -85,6 +100,11 @@ const ImagePage = () =>{
     await readTaskStatus(_task);
   };
 
+  const handleAnimate = async () => {
+    const _task = await handleGenerate(3);
+    await readTaskStatus(_task);
+  };
+
   const handleVideoRead = async () => {
     console.log("handleVideoRead", taskId);
     if (taskId === '') {
@@ -92,7 +112,7 @@ const ImagePage = () =>{
     }
     setLoading(true);
     try {
-      let response = await ImageApi.readVideo(taskId);
+      let response = await ImageApi.readVideo(taskId, model);
       setSubmittedText(response);
       console.log(response);
       if (response && response != 'Error' && response.length === 35) {
@@ -123,7 +143,8 @@ const ImagePage = () =>{
         }
         try {
           console.log("Job ", _task);
-          let response = await ImageApi.readVideo(_task);
+          console.log("Model ", model);
+          let response = await ImageApi.readVideo(_task, model);
           setSubmittedText(response);
           console.log(response);
           if (response && response != 'Error' && response.length === 35) {
@@ -153,7 +174,7 @@ const ImagePage = () =>{
       fontFamily: 'Arial, sans-serif'
     }}>
       {/*<h2 style={{ color: '#333' }}>输入图片/动作生成指令</h2>*/}
-      
+
       <form onSubmit={handleSubmit} style={{ marginBottom: '15px' }}>
         <div style={{ marginBottom: '15px' }}>
           <label 
@@ -185,6 +206,26 @@ const ImagePage = () =>{
               ......`}
           />
         </div>
+        <div>
+          <label htmlFor="model" style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+            模型 *
+          </label>
+          <Select
+            id="model"
+            style={{ width: '100%' }}
+            value={model}
+            onChange={(value) => handleSelectChange(value)}
+            placeholder="请选择模型"
+            allowClear
+          >
+            {modelOptions.map(option => (
+              <Select.Option key={option.value} value={option.value}>
+                {option.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+
         <div style={{ marginBottom: '15px' }}>
           <LocalUpload files={ files } setFiles={ setFiles } />
         </div>
@@ -227,6 +268,23 @@ const ImagePage = () =>{
 
           <Button 
             type="default"
+            onClick={handleAnimate}
+            style={{
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              flex: 1
+            }}
+            disabled={!inputText && !submittedText}
+          >
+            {loading ? "处理中..." : "生成模仿动作"}
+          </Button>
+
+          {/*<Button 
+            type="default"
             onClick={handleVideoRead}
             style={{
               backgroundColor: '#4CAF50',
@@ -240,7 +298,7 @@ const ImagePage = () =>{
             disabled={!inputText && !submittedText}
           >
             {loading ? "处理中..." : "动作读取"}
-          </Button>
+          </Button>*/}
         </div>
       </form>
 
