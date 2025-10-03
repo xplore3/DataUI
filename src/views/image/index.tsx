@@ -136,7 +136,7 @@ const ImagePage = () =>{
       setLoading(true);
       let jobSkip = false;
       let count = 0;
-      const job = new Cron('*/10 * * * * *', async () => {
+      const job = new Cron('*/20 * * * * *', async () => {
         if (jobSkip || count++ > 30) {
           job.stop();
           setLoading(false);
