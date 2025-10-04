@@ -24,8 +24,8 @@ const ImagePage = () =>{
   const [model, setModel] = useState('bailian');
 
   const modelOptions = [
-    { value: 'bailian', label: 'Bailian' },
-    { value: 'volce', label: '即梦' },
+    { value: 'bailian', label: '通义' },
+    { value: 'volce', label: '即梦，仅支持PNG，JPEG(非JPG)两种图片格式' },
   ];
 
   // Image preview
@@ -207,13 +207,13 @@ const ImagePage = () =>{
               ......`}
           />
         </div>
-        <div>
-          <label htmlFor="model" style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-            模型 *
+        <div style={{display: 'flex', marginBottom: '8px' }}>
+          <label htmlFor="model" style={{ width: '30%', display: 'block', fontWeight: 'bold' }}>
+            模型
           </label>
           <Select
             id="model"
-            style={{ width: '100%' }}
+            style={{ width: '50%' }}
             value={model}
             onChange={(value) => handleSelectChange(value)}
             placeholder="请选择模型"
