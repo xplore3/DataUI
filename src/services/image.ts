@@ -85,9 +85,17 @@ export const ImageApi = {
     return 'Error';
   },
 
-  readVideo: async (taskId: string, model: string = 'bailian') => {
+  readVideo: async (taskId: any, model: string = 'bailian') => {
     try {
-      const result = await api.get(`/get_video_result?task_id=${taskId}&model=${model}`, {});
+      let result = null;
+      if (model === 'bailian') {
+        result = await api.get(`/get_video_result?task_id=${taskId}&model=${model}`, {});
+      } else if (model === 'volce') {
+        result = await api.get(`/get_video_result?task_id=${taskId.task_id}&req_key=${taskId.req_key}&model=${model}`, {});
+      }
+      else {
+        result = await api.get(`/get_video_result?task_id=${taskId}&model=${model}`, {});
+      }
       console.log('video result', result);
       let response = result.data || result;
       return response;
