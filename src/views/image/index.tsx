@@ -208,12 +208,12 @@ const ImagePage = () =>{
           />
         </div>
         <div style={{display: 'flex', marginBottom: '8px' }}>
-          <label htmlFor="model" style={{ width: '30%', display: 'block', fontWeight: 'bold' }}>
-            模型
+          <label htmlFor="model" style={{ width: '15%', display: 'block', fontWeight: 'bold' }}>
+            模型:
           </label>
           <Select
             id="model"
-            style={{ width: '50%' }}
+            style={{ width: '60%' }}
             value={model}
             onChange={(value) => handleSelectChange(value)}
             placeholder="请选择模型"
