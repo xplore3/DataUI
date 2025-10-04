@@ -253,6 +253,7 @@ const ImagePage = () =>{
           <Button 
             type="default"
             onClick={handleVideo}
+            loading={loading}
             style={{
               backgroundColor: '#4CAF50',
               color: 'white',
@@ -270,6 +271,7 @@ const ImagePage = () =>{
           <Button 
             type="default"
             onClick={handleAnimate}
+            loading={loading}
             style={{
               backgroundColor: '#4CAF50',
               color: 'white',
@@ -287,6 +289,7 @@ const ImagePage = () =>{
           {/*<Button 
             type="default"
             onClick={handleVideoRead}
+            loading={loading}
             style={{
               backgroundColor: '#4CAF50',
               color: 'white',
