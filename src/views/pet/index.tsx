@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './index.less';
+
+interface GeneratedAction {
+  id: number;
+  name: string;
+  preview: string;
+}
 
 const PetCreator = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -7,25 +13,25 @@ const PetCreator = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isGeneratingActions, setIsGeneratingActions] = useState(false);
-  const [generatedActions, setGeneratedActions] = useState([]);
+  const [generatedActions, setGeneratedActions] = useState<GeneratedAction[]>([]);
 
   // 模拟已生成的动作
-  const mockActions = [
+  const mockActions: GeneratedAction[] = [
     { id: 1, name: '跳跃', preview: 'jump.gif' },
     { id: 2, name: '睡觉', preview: 'sleep.gif' },
     { id: 3, name: '玩耍', preview: 'play.gif' },
     { id: 4, name: '吃饭', preview: 'eat.gif' },
   ];
 
-  const handleStyleSelect = (style) => {
+  const handleStyleSelect = (style: string) => {
     setSelectedStyle(style);
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = (e: any) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = (event: any) => {
         setUploadedImage(event.target.result);
       };
       reader.readAsDataURL(file);
@@ -34,6 +40,7 @@ const PetCreator = () => {
 
   const handleGenerateImage = () => {
     setIsGenerating(true);
+    console.log(isGenerating)
     // 模拟生成过程
     setTimeout(() => {
       setIsGenerating(false);
@@ -51,7 +58,7 @@ const PetCreator = () => {
     }, 1000);
   };
 
-  const handleRegenerateAction = (actionId) => {
+  const handleRegenerateAction = (actionId: any) => {
     // 重新生成特定动作的逻辑
     console.log(`重新生成动作 ${actionId}`);
   };
