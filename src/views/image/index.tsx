@@ -156,6 +156,7 @@ const ImagePage = () =>{
             job.stop();
             setLoading(false);
             if (_model !== 'videobgremover') {
+              setLoading(true);
               toast('生成成功，正在去除背景，请稍候......');
               //setModel('videobgremover');
               const jobId = await ImageApi.videoBgRemove(response);
