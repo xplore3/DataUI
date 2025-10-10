@@ -17,6 +17,7 @@ import CodeGen from './views/codeGen';
 import UserList from './views/stat';
 import RawPage from './views/raw';
 import ImagePage from './views/image';
+import PetCreator from './views/pet';
 //import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
@@ -51,6 +52,7 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/image" element={<ImagePage />} />
         <Route path="/ip" element={<IpHome />} />
+        <Route path="/pet" element={<PetCreator />} />
         <Route path="/raw" element={<RawPage />} />
         <Route path="/user" element={<UserCenter />} />
         <Route path="/userlist" element={<UserList />} />

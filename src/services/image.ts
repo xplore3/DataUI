@@ -85,6 +85,18 @@ export const ImageApi = {
     return 'Error';
   },
 
+  videoBgRemove: async (videoUrl: string) => {
+    try {
+      let result = await api.post(`/video_bg_remove`, {video_url: videoUrl});
+      console.log('video_bg_remove result', result);
+      let response = result.data || result;
+      return response;
+    } catch (e) {
+      console.error('Error preparing form data:', e);
+    }
+    return 'Error';
+  },
+
   readVideo: async (taskId: any, model: string = 'bailian') => {
     try {
       let result = null;
@@ -92,6 +104,8 @@ export const ImageApi = {
         result = await api.get(`/get_video_result?task_id=${taskId}&model=${model}`, {});
       } else if (model === 'volce') {
         result = await api.get(`/get_video_result?task_id=${taskId.task_id}&req_key=${taskId.req_key}&model=${model}`, {});
+      } else if (model === 'videobgremover') {
+        result = await api.get(`/get_video_result?job_id=${taskId}&model=${model}`, {});
       }
       else {
         result = await api.get(`/get_video_result?task_id=${taskId}&model=${model}`, {});

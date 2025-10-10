@@ -98,12 +98,12 @@ const ImagePage = () =>{
 
   const handleVideo = async () => {
     const _task = await handleGenerate(2);
-    await readTaskStatus(_task);
+    await readTaskStatus(_task, model);
   };
 
   const handleAnimate = async () => {
     const _task = await handleGenerate(3);
-    await readTaskStatus(_task);
+    await readTaskStatus(_task, model);
   };
 
   /*const handleVideoRead = async () => {
@@ -131,7 +131,7 @@ const ImagePage = () =>{
     }
   };*/
 
-  const readTaskStatus = async (_task: string) => {
+  const readTaskStatus = async (_task: string, _model: string) => {
     try {
       setLoading(true);
       let jobSkip = false;
@@ -144,8 +144,8 @@ const ImagePage = () =>{
         }
         try {
           console.log("Job ", _task);
-          console.log("Model ", model);
-          let response = await ImageApi.readVideo(_task, model);
+          console.log("Model ", _model);
+          let response = await ImageApi.readVideo(_task, _model);
           setSubmittedText(response);
           console.log(response);
           if (response && response != 'Error' && response.length === 35) {
@@ -155,6 +155,14 @@ const ImagePage = () =>{
             jobSkip = true;
             job.stop();
             setLoading(false);
+            if (_model !== 'videobgremover') {
+              toast('生成成功，正在去除背景，请稍候......');
+              //setModel('videobgremover');
+              const jobId = await ImageApi.videoBgRemove(response);
+              setTaskId(jobId);
+              console.log('jobId', jobId);
+              await readTaskStatus(jobId, 'videobgremover');
+            }
           }
         } catch (err) {
           console.log(err);
