@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
+import { Cron } from 'croner';
+//import { Modal } from 'antd';
+//import { ExclamationCircleOutlined } from '@ant-design/icons';
 import './index.less';
 import Header from '@/components/JHeader';
 import Footer from '@/components/JFooter';
@@ -12,13 +15,54 @@ import { QualityApi } from '@/services/quality';
 const BrandResultPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResult, setSearchResult] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
     // 这里可以添加搜索逻辑
     console.log('搜索品牌:', searchValue);
-    // 实际应用中这里会触发API调用等操作
+    if (!searchValue || searchValue.trim() === '') {
+      return;
+    }
+    if (loading) {
+      return;
+    }
+    setLoading(true);
     const result = await QualityApi.prodctQuality(searchValue);
+    console.log('搜索结果:', result);
     setSearchResult(result);
+    await handlerStatus();
+  };
+
+  const handlerStatus = async () => {
+    try {
+      // checkResp per 10 seconds
+      let jobSkip = false;
+      const job = new Cron('*/10 * * * * *', async () => {
+        //console.log(`Response check at ${new Date().toISOString()}`);
+        if (jobSkip) {
+          return;
+        }
+        try {
+          QualityApi.checkTaskStatus().then(res => {
+            if (jobSkip) {
+              return;
+            }
+            if (res.completed) {
+              setLoading(false);
+              jobSkip = true;
+              job.stop();
+            }
+            if (res.text) {
+              setSearchResult(res.text)
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // AIMessage component with requestAnimationFrame typing animation
