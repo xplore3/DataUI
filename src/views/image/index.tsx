@@ -1,6 +1,7 @@
 import React, { useEffect, useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
-import { Select, Button } from 'antd';
+import { Select, Button, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Cron } from 'croner';
 import { ImageApi } from '@/services/image';
 import LocalUpload from '@/components/LocalUpload';
@@ -156,13 +157,25 @@ const ImagePage = () =>{
             job.stop();
             setLoading(false);
             if (_model !== 'videobgremover') {
-              setLoading(true);
-              toast('生成成功，正在去除背景，请稍候......');
-              //setModel('videobgremover');
-              const jobId = await ImageApi.videoBgRemove(response);
-              setTaskId(jobId);
-              console.log('jobId', jobId);
-              await readTaskStatus(jobId, 'videobgremover');
+              Modal.confirm({
+                title: '生成成功，是否去除背景?',
+                icon: <ExclamationCircleOutlined />,
+                content: '去除背景大约耗时1分钟，请耐心等待',
+                okText: '确定',
+                okType: 'danger',
+                cancelText: '取消',
+                async onOk() {
+                  setLoading(true);
+                  toast('正在去除背景，请稍候......');
+                  //setModel('videobgremover');
+                  const jobId = await ImageApi.videoBgRemove(response);
+                  setTaskId(jobId);
+                  await readTaskStatus(jobId, 'videobgremover');
+                },
+                onCancel() {
+                  console.log('Canceled');
+                },
+              });
             }
           }
         } catch (err) {
