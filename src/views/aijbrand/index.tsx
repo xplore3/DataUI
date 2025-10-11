@@ -11,11 +11,6 @@ const BrandResultPage = () => {
     // 实际应用中这里会触发API调用等操作
   };
 
-  const handleUpload = () => {
-    // 处理图片上传逻辑
-    console.log('上传图片');
-  };
-
   return (
     <div className="brand-result-page">
       <header className="header">
@@ -48,9 +43,6 @@ const BrandResultPage = () => {
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
-              <button className="upload-btn" onClick={handleUpload}>
-                Q 上传图片
-              </button>
               <button className="search-btn" onClick={handleSearch}>
                 搜索
               </button>

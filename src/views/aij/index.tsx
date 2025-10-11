@@ -1,8 +1,21 @@
 // HomePage.jsx
-//import React from 'react';
+import { useState } from 'react';
 import './index.less';
 
 const HomePage = () => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = () => {
+    // 这里可以添加搜索逻辑
+    console.log('搜索品牌:', searchValue);
+    // 实际应用中这里会触发API调用等操作
+  };
+
+  const handleUpload = () => {
+    // 处理图片上传逻辑
+    console.log('上传图片');
+  };
+
   return (
     <div className="home-page">
       <header className="header">
@@ -18,10 +31,18 @@ const HomePage = () => {
           <div className="search-box">
             <input 
               type="text" 
-              placeholder="输入品牌、品类名称或上传商品截图" 
+              placeholder="输入品牌、品类名称或上传商品截图"
               className="search-input"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()
             />
-            <button className="upload-btn">Q 上传图片</button>
+            <button className="upload-btn" onClick={handleUpload}>
+              Q 上传图片
+            </button>
+            <button className="search-btn" onClick={handleSearch}>
+              搜索
+            </button>
           </div>
           <p className="feature-description">
             只需输入品牌、品类名称或者商品截图，即可输出相关的AI品牌评级、消费警示、比较测评、消费引导等四部分内容，帮助用户规避顾客的劣质、少踩坑、少碰蹭，并推荐来自权威测评的高性价比优质商品
