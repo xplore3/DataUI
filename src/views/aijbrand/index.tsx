@@ -3,14 +3,18 @@ import { useState } from 'react';
 import './index.less';
 import Header from '@/components/JHeader';
 import Footer from '@/components/JFooter';
+import { QualityApi } from '@/services/quality';
 
 const BrandResultPage = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [searchResult, setSearchResult] = useState('');
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     // 这里可以添加搜索逻辑
     console.log('搜索品牌:', searchValue);
     // 实际应用中这里会触发API调用等操作
+    const result = await QualityApi.prodctQuality(searchValue);
+    setSearchResult(result);
   };
 
   return (
@@ -43,7 +47,11 @@ const BrandResultPage = () => {
 
         <section className="result-section">
           <div className="result-header">
-            <h3 className="brand-name">鉴定结果：ABC品牌</h3>
+            <h3 className="brand-name">鉴定结果：{searchValue}</h3>
+          </div>
+
+          <div className="rating-section">
+            {searchResult}
           </div>
 
           <div className="rating-section">
