@@ -1,6 +1,6 @@
 // BrandResultPage.jsx
-//import React, { useState } from 'react';
-import './BrandResultPage.less';
+import { useState } from 'react';
+import './index.less';
 
 const BrandResultPage = () => {
   const [searchValue, setSearchValue] = useState('');
