@@ -18,6 +18,8 @@ import UserList from './views/stat';
 import RawPage from './views/raw';
 import ImagePage from './views/image';
 import PetCreator from './views/pet';
+import AIJPage from './views/aij';
+import BrandResultPage from './views/aijbrand';
 //import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
@@ -52,6 +54,8 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/image" element={<ImagePage />} />
         <Route path="/ip" element={<IpHome />} />
+        <Route path="/aij" element={<HomePage />} />
+        <Route path="/aijbrand" element={<BrandResultPage />} />
         <Route path="/pet" element={<PetCreator />} />
         <Route path="/raw" element={<RawPage />} />
         <Route path="/user" element={<UserCenter />} />
