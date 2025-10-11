@@ -1,0 +1,58 @@
+// components/Footer.less
+.footer {
+  background: #001529;
+  color: white;
+  margin-top: 40px;
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .footer-logo {
+      h3 {
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        margin: 0;
+      }
+    }
+
+    .footer-info {
+      text-align: right;
+
+      p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        margin-bottom: 8px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    .footer-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 20px;
+
+      .footer-info {
+        text-align: center;
+      }
+    }
+  }
+}

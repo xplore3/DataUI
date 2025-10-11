@@ -1,0 +1,77 @@
+// components/Header.less
+.header {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1890ff;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+
+      .nav-link {
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+        padding: 8px 0;
+        position: relative;
+        transition: color 0.3s;
+        cursor: pointer;
+
+        &.active {
+          color: #1890ff;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #1890ff;
+          }
+        }
+
+        &:hover {
+          color: #1890ff;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    .nav {
+      padding: 0 12px;
+      flex-direction: column;
+      height: auto;
+      padding: 12px;
+
+      .nav-links {
+        gap: 16px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  }
+}

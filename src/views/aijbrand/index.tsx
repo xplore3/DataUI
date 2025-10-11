@@ -1,6 +1,8 @@
 // BrandResultPage.jsx
 import { useState } from 'react';
 import './index.less';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const BrandResultPage = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -13,25 +15,11 @@ const BrandResultPage = () => {
 
   return (
     <div className="brand-result-page">
-      <header className="header">
-        <nav className="nav">
-          <h1 className="logo">AI智鉴局</h1>
-          <div className="nav-links">
-            <a href="#" className="nav-link">首页</a>
-            <a href="#" className="nav-link active">品牌鉴定</a>
-            <a href="#" className="nav-link">消费指南</a>
-            <a href="#" className="nav-link">关于我们</a>
-          </div>
-        </nav>
-      </header>
+      <Header currentPage="brand" />
 
       <main className="main-content">
         <section className="brand-intro">
           <h2 className="page-title">品牌安全鉴定</h2>
-          <p className="page-description">
-            只需输入品牌、品类名称或者商品截图，即可输出相关的AI品牌评级、消费警示、不合格详情、比较测评、消费引导等内容，帮助用户规避假冒伪劣商品，少踩坑，少被骗，并推荐来自权威测评的高性价比优质商品。
-          </p>
-          
           {/* 新增搜索区域 */}
           <div className="search-section">
             <div className="search-box">
@@ -48,6 +36,9 @@ const BrandResultPage = () => {
               </button>
             </div>
           </div>
+          <p className="page-description">
+            只需输入品牌、品类名称或者商品截图，即可输出相关的AI品牌评级、消费警示、不合格详情、比较测评、消费引导等内容，帮助用户规避假冒伪劣商品，少踩坑，少被骗，并推荐来自权威测评的高性价比优质商品。
+          </p>
         </section>
 
         <section className="result-section">
@@ -171,18 +162,7 @@ const BrandResultPage = () => {
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <h3>AI智鉴局</h3>
-            <p>智能消费安全鉴定平台</p>
-          </div>
-          <div className="footer-info">
-            <p>© 2023 AI智鉴局 版权所有</p>
-            <p>数据来源：国家市场监督管理总局、中国消费者协会等权威机构</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
