@@ -55,7 +55,7 @@ function App() {
         <Route path="/image" element={<ImagePage />} />
         <Route path="/ip" element={<IpHome />} />
         <Route path="/aij" element={<HomePage />} />
-        <Route path="/aijbrand" element={<BrandResultPage />} />
+        <Route path="/brand" element={<BrandResultPage />} />
         <Route path="/pet" element={<PetCreator />} />
         <Route path="/raw" element={<RawPage />} />
         <Route path="/user" element={<UserCenter />} />

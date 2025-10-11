@@ -1,8 +1,8 @@
 // BrandResultPage.jsx
 import { useState } from 'react';
 import './index.less';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Header from '@/components/JHeader';
+import Footer from '@/components/JFooter';
 
 const BrandResultPage = () => {
   const [searchValue, setSearchValue] = useState('');

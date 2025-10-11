@@ -9,7 +9,7 @@ const Header = ({ currentPage = 'home' }) => {
         <h1 className="logo">AI智鉴局</h1>
         <div className="nav-links">
           <a 
-            href="/" 
+            href="/aij" 
             className={`nav-link ${currentPage === 'home' ? 'active' : ''}`}
           >
             首页

@@ -1,8 +1,8 @@
 // HomePage.jsx
 import { useState } from 'react';
 import './index.less';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Header from '@/components/JHeader';
+import Footer from '@/components/JFooter';
 
 const HomePage = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -22,7 +22,7 @@ const HomePage = () => {
     <div className="home-page">
       <Header currentPage="home" />
 
-      <header className="header">
+      <header className="title">
         <h1 className="logo">AI智鉴局</h1>
         <p className="subtitle">智能消费安全鉴定平台</p>
       </header>
@@ -42,7 +42,7 @@ const HomePage = () => {
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
             <button className="upload-btn" onClick={handleUpload}>
-              Q 上传图片
+              上传图片
             </button>
             <button className="search-btn" onClick={handleSearch}>
               搜索
