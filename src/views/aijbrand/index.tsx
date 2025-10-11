@@ -1,8 +1,12 @@
 // BrandResultPage.jsx
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 import './index.less';
 import Header from '@/components/JHeader';
 import Footer from '@/components/JFooter';
+import InnerChart from '@/components/InnerChart';
 import { QualityApi } from '@/services/quality';
 
 const BrandResultPage = () => {
@@ -15,6 +19,89 @@ const BrandResultPage = () => {
     // 实际应用中这里会触发API调用等操作
     const result = await QualityApi.prodctQuality(searchValue);
     setSearchResult(result);
+  };
+
+  // AIMessage component with requestAnimationFrame typing animation
+  const AIMessage = ({ message, onDisplayUpdate }: { message: string; onDisplayUpdate: (text: string) => void }) => {
+    const animationFrameRef = useRef<number | null>(null);
+    const [renderError, setRenderError] = useState(false);
+
+    useEffect(() => {
+      // Skip if the content is already complete
+      let currentIndex = message.length;
+      const chunkSize = 300; // Number of characters to add per frame
+      const updateText = () => {
+        if (currentIndex < message.length) {
+          const nextIndex = Math.min(currentIndex + chunkSize, message.length);
+          onDisplayUpdate(message.substring(0, nextIndex));
+          currentIndex = nextIndex;
+          animationFrameRef.current = requestAnimationFrame(updateText);
+        }
+      };
+      animationFrameRef.current = requestAnimationFrame(updateText);
+      return () => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+      };
+    }, [message, onDisplayUpdate]);
+
+    // 错误边界：如果 ReactMarkdown 出错，显示纯文本内容
+    if (renderError) {
+      return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message}</pre>;
+    }
+
+    try {
+      return (
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw as unknown as any]}
+          components={{
+            a: ({ href, children, ...props }) => (
+              <a
+                href={href}
+                onClick={e => {
+                  e.preventDefault();
+                  window.open(href, '_blank');
+                }}
+                style={{ cursor: 'pointer' }}
+                {...props}
+              >
+                {children}
+              </a>
+            ),
+            code({ className, children }) {
+              const lang = className?.replace('language-', '');
+
+              if (lang === 'chart') {
+                try {
+                  const config = JSON.parse(children as string);
+                  // console.log('chart-config', children);
+                  return <InnerChart {...config} />
+                } catch (e) {
+                  return <pre style={{color: 'red', fontWeight: 'bold'}} >图表配置格式错误</pre>
+                }
+              }
+
+              return (
+                <pre
+                  style={{backgroundColor: '#f3f4f6', borderRadius: '0.5rem', padding: '0.5rem', fontSize: '0.875rem', overflowX: 'auto', fontFamily: 'monospace'}}
+                >
+                  {children}
+                </pre>
+              );
+            }
+          }}
+        >
+          {message}
+        </ReactMarkdown>
+      );
+    } catch (error) {
+      // 如果 ReactMarkdown 渲染失败，切换到纯文本模式
+      console.warn('ReactMarkdown render failed, falling back to plain text:', error);
+      setRenderError(true);
+      return <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{message}</pre>;
+    }
   };
 
   return (
@@ -51,7 +138,12 @@ const BrandResultPage = () => {
           </div>
 
           <div className="rating-section">
-            {searchResult}
+            <AIMessage
+              message={searchResult}
+              onDisplayUpdate={newDisplayText => {
+                setSearchResult(newDisplayText);
+              }}
+            />
           </div>
 
           <div className="rating-section">
