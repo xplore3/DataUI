@@ -1,16 +1,29 @@
 // BrandResultPage.jsx
-//import React from 'react';
-import './index.less';
+//import React, { useState } from 'react';
+import './BrandResultPage.less';
 
 const BrandResultPage = () => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = () => {
+    // 这里可以添加搜索逻辑
+    console.log('搜索品牌:', searchValue);
+    // 实际应用中这里会触发API调用等操作
+  };
+
+  const handleUpload = () => {
+    // 处理图片上传逻辑
+    console.log('上传图片');
+  };
+
   return (
     <div className="brand-result-page">
       <header className="header">
         <nav className="nav">
           <h1 className="logo">AI智鉴局</h1>
           <div className="nav-links">
-            <a href="#" className="nav-link active">首页</a>
-            <a href="#" className="nav-link">品牌鉴定</a>
+            <a href="#" className="nav-link">首页</a>
+            <a href="#" className="nav-link active">品牌鉴定</a>
             <a href="#" className="nav-link">消费指南</a>
             <a href="#" className="nav-link">关于我们</a>
           </div>
@@ -23,6 +36,26 @@ const BrandResultPage = () => {
           <p className="page-description">
             只需输入品牌、品类名称或者商品截图，即可输出相关的AI品牌评级、消费警示、不合格详情、比较测评、消费引导等内容，帮助用户规避假冒伪劣商品，少踩坑，少被骗，并推荐来自权威测评的高性价比优质商品。
           </p>
+          
+          {/* 新增搜索区域 */}
+          <div className="search-section">
+            <div className="search-box">
+              <input 
+                type="text" 
+                placeholder="输入品牌、品类名称" 
+                className="search-input"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <button className="upload-btn" onClick={handleUpload}>
+                Q 上传图片
+              </button>
+              <button className="search-btn" onClick={handleSearch}>
+                搜索
+              </button>
+            </div>
+          </div>
         </section>
 
         <section className="result-section">
@@ -48,6 +81,7 @@ const BrandResultPage = () => {
           </div>
 
           <div className="info-sections">
+            {/* 消费警示部分 */}
             <div className="info-section">
               <div className="info-header">
                 <span className="info-icon">⚠</span>
@@ -80,10 +114,11 @@ const BrandResultPage = () => {
                   <a href="#" className="read-more">阅读原文</a>
                 </div>
 
-                {/* 其他警示项目... */}
+                {/* 可以继续添加更多警示项目 */}
               </div>
             </div>
 
+            {/* 比较测评部分 */}
             <div className="info-section">
               <div className="info-header">
                 <span className="info-icon">⚖</span>
@@ -109,11 +144,10 @@ const BrandResultPage = () => {
                   <p className="comparison-source">来源: 国家玩具质量监督检验中心</p>
                   <a href="#" className="read-more">阅读原文</a>
                 </div>
-
-                {/* 其他比较项目... */}
               </div>
             </div>
 
+            {/* 消费引导部分 */}
             <div className="info-section">
               <div className="info-header">
                 <span className="info-icon">&</span>
@@ -139,8 +173,6 @@ const BrandResultPage = () => {
                   <p className="guide-source">来源: 中国玩具和婴童用品协会</p>
                   <a href="#" className="read-more">阅读原文</a>
                 </div>
-
-                {/* 其他引导项目... */}
               </div>
             </div>
           </div>

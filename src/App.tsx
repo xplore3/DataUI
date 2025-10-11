@@ -18,7 +18,7 @@ import UserList from './views/stat';
 import RawPage from './views/raw';
 import ImagePage from './views/image';
 import PetCreator from './views/pet';
-import AIJPage from './views/aij';
+import HomePage from './views/aij';
 import BrandResultPage from './views/aijbrand';
 //import VConsole from 'vconsole';
 function App() {

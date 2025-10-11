@@ -1,5 +1,5 @@
 // HomePage.jsx
-import React from 'react';
+//import React from 'react';
 import './index.less';
 
 const HomePage = () => {
@@ -35,7 +35,7 @@ const HomePage = () => {
             <span className="search-tag">护肤品</span>
             <span className="search-tag">Nike</span>
             <span className="search-tag">奶粉</span>
-            <span className="view-more">查看更多></span>
+            <span className="view-more">查看更多</span>
           </div>
           <p className="update-time">更新于:2025-08-23</p>
         </section>
