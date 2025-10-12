@@ -1,5 +1,6 @@
 // BrandResultPage.jsx
-import { useEffect, useLocation, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
@@ -16,10 +17,11 @@ import { QualityApi } from '@/services/quality';
 const QUALITY_SEARCH_VALUE_KEY = 'quality_search_value';
 const QUALITY_SEARCH_RESULT_KEY = 'quality_search_result';
 
-const BrandResultPage = () => {
+const BrandResultPage = async () => {
   const location = useLocation();
   const [searchValue, setSearchValue] = useState(() => {
     if (location.state && (location.state as any).query) {
+      localStorage.setItem(QUALITY_SEARCH_VALUE_KEY, (location.state as any).query);
       return (location.state as any).query;
     }
     return localStorage.getItem(QUALITY_SEARCH_VALUE_KEY) || '';
@@ -45,6 +47,10 @@ const BrandResultPage = () => {
     setSearchResult(result);
     await handlerStatus();
   };
+
+  if (location.state && (location.state as any).query) {
+    await handleSearch();
+  }
 
   const handlerStatus = async () => {
     try {
@@ -180,8 +186,8 @@ const BrandResultPage = () => {
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
-              <button className="search-btn" onClick={handleSearch}>
-                搜索
+              <button className="search-btn" onClick={handleSearch} disabled={loading}>
+                {loading ? '处理中...' : '搜索'}
               </button>
             </div>
           </div>
