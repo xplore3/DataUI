@@ -196,6 +196,7 @@ const BrandResultPage = () => {
                 placeholder="输入品牌、品类名称" 
                 className="search-input"
                 value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
               <button className="search-btn" onClick={handleSearch} disabled={loading}>
