@@ -52,6 +52,8 @@ const BrandResultPage = () => {
       return;
     }
     console.log('识别到的商品:', product);
+    setSearchValue(product.product);
+    localStorage.setItem(QUALITY_SEARCH_VALUE_KEY, product.product);
     const result = await QualityApi.productQuality(product.product);
     console.log('搜索结果:', result);
     setSearchResult(result);
