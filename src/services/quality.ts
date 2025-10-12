@@ -44,7 +44,39 @@ export const QualityApi = {
     return 'Error';
   },
 
-  prodctQuality: async (text: string) => {
+  productName: async (text: string) => {
+    try {
+      const result = await api.post('/routine', {
+        text: text,
+        option: 'product_name',
+        userId: 'webuser',
+      });
+      console.log('product name result', result);
+
+      let response = result.data.text;
+      if (result.status != 200) {
+        response = "Error in response " + result.statusText;
+      }
+      try {
+        const json = JSON.parse(response);
+        /*if (json && json.result === 'success') {
+          response = json.product;
+        }
+        else if (json && json.result === 'fail') {
+          response = json.reason;
+        }*/
+        return json;
+      } catch (err) {
+        //response = response.product || response;
+      }
+      return response;
+    } catch (e) {
+      console.error('Error preparing form data:', e);
+    }
+    return null;
+  },
+
+  productQuality: async (text: string) => {
     try {
       const result = await api.post('/routine', {
         text: text,

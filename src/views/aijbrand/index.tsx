@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import { Cron } from 'croner';
+import { toast } from 'react-toastify';
 //import { Modal } from 'antd';
 //import { ExclamationCircleOutlined } from '@ant-design/icons';
 import './index.less';
@@ -17,7 +18,7 @@ import { QualityApi } from '@/services/quality';
 const QUALITY_SEARCH_VALUE_KEY = 'quality_search_value';
 const QUALITY_SEARCH_RESULT_KEY = 'quality_search_result';
 
-const BrandResultPage = async () => {
+const BrandResultPage = () => {
   const location = useLocation();
   const [searchValue, setSearchValue] = useState(() => {
     if (location.state && (location.state as any).query) {
@@ -42,14 +43,23 @@ const BrandResultPage = async () => {
     }
     localStorage.setItem(QUALITY_SEARCH_VALUE_KEY, searchValue);
     setLoading(true);
-    const result = await QualityApi.prodctQuality(searchValue);
+    const product = await QualityApi.productName(searchValue);
+    if (!product || (product.result && product.result === 'fail')) {
+      setSearchResult(typeof product === 'string' ? product : (product.reason || '无法识别目标商品'));
+      setLoading(false);
+      toast.error('无法识别目标商品，请准确输入品牌、品类名称');
+      return;
+    }
+    console.log('识别到的商品:', product);
+    const result = await QualityApi.productQuality(product);
     console.log('搜索结果:', result);
     setSearchResult(result);
     await handlerStatus();
   };
 
   if (location.state && (location.state as any).query) {
-    await handleSearch();
+    handleSearch();
+    location.state = {};
   }
 
   const handlerStatus = async () => {
