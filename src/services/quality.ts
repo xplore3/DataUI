@@ -49,7 +49,7 @@ export const QualityApi = {
       const result = await api.post('/routine', {
         text: text,
         option: 'product_name',
-        userId: 'webuser',
+        userId: 'qualitywebuser',
       });
       console.log('product name result', result);
 
@@ -81,7 +81,7 @@ export const QualityApi = {
       const result = await api.post('/routine', {
         text: text,
         option: 'product_quality',
-        userId: 'webuser',
+        userId: 'qualitywebuser',
       });
       console.log('product result', result);
 

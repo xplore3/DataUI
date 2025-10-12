@@ -44,6 +44,7 @@ const BrandResultPage = () => {
     localStorage.setItem(QUALITY_SEARCH_VALUE_KEY, searchValue);
     setLoading(true);
     const product = await QualityApi.productName(searchValue);
+    console.log(product);
     if (!product || (product.result && product.result === 'fail')) {
       setSearchResult(typeof product === 'string' ? product : (product.reason || '无法识别目标商品'));
       setLoading(false);
@@ -51,7 +52,7 @@ const BrandResultPage = () => {
       return;
     }
     console.log('识别到的商品:', product);
-    const result = await QualityApi.productQuality(product);
+    const result = await QualityApi.productQuality(product.product);
     console.log('搜索结果:', result);
     setSearchResult(result);
     await handlerStatus();
