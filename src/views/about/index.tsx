@@ -17,7 +17,7 @@ const About: React.FC = () => (
       <br />基于数据和策略，自动生成优质内容，比如根据趋势与策略，生成种草文案、评论内容和话题组合。
       <br />
       本产品由 Data3Agent 团队开发，旨在为用户提供高效、智能的数据服务体验。<br />
-      如需了解更多信息，请联系 support@data3.site。
+      如需了解更多信息，请联系 Data3Agent@qq.com。
     </p>
   </div>
 );
