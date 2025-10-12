@@ -1,5 +1,5 @@
 // BrandResultPage.jsx
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLocation, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
@@ -12,20 +12,33 @@ import Footer from '@/components/JFooter';
 import InnerChart from '@/components/InnerChart';
 import { QualityApi } from '@/services/quality';
 
+
+const QUALITY_SEARCH_VALUE_KEY = 'quality_search_value';
+const QUALITY_SEARCH_RESULT_KEY = 'quality_search_result';
+
 const BrandResultPage = () => {
-  const [searchValue, setSearchValue] = useState('');
-  const [searchResult, setSearchResult] = useState('');
+  const location = useLocation();
+  const [searchValue, setSearchValue] = useState(() => {
+    if (location.state && (location.state as any).query) {
+      return (location.state as any).query;
+    }
+    return localStorage.getItem(QUALITY_SEARCH_VALUE_KEY) || '';
+  });
+  const [searchResult, setSearchResult] = useState(() => {
+    return localStorage.getItem(QUALITY_SEARCH_RESULT_KEY) || '';
+  });
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
     // 这里可以添加搜索逻辑
-    console.log('搜索品牌:', searchValue);
+    console.log('搜索:', searchValue);
     if (!searchValue || searchValue.trim() === '') {
       return;
     }
     if (loading) {
       return;
     }
+    localStorage.setItem(QUALITY_SEARCH_VALUE_KEY, searchValue);
     setLoading(true);
     const result = await QualityApi.prodctQuality(searchValue);
     console.log('搜索结果:', result);
@@ -53,7 +66,8 @@ const BrandResultPage = () => {
               job.stop();
             }
             if (res.text) {
-              setSearchResult(res.text)
+              setSearchResult(res.text);
+              localStorage.setItem(QUALITY_SEARCH_RESULT_KEY, res.text);
             }
           });
         } catch (err) {
@@ -190,7 +204,7 @@ const BrandResultPage = () => {
             />
           </div>
 
-          <div className="rating-section">
+          {/*<div className="rating-section">
             <div className="rating-header">
               <span className="rating-icon">⭐</span>
               <span className="rating-title">AI品牌评级</span>
@@ -208,7 +222,7 @@ const BrandResultPage = () => {
           </div>
 
           <div className="info-sections">
-            {/* 消费警示部分 */}
+            {/* 消费警示部分 /}
             <div className="info-section">
               <div className="info-header">
                 <span className="info-icon">⚠</span>
@@ -241,11 +255,11 @@ const BrandResultPage = () => {
                   <a href="#" className="read-more">阅读原文</a>
                 </div>
 
-                {/* 可以继续添加更多警示项目 */}
+                {/* 可以继续添加更多警示项目 /}
               </div>
             </div>
 
-            {/* 比较测评部分 */}
+            {/* 比较测评部分 /}
             <div className="info-section">
               <div className="info-header">
                 <span className="info-icon">⚖</span>
@@ -274,7 +288,7 @@ const BrandResultPage = () => {
               </div>
             </div>
 
-            {/* 消费引导部分 */}
+            {/* 消费引导部分 /}
             <div className="info-section">
               <div className="info-header">
                 <span className="info-icon">&</span>
@@ -302,7 +316,8 @@ const BrandResultPage = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>*/}
+
         </section>
       </main>
 

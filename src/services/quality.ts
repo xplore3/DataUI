@@ -97,9 +97,6 @@ export const QualityApi = {
         response = "Error in response " + result.statusText;
       }
       try {
-        //const match = response.match(/current_step:\s*(\d+)/);
-        //const step = match ? parseInt(match[1], 10) : null;
-        //response = `Step ${step} ...`;
         const status = JSON.parse(response);
         if (status) {
           response = status.text;

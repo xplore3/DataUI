@@ -1,16 +1,17 @@
 // HomePage.jsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './index.less';
 import Header from '@/components/JHeader';
 import Footer from '@/components/JFooter';
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = () => {
-    // 这里可以添加搜索逻辑
-    console.log('搜索品牌:', searchValue);
-    // 实际应用中这里会触发API调用等操作
+    //console.log('搜索:', searchValue);
+    navigate('/brand', { state: { query: searchValue } });
   };
 
   const handleUpload = () => {
