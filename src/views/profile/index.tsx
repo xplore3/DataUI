@@ -191,6 +191,8 @@ const ProfilePage = () => {
       okType: 'danger',
       onOk: async () => {
         try {
+          await ProfileApi.deleteDoc(item.id.toString());
+
           setKnowledgeItems(prev => prev.filter(k => k.id !== item.id));
           message.success('知识删除成功');
         } catch (error) {
