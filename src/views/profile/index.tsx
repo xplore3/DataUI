@@ -30,24 +30,61 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 const { confirm } = Modal;
 
+// 类型定义
+interface KnowledgeItem {
+  id: number;
+  title: string;
+  content: string;
+  type: string;
+  createTime: string;
+  updateTime: string;
+}
+
+interface FileItem {
+  id: string | number;
+  name: string;
+  size: number;
+  type: string;
+  uploadTime: string;
+  url: string;
+}
+
+interface UploadProgress {
+  [key: string]: number;
+}
+
+interface UploadOptions {
+  file: File;
+  onSuccess: (response: any) => void;
+  onError: (error: any) => void;
+}
 
 const ProfilePage = () => {
-  const [knowledgeItems, setKnowledgeItems] = useState([]);
-  const [files, setFiles] = useState([]);
+  const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
+  const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [form] = Form.useForm();
-  const [uploadProgress, setUploadProgress] = useState({});
+  const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
 
   // 加载知识库数据
   const loadKnowledgeData = async () => {
     setLoading(true);
     try {
-      // 模拟API调用 - 生产环境中替换为实际API
       const knowledgeRes = await ProfileApi.list();
+      // 确保数据格式正确
+      const formattedData = Array.isArray(knowledgeRes) 
+        ? knowledgeRes.map((item: any) => ({
+            id: item.id || Date.now() + Math.random(),
+            title: item.title || '无标题',
+            content: item.content || item.text || '',
+            type: item.type || 'text',
+            createTime: item.createTime || new Date().toISOString(),
+            updateTime: item.updateTime || new Date().toISOString()
+          }))
+        : [];
       
-      setKnowledgeItems(knowledgeRes || []);
-      //setFiles(filesRes.data || []);
+      setKnowledgeItems(formattedData);
     } catch (error) {
       console.error('加载数据失败:', error);
       message.error('加载数据失败');
@@ -61,9 +98,9 @@ const ProfilePage = () => {
   }, []);
 
   // 添加文本知识
-  const addTextKnowledge = async (values: any) => {
+  const addTextKnowledge = async (values: { title: string; content: string }) => {
     try {
-      const newItem = {
+      const newItem: KnowledgeItem = {
         id: Date.now(),
         title: values.title,
         content: values.content,
@@ -72,7 +109,7 @@ const ProfilePage = () => {
         updateTime: new Date().toISOString()
       };
 
-      await ProfileApi.add(newItem.content);
+      await ProfileApi.add(values.content);
       
       setKnowledgeItems(prev => [newItem, ...prev]);
       form.resetFields();
@@ -84,9 +121,8 @@ const ProfilePage = () => {
   };
 
   // 文件上传处理
-  const handleFileUpload = async (options: any) => {
+  const handleFileUpload = async (options: UploadOptions) => {
     const { file, onSuccess, onError } = options;
-    console.log(uploading);
     
     setUploading(true);
     setUploadProgress(prev => ({
@@ -97,13 +133,13 @@ const ProfilePage = () => {
     try {
       const response = await ProfileApi.uploadFile([file]);
 
-      const newFile = {
-        id: response.data.fileId,
+      const newFile: FileItem = {
+        id: response.data?.fileId || Date.now(),
         name: file.name,
         size: file.size,
         type: file.type,
         uploadTime: new Date().toISOString(),
-        url: response.data.url
+        url: response.data?.url || URL.createObjectURL(file)
       };
 
       setFiles(prev => [newFile, ...prev]);
@@ -124,7 +160,7 @@ const ProfilePage = () => {
   };
 
   // 删除文件
-  const deleteFile = (file: any) => {
+  const deleteFile = (file: FileItem) => {
     confirm({
       title: '确认删除',
       content: `确定要删除文件 "${file.name}" 吗？`,
@@ -133,7 +169,6 @@ const ProfilePage = () => {
       okType: 'danger',
       onOk: async () => {
         try {
-          //await axios.delete(`${API_BASE_URL}/files/${file.id}`);
           setFiles(prev => prev.filter(f => f.id !== file.id));
           message.success('文件删除成功');
         } catch (error) {
@@ -145,7 +180,7 @@ const ProfilePage = () => {
   };
 
   // 删除知识项
-  const deleteKnowledgeItem = (item: any) => {
+  const deleteKnowledgeItem = (item: KnowledgeItem) => {
     confirm({
       title: '确认删除',
       content: `确定要删除知识 "${item.title}" 吗？`,
@@ -154,7 +189,6 @@ const ProfilePage = () => {
       okType: 'danger',
       onOk: async () => {
         try {
-          //await axios.delete(`${API_BASE_URL}/knowledge/${item.id}`);
           setKnowledgeItems(prev => prev.filter(k => k.id !== item.id));
           message.success('知识删除成功');
         } catch (error) {
@@ -166,7 +200,7 @@ const ProfilePage = () => {
   };
 
   // 格式化文件大小
-  const formatFileSize = (bytes: any) => {
+  const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -176,14 +210,18 @@ const ProfilePage = () => {
 
   // 格式化日期
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('zh-CN');
+    try {
+      return new Date(dateString).toLocaleString('zh-CN');
+    } catch {
+      return '未知时间';
+    }
   };
 
   const uploadProps = {
     customRequest: handleFileUpload,
     multiple: true,
     showUploadList: false,
-    beforeUpload: (file) => {
+    beforeUpload: (file: File) => {
       // 文件大小限制 - 100MB
       const isLt100M = file.size / 1024 / 1024 < 100;
       if (!isLt100M) {
@@ -196,8 +234,6 @@ const ProfilePage = () => {
 
   return (
     <Layout className="knowledge-base-layout">
-      {/* 假设左侧有现成的SiderBar */}
-      
       <Layout>
         <Content className="knowledge-base-content">
           <div className="knowledge-base-container">
@@ -321,7 +357,7 @@ const ProfilePage = () => {
                 >
                   <List
                     dataSource={knowledgeItems}
-                    renderItem={(item) => (
+                    renderItem={(item: KnowledgeItem) => (
                       <List.Item
                         actions={[
                           <Button
@@ -371,7 +407,7 @@ const ProfilePage = () => {
                 >
                   <List
                     dataSource={files}
-                    renderItem={(file) => (
+                    renderItem={(file: FileItem) => (
                       <List.Item
                         actions={[
                           <Button
