@@ -259,7 +259,7 @@ const ProfilePage = () => {
                     layout="vertical"
                     onFinish={addTextKnowledge}
                   >
-                    <Form.Item
+                    {/*<Form.Item
                       name="title"
                       label="知识标题"
                       rules={[
@@ -272,7 +272,7 @@ const ProfilePage = () => {
                         maxLength={100}
                         showCount
                       />
-                    </Form.Item>
+                    </Form.Item>*/}
 
                     <Form.Item
                       name="content"

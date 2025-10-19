@@ -72,6 +72,7 @@ export const ProfileApi = {
       try {
         const json = JSON.parse(response);
         console.log(json);
+        return json.memories;
       } catch (err) {
         console.log(err);
       }
@@ -93,6 +94,7 @@ export const ProfileApi = {
       try {
         const json = JSON.parse(response);
         console.log(json);
+        return json.results;
       } catch (err) {
         console.log(err);
       }
@@ -114,6 +116,7 @@ export const ProfileApi = {
       try {
         const json = JSON.parse(response);
         console.log(json);
+        return json.results;
       } catch (err) {
         console.log(err);
       }
