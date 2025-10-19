@@ -75,7 +75,7 @@ export const ProfileApi = {
       } catch (err) {
         console.log(err);
       }
-      return response;
+      return response.memories;
     } catch (e) {
       console.error('Error list data:', e);
     }
