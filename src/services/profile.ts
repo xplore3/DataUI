@@ -137,11 +137,6 @@ export const ProfileApi = {
       if (result.status != 200) {
         return "Error in response " + result.statusText;
       }
-      try {
-        const json = JSON.parse(result.data || result);
-        return json;
-      } catch (err) {
-      }
       return response;
     } catch (e) {
       console.error('Error delete data:', e);

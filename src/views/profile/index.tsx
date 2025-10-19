@@ -191,7 +191,8 @@ const ProfilePage = () => {
       okType: 'danger',
       onOk: async () => {
         try {
-          await ProfileApi.deleteDoc(item.id.toString());
+          const result = await ProfileApi.deleteDoc(item.id.toString());
+          console.log('删除知识结果:', result);
 
           setKnowledgeItems(prev => prev.filter(k => k.id !== item.id));
           message.success('知识删除成功');
@@ -252,7 +253,7 @@ const ProfilePage = () => {
               <div className="left-panel">
                 {/* 添加文本知识卡片 */}
                 <Card 
-                  title="添加文本知识" 
+                  title="添加文本知识或URL链接" 
                   className="add-knowledge-card"
                   bordered={false}
                 >
@@ -280,12 +281,12 @@ const ProfilePage = () => {
                       name="content"
                       label="知识内容"
                       rules={[
-                        { required: true, message: '请输入知识内容' },
+                        { required: true, message: '请输入知识内容或单个URL' },
                         { max: 5000, message: '内容不能超过5000个字符' }
                       ]}
                     >
                       <TextArea
-                        placeholder="请输入详细的知识内容"
+                        placeholder="请输入详细的知识内容或单个URL"
                         rows={6}
                         maxLength={5000}
                         showCount
@@ -397,7 +398,7 @@ const ProfilePage = () => {
                 </Card>
 
                 {/* 文件列表 */}
-                <Card 
+                {false && <Card 
                   title={
                     <Space>
                       <FileOutlined />
@@ -448,7 +449,7 @@ const ProfilePage = () => {
                     )}
                     locale={{ emptyText: '暂无文件' }}
                   />
-                </Card>
+                </Card>}
               </div>
             </div>
           </div>
