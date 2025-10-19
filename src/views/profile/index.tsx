@@ -22,6 +22,7 @@ import {
   FileOutlined,
   EditOutlined
 } from '@ant-design/icons';
+import type { UploadProps, RcFile, UploadRequestOption } from 'antd/es/upload';
 import './index.less';
 import { ProfileApi } from '@/services/profile';
 
@@ -53,17 +54,10 @@ interface UploadProgress {
   [key: string]: number;
 }
 
-interface UploadOptions {
-  file: File;
-  onSuccess: (response: any) => void;
-  onError: (error: any) => void;
-}
-
 const ProfilePage = () => {
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
 
@@ -121,39 +115,40 @@ const ProfilePage = () => {
   };
 
   // 文件上传处理
-  const handleFileUpload = async (options: UploadOptions) => {
+  const handleFileUpload = async (options: UploadRequestOption) => {
     const { file, onSuccess, onError } = options;
     
-    setUploading(true);
+    // 使用RcFile类型，它包含uid属性
+    const rcFile = file as RcFile;
+    
     setUploadProgress(prev => ({
       ...prev,
-      [file.uid]: 0
+      [rcFile.uid]: 0
     }));
 
     try {
-      const response = await ProfileApi.uploadFile([file]);
+      const response = await ProfileApi.uploadFile([rcFile]);
 
       const newFile: FileItem = {
         id: response.data?.fileId || Date.now(),
-        name: file.name,
-        size: file.size,
-        type: file.type,
+        name: rcFile.name,
+        size: rcFile.size,
+        type: rcFile.type,
         uploadTime: new Date().toISOString(),
-        url: response.data?.url || URL.createObjectURL(file)
+        url: response.data?.url || URL.createObjectURL(rcFile)
       };
 
       setFiles(prev => [newFile, ...prev]);
-      onSuccess(response.data);
-      message.success(`${file.name} 上传成功`);
+      onSuccess?.(response.data);
+      message.success(`${rcFile.name} 上传成功`);
     } catch (error) {
       console.error('文件上传失败:', error);
-      onError(error);
-      message.error(`${file.name} 上传失败`);
+      onError?.(error);
+      message.error(`${rcFile.name} 上传失败`);
     } finally {
-      setUploading(false);
       setUploadProgress(prev => {
         const newProgress = { ...prev };
-        delete newProgress[file.uid];
+        delete newProgress[rcFile.uid];
         return newProgress;
       });
     }
@@ -217,11 +212,11 @@ const ProfilePage = () => {
     }
   };
 
-  const uploadProps = {
+  const uploadProps: UploadProps = {
     customRequest: handleFileUpload,
     multiple: true,
     showUploadList: false,
-    beforeUpload: (file: File) => {
+    beforeUpload: (file: RcFile) => {
       // 文件大小限制 - 100MB
       const isLt100M = file.size / 1024 / 1024 < 100;
       if (!isLt100M) {
