@@ -156,7 +156,7 @@ const ImagePage = () =>{
             jobSkip = true;
             job.stop();
             setLoading(false);
-            if (_model !== 'videobgremover') {
+            if (_model === 'videobgremover') {
               Modal.confirm({
                 title: '生成成功，是否去除背景?',
                 icon: <ExclamationCircleOutlined />,
