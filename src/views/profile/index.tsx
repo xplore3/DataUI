@@ -22,7 +22,7 @@ import {
   FileOutlined,
   EditOutlined
 } from '@ant-design/icons';
-import type { UploadProps, RcFile, UploadRequestOption } from 'antd/es/upload';
+import type { UploadProps, RcFile } from 'antd/es/upload';
 import './index.less';
 import { ProfileApi } from '@/services/profile';
 
@@ -52,6 +52,13 @@ interface FileItem {
 
 interface UploadProgress {
   [key: string]: number;
+}
+
+// 自定义 UploadRequestOption 类型
+interface CustomUploadRequestOption {
+  file: RcFile;
+  onSuccess?: (body: any) => void;
+  onError?: (err: Error) => void;
 }
 
 const ProfilePage = () => {
@@ -115,7 +122,7 @@ const ProfilePage = () => {
   };
 
   // 文件上传处理
-  const handleFileUpload = async (options: UploadRequestOption) => {
+  const handleFileUpload = async (options: CustomUploadRequestOption) => {
     const { file, onSuccess, onError } = options;
     
     // 使用RcFile类型，它包含uid属性
@@ -143,7 +150,7 @@ const ProfilePage = () => {
       message.success(`${rcFile.name} 上传成功`);
     } catch (error) {
       console.error('文件上传失败:', error);
-      onError?.(error);
+      onError?.(error as Error);
       message.error(`${rcFile.name} 上传失败`);
     } finally {
       setUploadProgress(prev => {
@@ -213,7 +220,7 @@ const ProfilePage = () => {
   };
 
   const uploadProps: UploadProps = {
-    customRequest: handleFileUpload,
+    customRequest: handleFileUpload as any,
     multiple: true,
     showUploadList: false,
     beforeUpload: (file: RcFile) => {
