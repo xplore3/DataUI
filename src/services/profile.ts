@@ -46,7 +46,7 @@ export const ProfileApi = {
       });
       console.log('add result', result);
 
-      let response = result;
+      let response = '';
       if (result.status != 200) {
         response = "Error in response " + result.statusText;
       }
@@ -68,7 +68,7 @@ export const ProfileApi = {
       const result = await api.post('/memory_list', {});
       console.log('list result', result);
 
-      let response = result;
+      let response = '';
       try {
         const json = JSON.parse(response);
         console.log(json);
@@ -89,7 +89,7 @@ export const ProfileApi = {
       });
       console.log('search docs result', result);
 
-      let response = result;
+      let response = '';
       try {
         const json = JSON.parse(response);
         console.log(json);
@@ -110,7 +110,7 @@ export const ProfileApi = {
       });
       console.log('search result', result);
 
-      let response = result;
+      let response = '';
       try {
         const json = JSON.parse(response);
         console.log(json);

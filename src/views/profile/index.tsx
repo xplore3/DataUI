@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Layout,
   Card,
@@ -46,7 +46,7 @@ const ProfilePage = () => {
       // 模拟API调用 - 生产环境中替换为实际API
       const knowledgeRes = await ProfileApi.list();
       
-      setKnowledgeItems(knowledgeRes.data || []);
+      setKnowledgeItems(knowledgeRes || []);
       //setFiles(filesRes.data || []);
     } catch (error) {
       console.error('加载数据失败:', error);
@@ -61,7 +61,7 @@ const ProfilePage = () => {
   }, []);
 
   // 添加文本知识
-  const addTextKnowledge = async (values) => {
+  const addTextKnowledge = async (values: any) => {
     try {
       const newItem = {
         id: Date.now(),
@@ -84,8 +84,9 @@ const ProfilePage = () => {
   };
 
   // 文件上传处理
-  const handleFileUpload = async (options) => {
+  const handleFileUpload = async (options: any) => {
     const { file, onSuccess, onError } = options;
+    console.log(uploading);
     
     setUploading(true);
     setUploadProgress(prev => ({
@@ -123,7 +124,7 @@ const ProfilePage = () => {
   };
 
   // 删除文件
-  const deleteFile = (file) => {
+  const deleteFile = (file: any) => {
     confirm({
       title: '确认删除',
       content: `确定要删除文件 "${file.name}" 吗？`,
@@ -144,7 +145,7 @@ const ProfilePage = () => {
   };
 
   // 删除知识项
-  const deleteKnowledgeItem = (item) => {
+  const deleteKnowledgeItem = (item: any) => {
     confirm({
       title: '确认删除',
       content: `确定要删除知识 "${item.title}" 吗？`,
@@ -165,7 +166,7 @@ const ProfilePage = () => {
   };
 
   // 格式化文件大小
-  const formatFileSize = (bytes) => {
+  const formatFileSize = (bytes: any) => {
     if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -174,7 +175,7 @@ const ProfilePage = () => {
   };
 
   // 格式化日期
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('zh-CN');
   };
 
