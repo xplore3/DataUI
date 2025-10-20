@@ -37,8 +37,8 @@ interface KnowledgeItem {
   title: string;
   content: string;
   type: string;
-  createTime: string;
-  updateTime: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface FileItem {
@@ -80,8 +80,8 @@ const ProfilePage = () => {
             title: item.title || '无标题',
             content: item.content || item.text || '',
             type: item.type || 'text',
-            createTime: item.createTime || new Date().toISOString(),
-            updateTime: item.updateTime || new Date().toISOString()
+            createdAt: item.createdAt || new Date().toISOString(),
+            updatedAt: item.updatedAt || new Date().toISOString()
           }))
         : [];
       
@@ -107,8 +107,8 @@ const ProfilePage = () => {
         title: values.title,
         content: values.content,
         type: 'text',
-        createTime: new Date().toISOString(),
-        updateTime: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await ProfileApi.add(values.content);
@@ -426,7 +426,7 @@ const ProfilePage = () => {
                               </Text>
                               <div className="item-meta">
                                 <Text type="secondary" className="update-time">
-                                  更新时间: {formatDate(item.updateTime)}
+                                  更新时间: {formatDate(item.updatedAt)}
                                 </Text>
                               </div>
                             </div>
