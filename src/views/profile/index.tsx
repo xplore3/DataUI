@@ -101,6 +101,7 @@ const ProfilePage = () => {
   // 添加文本知识
   const addTextKnowledge = async (values: { title: string; content: string }) => {
     try {
+      setLoading(true);
       const newItem: KnowledgeItem = {
         id: Date.now(),
         title: values.title,
@@ -119,11 +120,13 @@ const ProfilePage = () => {
       console.error('添加知识失败:', error);
       message.error('添加知识失败');
     }
+    setLoading(false);
   };
 
   // 批量添加URLs
   const handleAddUrls = async (content: string) => {
     try {
+      setLoading(true);
       await ProfileApi.addUrls(content);
       form.resetFields();
       message.success('URL List添加成功,处理时间较长，请等待');
@@ -131,6 +134,7 @@ const ProfilePage = () => {
       console.error('添加URL List失败:', error);
       message.error('添加URL List失败');
     }
+    setLoading(false);
   }
 
   // 文件上传处理
@@ -311,6 +315,7 @@ const ProfilePage = () => {
                         icon={<PlusOutlined />}
                         block
                         size="large"
+                        loading={loading}
                         onClick={() => {
                           // 获取并验证表单数据
                           const formValues = form.getFieldsValue();
@@ -329,6 +334,7 @@ const ProfilePage = () => {
                         type="primary"
                         htmlType="submit"
                         icon={<PlusOutlined />}
+                        loading={loading}
                         block
                         size="large"
                       >
