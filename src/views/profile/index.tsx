@@ -116,6 +116,7 @@ const ProfilePage = () => {
       setKnowledgeItems(prev => [newItem, ...prev]);
       form.resetFields();
       message.success('知识添加成功');
+      //await loadKnowledgeData();
     } catch (error) {
       console.error('添加知识失败:', error);
       message.error('添加知识失败');
@@ -130,6 +131,7 @@ const ProfilePage = () => {
       await ProfileApi.addUrls(content);
       form.resetFields();
       message.success('URL List添加成功,处理时间较长，请等待');
+      await loadKnowledgeData();
     } catch (error) {
       console.error('添加URL List失败:', error);
       message.error('添加URL List失败');
@@ -164,6 +166,7 @@ const ProfilePage = () => {
       setFiles(prev => [newFile, ...prev]);
       onSuccess?.(response.data);
       message.success(`${rcFile.name} 上传成功`);
+      await loadKnowledgeData();
     } catch (error) {
       console.error('文件上传失败:', error);
       onError?.(error as Error);
