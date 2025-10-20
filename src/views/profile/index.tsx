@@ -121,6 +121,18 @@ const ProfilePage = () => {
     }
   };
 
+  // 批量添加URLs
+  const handleAddUrls = async (content: string) => {
+    try {
+      await ProfileApi.addUrls(content);
+      form.resetFields();
+      message.success('URL List添加成功,处理时间较长，请等待');
+    } catch (error) {
+      console.error('添加URL List失败:', error);
+      message.error('添加URL List失败');
+    }
+  }
+
   // 文件上传处理
   const handleFileUpload = async (options: CustomUploadRequestOption) => {
     const { file, onSuccess, onError } = options;
@@ -293,17 +305,36 @@ const ProfilePage = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item>
-                      <Button 
-                        type="primary" 
-                        htmlType="submit" 
+                    <Form.Item><Space.Compact block>
+                      <Button
+                        type="dashed"
+                        icon={<PlusOutlined />}
+                        block
+                        size="large"
+                        onClick={() => {
+                          // 获取并验证表单数据
+                          const formValues = form.getFieldsValue();
+                          const { content } = formValues;
+
+                          if (!content?.trim()) {
+                            message.error('请输入URL地址');
+                            return;
+                          }
+                          handleAddUrls(content.trim());
+                        }}
+                      >
+                        批量添加URL
+                      </Button>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
                         icon={<PlusOutlined />}
                         block
                         size="large"
                       >
                         添加知识
                       </Button>
-                    </Form.Item>
+                    </Space.Compact></Form.Item>
                   </Form>
                 </Card>
 

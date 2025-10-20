@@ -62,6 +62,29 @@ export const ProfileApi = {
     return null;
   },
 
+  addUrls: async (text: string) => {
+    try {
+      const result = await api.post('/memory_add_urls', {
+        content: text
+      });
+      console.log('add urls result', result);
+
+      let response = result.data || result;
+      if (result.status != 200) {
+        return "Error in response " + result.statusText;
+      }
+      try {
+        const json = JSON.parse(result.data || result);
+        return json;
+      } catch (err) {
+      }
+      return response;
+    } catch (e) {
+      console.error('Error add urls:', e);
+    }
+    return null;
+  },
+
   list: async () => {
     try {
       const result = await api.post('/memory_list', {});
