@@ -300,12 +300,12 @@ const ProfilePage = () => {
                       name="content"
                       label="知识内容"
                       rules={[
-                        { required: true, message: '请输入知识内容或单个URL' },
+                        { required: true, message: '请输入知识内容或URL' },
                         { max: 5000, message: '内容不能超过5000个字符' }
                       ]}
                     >
                       <TextArea
-                        placeholder="请输入详细的知识内容或单个URL"
+                        placeholder="请输入详细的知识内容或URL"
                         rows={6}
                         maxLength={5000}
                         showCount
@@ -314,7 +314,8 @@ const ProfilePage = () => {
 
                     <Form.Item><Space.Compact block>
                       <Button
-                        type="default"
+                        ghost
+                        type="primary"
                         icon={<PlusOutlined />}
                         block
                         size="large"
