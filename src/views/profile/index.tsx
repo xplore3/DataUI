@@ -314,7 +314,7 @@ const ProfilePage = () => {
 
                     <Form.Item><Space.Compact block>
                       <Button
-                        type="dashed"
+                        type="default"
                         icon={<PlusOutlined />}
                         block
                         size="large"
