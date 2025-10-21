@@ -42,7 +42,8 @@ export const ProfileApi = {
   add: async (text: string) => {
     try {
       const result = await api.post('/memory_add', {
-        content: text
+        content: text,
+        containerTag: 'sk_ai_quality'
       });
       console.log('add result', result);
 
@@ -65,7 +66,8 @@ export const ProfileApi = {
   addUrls: async (text: string) => {
     try {
       const result = await api.post('/memory_add_urls', {
-        content: text
+        content: text,
+        containerTag: 'sk_ai_quality'
       });
       console.log('add urls result', result);
 
