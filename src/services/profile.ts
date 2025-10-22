@@ -89,7 +89,10 @@ export const ProfileApi = {
 
   list: async () => {
     try {
-      const result = await api.post('/memory_list', {});
+      const result = await api.post('/memory_list', {
+        includeContent: true,
+        limit: '50'
+      });
       console.log('list result', result);
 
       let response = result.data || result;
