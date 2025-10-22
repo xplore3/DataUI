@@ -5,6 +5,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Cron } from 'croner';
 import { ImageApi } from '@/services/image';
 import LocalUpload from '@/components/LocalUpload';
+import { addWhiteBackgroundToGenerated } from '@/utils/imageProcessor';
 
 const ImagePage = () =>{
   const [inputText, setInputText] = useState(`把图片中的宠物提取出来，保持其基本特征不变；
@@ -82,7 +83,22 @@ const ImagePage = () =>{
         setTaskId(response);
       }
       console.log(taskId);
-      setSubmittedText(response.data || response);
+      
+      // 自动处理生成的图片：添加白色背景，宠物缩小到50%
+      let finalResult = response.data || response;
+      if (images === 1 && finalResult) {
+        try {
+          toast('正在添加白色背景...');
+          const processedImage = await addWhiteBackgroundToGenerated(finalResult, { petScale: 0.5 });
+          finalResult = processedImage;
+          toast('背景添加成功');
+        } catch (error) {
+          console.error('背景添加失败:', error);
+          toast('背景添加失败，显示原图');
+        }
+      }
+      
+      setSubmittedText(finalResult);
       setLoading(false);
       toast('提交成功');
       return response;
