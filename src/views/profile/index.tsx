@@ -127,7 +127,8 @@ const ProfilePage = () => {
       await ProfileApi.add(values.content, tag);
       
       setKnowledgeItems(prev => [newItem, ...prev]);
-      form.resetFields();
+      //form.resetFields();
+      form.setFieldsValue({content: ''});
       message.success('知识添加成功');
       //await loadKnowledgeData();
     } catch (error) {
@@ -144,7 +145,8 @@ const ProfilePage = () => {
       setTag(_tag);
       localStorage.setItem(PROFILE_KNOWLEDGE_TAG, _tag);
       await ProfileApi.addUrls(content, _tag);
-      form.resetFields();
+      //form.resetFields();
+      form.setFieldsValue({content: ''});
       message.success('URL List添加成功,处理时间较长，请等待');
       await loadKnowledgeData();
     } catch (error) {
@@ -292,6 +294,9 @@ const ProfilePage = () => {
                   title="添加文本知识或URL链接" 
                   className="add-knowledge-card"
                   bordered={false}
+                  initialValues={{
+                    tag: tag
+                  }}
                 >
                   <Form
                     form={form}
@@ -323,7 +328,6 @@ const ProfilePage = () => {
                       <Input 
                         placeholder="请输入知识标签" 
                         maxLength={20}
-                        value={tag}
                         showCount
                       />
                     </Form.Item>
