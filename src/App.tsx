@@ -21,6 +21,7 @@ import PetCreator from './views/pet';
 import HomePage from './views/aij';
 import BrandResultPage from './views/aijbrand';
 import ProfilePage from './views/profile';
+import DetailPage from './views/detail';
 //import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
