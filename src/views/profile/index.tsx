@@ -294,14 +294,14 @@ const ProfilePage = () => {
                   title="添加文本知识或URL链接" 
                   className="add-knowledge-card"
                   bordered={false}
-                  initialValues={{
-                    tag: tag
-                  }}
                 >
                   <Form
                     form={form}
                     layout="vertical"
                     onFinish={addTextKnowledge}
+                    initialValues={{
+                      tag: tag
+                    }}
                   >
                     {/*<Form.Item
                       name="title"
