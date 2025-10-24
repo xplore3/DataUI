@@ -110,6 +110,51 @@ export const ProfileApi = {
     return 'Error';
   },
 
+  getById: async (id: string) => {
+    try {
+      const result = await api.get(`/memory_get?id=${id}`, {});
+      console.log('get result', result);
+
+      let response = result.data || result;
+      try {
+        const json = JSON.parse(response);
+        console.log(json);
+        return json;
+      } catch (err) {
+        console.log(err);
+      }
+      return response;
+    } catch (e) {
+      console.error('Error get data:', e);
+    }
+    return 'Error';
+  },
+
+  update: async (id: string, text: string) => {
+    try {
+      const result = await api.post('/memory_update', {
+        id: id,
+        content: text,
+        containerTag: 'sk_ai_quality'
+      });
+      console.log('update result', result);
+
+      let response = result.data || result;
+      if (result.status != 200) {
+        return "Error in response " + result.statusText;
+      }
+      try {
+        const json = JSON.parse(result.data || result);
+        return json;
+      } catch (err) {
+      }
+      return response;
+    } catch (e) {
+      console.error('Error update data:', e);
+    }
+    return null;
+  },
+
   searchDocs: async (text: string) => {
     try {
       const result = await api.post('/memory_search_documents', {

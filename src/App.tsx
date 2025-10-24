@@ -57,6 +57,7 @@ function App() {
         <Route path="/ip" element={<IpHome />} />
         <Route path="/aij" element={<HomePage />} />
         <Route path="/brand" element={<BrandResultPage />} />
+        <Route path="/detail" element={<DetailPage />} />
         <Route path="/pet" element={<PetCreator />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/raw" element={<RawPage />} />

@@ -1,0 +1,108 @@
+// src/views/profile/KnowledgeDetail.less
+.knowledge-detail-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.detail-content {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.content-main {
+  .content-card {
+    .ant-card-head {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .ant-card-body {
+      padding: 24px;
+    }
+  }
+}
+
+.content-display {
+  .content-url {
+    color: #1890ff;
+    text-decoration: none;
+    word-break: break-all;
+    
+    &:hover {
+      color: #40a9ff;
+      text-decoration: underline;
+    }
+  }
+}
+
+.metadata-card {
+  .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .ant-descriptions-item-label {
+    font-weight: 500;
+    background-color: #fafafa;
+  }
+}
+
+.knowledge-detail-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
+.knowledge-detail-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  gap: 16px;
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .knowledge-detail-container {
+    padding: 16px;
+  }
+  
+  .detail-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .content-main,
+  .content-sidebar {
+    width: 100%;
+  }
+}
+
+// 动画效果
+.content-card,
+.metadata-card {
+  transition: box-shadow 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
