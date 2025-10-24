@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Layout,
   Card,
@@ -62,6 +63,7 @@ interface CustomUploadRequestOption {
 }
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -410,11 +412,15 @@ const ProfilePage = () => {
                             type="text"
                             icon={<DeleteOutlined />}
                             danger
-                            onClick={() => deleteKnowledgeItem(item)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteKnowledgeItem(item);
+                            }}
                           >
                             删除
                           </Button>
                         ]}
+                        onClick={() => navigate(`/detail/${item.id}`)}
                       >
                         <List.Item.Meta
                           avatar={<EditOutlined className="knowledge-icon" />}
