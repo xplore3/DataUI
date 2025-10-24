@@ -38,6 +38,7 @@ interface KnowledgeItem {
   title: string;
   content: string;
   type: string;
+  tag: string,
   createdAt: string;
   updatedAt: string;
 }
@@ -47,6 +48,7 @@ interface FileItem {
   name: string;
   size: number;
   type: string;
+  tag: string,
   uploadTime: string;
   url: string;
 }
@@ -62,11 +64,16 @@ interface CustomUploadRequestOption {
   onError?: (err: Error) => void;
 }
 
+const PROFILE_KNOWLEDGE_TAG = 'profile_knowledge_tag';
+
 const ProfilePage = () => {
   const navigate = useNavigate();
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [tag, setTag] = useState(() => {
+    return localStorage.getItem(PROFILE_KNOWLEDGE_TAG) || 'Evaluation';
+  });
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
 
@@ -82,6 +89,7 @@ const ProfilePage = () => {
             title: item.title || '无标题',
             content: item.content || item.text || '',
             type: item.type || 'text',
+            tag: item.tag || 'default',
             createdAt: item.createdAt || new Date().toISOString(),
             updatedAt: item.updatedAt || new Date().toISOString()
           }))
@@ -101,19 +109,22 @@ const ProfilePage = () => {
   }, []);
 
   // 添加文本知识
-  const addTextKnowledge = async (values: { title: string; content: string }) => {
+  const addTextKnowledge = async (values: { title: string; content: string, tag: string }) => {
     try {
       setLoading(true);
+      setTag(values.tag);
+      localStorage.setItem(PROFILE_KNOWLEDGE_TAG, values.tag);
       const newItem: KnowledgeItem = {
         id: Date.now(),
         title: values.title,
         content: values.content,
         type: 'text',
+        tag: values.tag,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
-      await ProfileApi.add(values.content);
+      await ProfileApi.add(values.content, tag);
       
       setKnowledgeItems(prev => [newItem, ...prev]);
       form.resetFields();
@@ -127,10 +138,12 @@ const ProfilePage = () => {
   };
 
   // 批量添加URLs
-  const handleAddUrls = async (content: string) => {
+  const handleAddUrls = async (content: string, _tag: string) => {
     try {
       setLoading(true);
-      await ProfileApi.addUrls(content);
+      setTag(_tag);
+      localStorage.setItem(PROFILE_KNOWLEDGE_TAG, _tag);
+      await ProfileApi.addUrls(content, _tag);
       form.resetFields();
       message.success('URL List添加成功,处理时间较长，请等待');
       await loadKnowledgeData();
@@ -154,13 +167,15 @@ const ProfilePage = () => {
     }));
 
     try {
-      const response = await ProfileApi.uploadFile([rcFile]);
+      console.log("handleFileUpload", tag);
+      const response = await ProfileApi.uploadFile([rcFile], tag);
 
       const newFile: FileItem = {
         id: response.data?.fileId || Date.now(),
         name: rcFile.name,
         size: rcFile.size,
         type: rcFile.type,
+        tag: tag,
         uploadTime: new Date().toISOString(),
         url: response.data?.url || URL.createObjectURL(rcFile)
       };
@@ -297,6 +312,21 @@ const ProfilePage = () => {
                         showCount
                       />
                     </Form.Item>*/}
+                    <Form.Item
+                      name="tag"
+                      label="知识标签"
+                      rules={[
+                        { required: true, message: '请输入知识标签' },
+                        { max: 20, message: '标题不能超过20个字符' }
+                      ]}
+                    >
+                      <Input 
+                        placeholder="请输入知识标签" 
+                        maxLength={20}
+                        value={tag}
+                        showCount
+                      />
+                    </Form.Item>
 
                     <Form.Item
                       name="content"
@@ -325,13 +355,17 @@ const ProfilePage = () => {
                         onClick={() => {
                           // 获取并验证表单数据
                           const formValues = form.getFieldsValue();
-                          const { content } = formValues;
+                          const { content, tag } = formValues;
 
                           if (!content?.trim()) {
                             message.error('请输入URL地址');
                             return;
                           }
-                          handleAddUrls(content.trim());
+                          if (!tag?.trim()) {
+                            message.error('请输入TAG');
+                            return;
+                          }
+                          handleAddUrls(content.trim(), tag);
                         }}
                       >
                         批量添加URL

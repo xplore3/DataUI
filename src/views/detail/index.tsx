@@ -59,7 +59,7 @@ const DetailPage: React.FC = () => {
     
     setLoading(true);
     try {
-      // 假设有获取单条知识的API
+      // 获取单条知识的API
       const response = await ProfileApi.getById(id);
       setKnowledge(response);
       form.setFieldsValue({
@@ -112,8 +112,8 @@ const DetailPage: React.FC = () => {
         updateTime: new Date().toISOString()
       };
 
-      // 假设有更新知识的API
-      await ProfileApi.update(knowledge.id, values.content);
+      // 更新知识的API
+      await ProfileApi.update(knowledge.id.toString(), values.content);
       
       setKnowledge(updatedKnowledge);
       setEditing(false);

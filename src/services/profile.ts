@@ -1,6 +1,8 @@
 import api from './axios';
 import { pinyin } from "pinyin-pro";
 
+const TAG_PREFIX = "sk_ai_quality_";
+
 export const ProfileApi = {
   getFileName: (file: File) => {
     let newFileName = file.name;
@@ -19,13 +21,14 @@ export const ProfileApi = {
     return newFileName;
   },
 
-  uploadFile: async (files: File[]) => {
+  uploadFile: async (files: File[], tag: string) => {
     try {
       const formData = new FormData();
       files.forEach((file) => {
         let newFileName = ProfileApi.getFileName(file);
         formData.append('files', file, newFileName);
       });
+      formData.append('tag', TAG_PREFIX + tag);
 
       const result = await api.post('/memory_uploadfile', formData, {
         headers: {'Content-Type': 'multipart/form-data'}
@@ -39,11 +42,12 @@ export const ProfileApi = {
     return 'Error';
   },
 
-  add: async (text: string) => {
+  add: async (text: string, tag: string) => {
     try {
       const result = await api.post('/memory_add', {
         content: text,
-        containerTag: 'sk_ai_quality'
+        containerTag: TAG_PREFIX + tag
+        //containerTag: 'sk_ai_quality'
       });
       console.log('add result', result);
 
@@ -63,11 +67,12 @@ export const ProfileApi = {
     return null;
   },
 
-  addUrls: async (text: string) => {
+  addUrls: async (text: string, tag: string) => {
     try {
       const result = await api.post('/memory_add_urls', {
         content: text,
-        containerTag: 'sk_ai_quality'
+        containerTag: TAG_PREFIX + tag
+        //containerTag: 'sk_ai_quality'
       });
       console.log('add urls result', result);
 
@@ -134,8 +139,7 @@ export const ProfileApi = {
     try {
       const result = await api.post('/memory_update', {
         id: id,
-        content: text,
-        containerTag: 'sk_ai_quality'
+        content: text
       });
       console.log('update result', result);
 
