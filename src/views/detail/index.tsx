@@ -33,7 +33,7 @@ interface KnowledgeItem {
   title: string;
   content: string;
   type: string;
-  containerTag?: string;
+  containerTags?: string;
   createdAt: string;
   updatedAt: string;
   metadata?: {
@@ -339,7 +339,7 @@ const DetailPage: React.FC = () => {
                         <Tag key={index} color="geekblue" style={{ marginBottom: 4 }}>
                           {tag}
                         </Tag>
-                      )) || <Text type="secondary">{knowledge.containerTag}</Text>}
+                      )) || <Text type="secondary">{knowledge.metadata?.category}</Text>}
                     </div>
                   )}
                 </Item>
