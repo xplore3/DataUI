@@ -136,10 +136,11 @@ export const ProfileApi = {
     return 'Error';
   },
 
-  update: async (id: string, text: string) => {
+  update: async (id: string, text: string, title: string) => {
     try {
       const result = await api.post('/memory_update', {
         id: id,
+        title: title,
         content: text
       });
       console.log('update result', result);

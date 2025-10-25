@@ -114,7 +114,7 @@ const DetailPage: React.FC = () => {
       };
 
       // 更新知识的API
-      await ProfileApi.update(knowledge.id.toString(), values.content);
+      await ProfileApi.update(knowledge.id.toString(), values.content, values.title);
       
       setKnowledge(updatedKnowledge);
       setEditing(false);
