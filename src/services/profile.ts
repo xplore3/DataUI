@@ -92,11 +92,12 @@ export const ProfileApi = {
     return null;
   },
 
-  list: async () => {
+  list: async (page = 1, pageSize = 20) => {
     try {
       const result = await api.post('/memory_list', {
         includeContent: true,
-        limit: '50'
+        page: page,
+        limit: pageSize
       });
       console.log('list result', result);
 

@@ -76,12 +76,21 @@ const ProfilePage = () => {
   });
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 20,
+    total: 0,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: (total: number, range: [number, number]) => 
+      `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
+  });
 
   // 加载知识库数据
-  const loadKnowledgeData = async () => {
+  const loadKnowledgeData = async (page = 1, pageSize = 20) => {
     setLoading(true);
     try {
-      const knowledgeRes = await ProfileApi.list();
+      const knowledgeRes = await ProfileApi.list(page, pageSize);
       // 确保数据格式正确
       const formattedData = Array.isArray(knowledgeRes) 
         ? knowledgeRes.map((item: any) => ({
@@ -96,6 +105,12 @@ const ProfilePage = () => {
         : [];
       
       setKnowledgeItems(formattedData);
+      setPagination(prev => ({
+        ...prev,
+        current: page,
+        pageSize,
+        total: knowledgeRes.total || knowledgeRes.data?.length || 0
+      }));
     } catch (error) {
       console.error('加载数据失败:', error);
       message.error('加载数据失败');
@@ -105,7 +120,7 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    loadKnowledgeData();
+    //loadKnowledgeData();
   }, []);
 
   // 添加文本知识
@@ -130,7 +145,7 @@ const ProfilePage = () => {
       //form.resetFields();
       form.setFieldsValue({content: ''});
       message.success('知识添加成功');
-      //await loadKnowledgeData();
+      await loadKnowledgeData();
     } catch (error) {
       console.error('添加知识失败:', error);
       message.error('添加知识失败');
@@ -240,6 +255,17 @@ const ProfilePage = () => {
         }
       },
     });
+  };
+
+  // 分页处理
+  const handlePageChange = (page: number, pageSize?: number) => {
+    loadKnowledgeData(page, pageSize || pagination.pageSize);
+  };
+
+  // 点击项目在新窗口打开
+  const handleItemClick = (itemId: number) => {
+    //window.open(`/detail/${itemId}`, '_blank');
+    navigate(`/detail/${itemId}`, '_blank');
   };
 
   // 格式化文件大小
@@ -458,7 +484,8 @@ const ProfilePage = () => {
                             删除
                           </Button>
                         ]}
-                        onClick={() => navigate(`/detail/${item.id}`)}
+                        className="knowledge-list-item"
+                        onClick={() => handleItemClick(item.id)}
                       >
                         <List.Item.Meta
                           avatar={<EditOutlined className="knowledge-icon" />}
@@ -478,6 +505,11 @@ const ProfilePage = () => {
                         />
                       </List.Item>
                     )}
+                    pagination={{
+                      ...pagination,
+                      onChange: handlePageChange,
+                      onShowSizeChange: handlePageChange,
+                    }}
                     locale={{ emptyText: '暂无知识内容' }}
                   />
                 </Card>

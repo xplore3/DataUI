@@ -143,6 +143,28 @@
   }
 }
 
+.knowledge-list-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+  
+  &:hover {
+    background-color: #fafafa;
+    transform: translateX(4px);
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// 分页样式调整
+.ant-list-pagination {
+  margin-top: 24px;
+  text-align: center;
+}
+
 // 图标样式
 .knowledge-icon,
 .file-icon {
