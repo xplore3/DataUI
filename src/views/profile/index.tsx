@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Layout,
   Card,
@@ -68,7 +68,7 @@ const PROFILE_KNOWLEDGE_TAG = 'profile_knowledge_tag';
 const PROFILE_KNOWLEDGE_LIST = 'profile_knowledge_list';
 
 const ProfilePage = () => {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -99,7 +99,7 @@ const ProfilePage = () => {
       }
       // 确保数据格式正确
       const formattedData = Array.isArray(knowledgeRes.memories) 
-        ? knowledgeRes.map((item: any) => ({
+        ? knowledgeRes.memories.map((item: any) => ({
             id: item.id || Date.now() + Math.random(),
             title: item.title || '无标题',
             content: item.content || item.text || '',
@@ -284,8 +284,8 @@ const ProfilePage = () => {
 
   // 点击项目在新窗口打开
   const handleItemClick = (itemId: number) => {
-    window.open(`/detail/${itemId}`, '_blank');
-    //navigate(`/detail/${itemId}`, '_blank');
+    //window.open(`/detail/${itemId}`, '_blank');
+    navigate(`/detail/${itemId}`);
   };
 
   // 格式化文件大小
