@@ -33,8 +33,8 @@ interface KnowledgeItem {
   title: string;
   content: string;
   type: string;
-  createTime: string;
-  updateTime: string;
+  createdAt: string;
+  updatedAt: string;
   metadata?: {
     author?: string;
     tags?: string[];
@@ -281,13 +281,13 @@ const DetailPage: React.FC = () => {
                 <Item label="创建时间">
                   <Space>
                     <CalendarOutlined />
-                    {formatDate(knowledge.createTime)}
+                    {formatDate(knowledge.createdAt)}
                   </Space>
                 </Item>
                 <Item label="更新时间">
                   <Space>
                     <CalendarOutlined />
-                    {formatDate(knowledge.updateTime)}
+                    {formatDate(knowledge.updatedAt)}
                   </Space>
                 </Item>
                 <Item label="类型">
@@ -297,7 +297,7 @@ const DetailPage: React.FC = () => {
                 </Item>
                 
                 {/* 可编辑的元数据 */}
-                <Form.Item name={['metadata', 'author']} noStyle>
+                {/*<Form.Item name={['metadata', 'author']} noStyle>
                   <Item label="作者">
                     {editing ? (
                       <Input placeholder="请输入作者" />
@@ -305,7 +305,7 @@ const DetailPage: React.FC = () => {
                       <Text>{knowledge.metadata?.author || '未设置'}</Text>
                     )}
                   </Item>
-                </Form.Item>
+                </Form.Item>*/}
 
                 <Form.Item name={['metadata', 'category']} noStyle>
                   <Item label="分类">
@@ -317,7 +317,7 @@ const DetailPage: React.FC = () => {
                   </Item>
                 </Form.Item>
 
-                <Form.Item name={['metadata', 'source']} noStyle>
+                {/*<Form.Item name={['metadata', 'source']} noStyle>
                   <Item label="来源">
                     {editing ? (
                       <Input placeholder="请输入来源" />
@@ -325,7 +325,7 @@ const DetailPage: React.FC = () => {
                       <Text>{knowledge.metadata?.source || '未知'}</Text>
                     )}
                   </Item>
-                </Form.Item>
+                </Form.Item>*/}
 
                 <Item label="标签">
                   {editing ? (
@@ -334,11 +334,11 @@ const DetailPage: React.FC = () => {
                     </Form.Item>
                   ) : (
                     <div>
-                      {knowledge.metadata?.tags?.map((tag, index) => (
+                      {/*knowledge.containerTags?.map((tag, index) => (
                         <Tag key={index} color="geekblue" style={{ marginBottom: 4 }}>
                           {tag}
                         </Tag>
-                      )) || <Text type="secondary">无标签</Text>}
+                      )) || */<Text type="secondary">{knowledge.containerTag}</Text>}
                     </div>
                   )}
                 </Item>
