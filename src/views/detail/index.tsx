@@ -33,7 +33,7 @@ interface KnowledgeItem {
   title: string;
   content: string;
   type: string;
-  containerTags?: string;
+  containerTags?: string[];
   createdAt: string;
   updatedAt: string;
   metadata?: {
