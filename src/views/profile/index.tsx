@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import {
   Layout,
   Card,
@@ -67,7 +67,7 @@ interface CustomUploadRequestOption {
 const PROFILE_KNOWLEDGE_TAG = 'profile_knowledge_tag';
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -264,8 +264,8 @@ const ProfilePage = () => {
 
   // 点击项目在新窗口打开
   const handleItemClick = (itemId: number) => {
-    //window.open(`/detail/${itemId}`, '_blank');
-    navigate(`/detail/${itemId}`, '_blank');
+    window.open(`/detail/${itemId}`, '_blank');
+    //navigate(`/detail/${itemId}`, '_blank');
   };
 
   // 格式化文件大小
