@@ -92,8 +92,13 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       const knowledgeRes = await ProfileApi.list(page, pageSize);
+      if (!knowledgeRes) {
+        setLoading(false);
+        message.error('加载数据失败');
+        return;
+      }
       // 确保数据格式正确
-      const formattedData = Array.isArray(knowledgeRes) 
+      const formattedData = Array.isArray(knowledgeRes.memories) 
         ? knowledgeRes.map((item: any) => ({
             id: item.id || Date.now() + Math.random(),
             title: item.title || '无标题',
@@ -108,9 +113,9 @@ const ProfilePage = () => {
       setKnowledgeItems(formattedData);
       setPagination(prev => ({
         ...prev,
-        current: page,
+        current: knowledgeRes.pagination?.currentPage,
         pageSize,
-        total: knowledgeRes.total || knowledgeRes.data?.length || 0
+        total: knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length || 0
       }));
     } catch (error) {
       console.error('加载数据失败:', error);

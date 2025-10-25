@@ -105,15 +105,15 @@ export const ProfileApi = {
       try {
         const json = JSON.parse(response);
         console.log(json);
-        return json.memories;
+        return json;
       } catch (err) {
         console.log(err);
       }
-      return response.memories;
+      return response;
     } catch (e) {
       console.error('Error list data:', e);
     }
-    return 'Error';
+    return null;
   },
 
   getById: async (id: string) => {
