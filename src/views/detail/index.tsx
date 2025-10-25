@@ -335,11 +335,11 @@ const DetailPage: React.FC = () => {
                     </Form.Item>
                   ) : (
                     <div>
-                      {/*knowledge.containerTags?.map((tag, index) => (
+                      {knowledge.containerTags?.map((tag, index) => (
                         <Tag key={index} color="geekblue" style={{ marginBottom: 4 }}>
                           {tag}
                         </Tag>
-                      )) || */<Text type="secondary">{knowledge.containerTag}</Text>}
+                      )) || <Text type="secondary">{knowledge.containerTag}</Text>}
                     </div>
                   )}
                 </Item>
