@@ -65,6 +65,7 @@ interface CustomUploadRequestOption {
 }
 
 const PROFILE_KNOWLEDGE_TAG = 'profile_knowledge_tag';
+const PROFILE_KNOWLEDGE_LIST = 'profile_knowledge_list';
 
 const ProfilePage = () => {
   //const navigate = useNavigate();
@@ -120,8 +121,22 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    //loadKnowledgeData();
+    const savedList = localStorage.getItem(PROFILE_KNOWLEDGE_LIST);
+    if (savedList) {
+      const parsedMessages: KnowledgeItem[] = JSON.parse(savedList);
+      const initializedMessages = parsedMessages.slice(-200);
+      setKnowledgeItems(initializedMessages);
+    }
+    else {
+      loadKnowledgeData();
+    }
   }, []);
+
+  useEffect(() => {
+    if (knowledgeItems.length > 0) {
+      localStorage.setItem(PROFILE_KNOWLEDGE_LIST, JSON.stringify(knowledgeItems));
+    }
+  }, [knowledgeItems]);
 
   // 添加文本知识
   const addTextKnowledge = async (values: { title: string; content: string, tag: string }) => {
