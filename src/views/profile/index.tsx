@@ -22,7 +22,8 @@ import {
   FileTextOutlined,
   FileOutlined,
   EditOutlined,
-  QuestionCircleOutlined
+  QuestionCircleOutlined,
+  WarningOutlined
 } from '@ant-design/icons';
 import type { UploadProps, RcFile } from 'antd/es/upload';
 import './index.less';
@@ -524,7 +525,10 @@ const ProfilePage = () => {
                         <List.Item.Meta
                           avatar={item.status == "done" ? 
                             <EditOutlined className="knowledge-icon" /> :
-                            <QuestionCircleOutlined className="knowledge-icon" />}
+                            (item.status == "queued" ?
+                            <QuestionCircleOutlined className="knowledge-icon" /> :
+                            <WarningOutlined />)
+                          }
                           title={item.status == "done" ? item.title : '处理中...'}
                           description={
                             <div>
