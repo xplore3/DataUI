@@ -86,7 +86,7 @@ const ProfilePage = () => {
   });
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 20,
+    pageSize: 10,
     total: totalNumber,
     showSizeChanger: true,
     showQuickJumper: true,
@@ -95,7 +95,7 @@ const ProfilePage = () => {
   });
 
   // 加载知识库数据
-  const loadKnowledgeData = async (page = 1, pageSize = 20) => {
+  const loadKnowledgeData = async (page = 1, pageSize = 10) => {
     setLoading(true);
     try {
       const knowledgeRes = await ProfileApi.list(page, pageSize);
@@ -525,11 +525,12 @@ const ProfilePage = () => {
                         <List.Item.Meta
                           avatar={item.status == "done" ? 
                             <EditOutlined className="knowledge-icon" /> :
-                            (item.status == "queued" ?
-                            <QuestionCircleOutlined className="knowledge-icon" /> :
-                            <WarningOutlined />)
+                            (item.status == "failed" || item.status == "unknown" ?
+                            <WarningOutlined className="file-icon" /> :
+                            <QuestionCircleOutlined className="knowledge-icon" />)
                           }
-                          title={item.status == "done" ? item.title : '处理中...'}
+                          title={item.status == "done" ? item.title :
+                            (item.status == "failed" || item.status == "unknown" ? '解析失败' : '处理中...')}
                           description={
                             <div>
                               <Text ellipsis={{ tooltip: item.content }}>
