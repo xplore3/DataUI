@@ -77,10 +77,11 @@ const ProfilePage = () => {
   });
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({});
+  const [totalNumber, setTotalNumber] = useState(0);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 20,
-    total: 0,
+    pageSize: 10,
+    total: totalNumber,
     showSizeChanger: true,
     showQuickJumper: true,
     showTotal: (total: number, range: [number, number]) => 
@@ -88,7 +89,7 @@ const ProfilePage = () => {
   });
 
   // 加载知识库数据
-  const loadKnowledgeData = async (page = 1, pageSize = 20) => {
+  const loadKnowledgeData = async (page = 1, pageSize = 10) => {
     setLoading(true);
     try {
       const knowledgeRes = await ProfileApi.list(page, pageSize);
@@ -111,6 +112,7 @@ const ProfilePage = () => {
         : [];
       
       setKnowledgeItems(formattedData);
+      setTotalNumber(knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length);
       setPagination(prev => ({
         ...prev,
         current: knowledgeRes.pagination?.currentPage,
@@ -131,6 +133,7 @@ const ProfilePage = () => {
       const parsedMessages: KnowledgeItem[] = JSON.parse(savedList);
       const initializedMessages = parsedMessages.slice(-200);
       setKnowledgeItems(initializedMessages);
+      setTotalNumber(initializedMessages.length);
     }
     else {
       loadKnowledgeData();
