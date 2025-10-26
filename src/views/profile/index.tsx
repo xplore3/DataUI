@@ -21,7 +21,8 @@ import {
   DeleteOutlined,
   FileTextOutlined,
   FileOutlined,
-  EditOutlined
+  EditOutlined,
+  QuestionCircleOutlined
 } from '@ant-design/icons';
 import type { UploadProps, RcFile } from 'antd/es/upload';
 import './index.less';
@@ -39,6 +40,7 @@ interface KnowledgeItem {
   content: string;
   type: string;
   tag: string,
+  status: string,
   createdAt: string;
   updatedAt: string;
 }
@@ -83,7 +85,7 @@ const ProfilePage = () => {
   });
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 20,
     total: totalNumber,
     showSizeChanger: true,
     showQuickJumper: true,
@@ -92,7 +94,7 @@ const ProfilePage = () => {
   });
 
   // 加载知识库数据
-  const loadKnowledgeData = async (page = 1, pageSize = 10) => {
+  const loadKnowledgeData = async (page = 1, pageSize = 20) => {
     setLoading(true);
     try {
       const knowledgeRes = await ProfileApi.list(page, pageSize);
@@ -109,6 +111,7 @@ const ProfilePage = () => {
             content: item.content || item.text || '',
             type: item.type || 'text',
             tag: item.tag || 'default',
+            status: item.status,
             createdAt: item.createdAt || new Date().toISOString(),
             updatedAt: item.updatedAt || new Date().toISOString()
           }))
@@ -165,6 +168,7 @@ const ProfilePage = () => {
         content: values.content,
         type: 'text',
         tag: values.tag,
+        status: "queued",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -381,7 +385,7 @@ const ProfilePage = () => {
                         { max: 20, message: '标题不能超过20个字符' }
                       ]}
                     >
-                      <Input 
+                      <Input
                         placeholder="请输入知识标签" 
                         maxLength={20}
                         showCount
@@ -518,8 +522,10 @@ const ProfilePage = () => {
                         onClick={() => handleItemClick(item.id)}
                       >
                         <List.Item.Meta
-                          avatar={<EditOutlined className="knowledge-icon" />}
-                          title={item.title}
+                          avatar={item.status == "done" ? 
+                            <EditOutlined className="knowledge-icon" /> :
+                            <QuestionCircleOutlined className="knowledge-icon" />}
+                          title={item.status == "done" ? item.title : '处理中...'}
                           description={
                             <div>
                               <Text ellipsis={{ tooltip: item.content }}>
