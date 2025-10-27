@@ -22,7 +22,7 @@ export default defineConfig({
     proxy: {
         '/dev': {
           // target: 'https://test.data3.site/dev',
-          target: 'http://97.64.21.158:3021',
+          target: 'http://localhost:3000',
           secure: false,
           ws: true,
           changeOrigin: true,

@@ -25,6 +25,7 @@
     "croner": "^9.0.0",
     "html2canvas": "^1.4.1",
     "jspdf": "3.0.1",
+    "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
     "less": "^4.2.2",
     "pinyin-pro": "^3.27.0",
