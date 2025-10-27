@@ -81,6 +81,7 @@ const PetCreator = () => {
       
       if (result && typeof result === 'string' && result.startsWith('data:image')) {
         setGeneratedPetImage(result);
+        await handleGenerateActionImage(result);
         message.success('宠物形象生成成功！');
       } else if (result && typeof result === 'string' && result.startsWith('{')) {
         // 尝试解析JSON错误信息
@@ -102,9 +103,9 @@ const PetCreator = () => {
         //throw new Error('生成失败，请重试');
         const data = await imageUrlToBase64(result);
         setGeneratedPetImage(data);
+        await handleGenerateActionImage(data);
         message.success('宠物形象生成成功！');
       }
-      await handleGenerateActionImage();
     } catch (error: any) {
       console.error('生成图片失败:', error);
       message.error(error.message || '生成失败，请重试');
@@ -114,9 +115,9 @@ const PetCreator = () => {
     }
   };
 
-  const handleGenerateActionImage = async () => {
-    if (!generatedPetImage) {
-      message.error('基础图片生成没有成功');
+  const handleGenerateActionImage = async (data: string) => {
+    if (!data) {
+      message.error('基础图片生成尚未成功');
       return;
     }
 
@@ -130,7 +131,7 @@ const PetCreator = () => {
 
       console.log('开始生成宠物动作形象...');
       // 将生成的宠物图片转换为File对象
-      const petImageFile = await base64ToFile(generatedPetImage, 'pet-walk-image.png');
+      const petImageFile = await base64ToFile(data, 'pet-action-image.png');
 
       // 调用图片生成API,生成【走路】姿态
       let result = await ImageApi.imageEdit(walkPrompt, [petImageFile], model);
@@ -1044,7 +1045,7 @@ const PetCreator = () => {
               </>
             )}
 
-            {!isGenerating && generatedPetImage && generatedWalkImage && generatedRunImage (
+            {!isGenerating && generatedPetImage && generatedWalkImage && generatedRunImage && (
               <>
                 <div className="generated-pet-preview">
                   <p className="success-text">🎉 你的{selectedStyle === 'pixel' ? '像素风' : '迪士尼风'}宠物形象生成完成！</p>
