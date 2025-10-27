@@ -24,6 +24,8 @@ const PetCreator = () => {
   const [isGeneratingActions, setIsGeneratingActions] = useState(false);
   const [generatedActions, setGeneratedActions] = useState<GeneratedAction[]>([]);
   const [generatedPetImage, setGeneratedPetImage] = useState<string | null>(null);
+  const [generatedWalkImage, setGeneratedWalkImage] = useState<string | null>(null);
+  const [generatedRunImage, setGeneratedRunImage] = useState<string | null>(null);
 
   const handleStyleSelect = (style: string) => {
     setSelectedStyle(style);
@@ -102,10 +104,95 @@ const PetCreator = () => {
         setGeneratedPetImage(data);
         message.success('宠物形象生成成功！');
       }
+      await handleGenerateActionImage();
     } catch (error: any) {
       console.error('生成图片失败:', error);
       message.error(error.message || '生成失败，请重试');
       setGeneratedPetImage(null);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateActionImage = async () => {
+    if (!generatedPetImage) {
+      message.error('基础图片生成没有成功');
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      // 根据选择的风格生成不同的提示词
+      const walkPrompt = '将图片中的宠物提取出来，保持其品种、体型、毛色和花纹等特征基本一致。\n\n重新生成一张高像素辨识度的像素艺术风格图（Pixel Art），像素颗粒感清晰、线条锐利。宠物身体成走路启动姿势，身体前倾，重心前移。迈出左前肢与右后肢，同时头部自然地从正面转向行进方向（正前方），视线随之改变；身体与画面呈约5°角，头在左、尾在右，形成轻微立体透视感。眼睛不可为纯黑色，需保留高光与层次。\n\n背景为纯白色（锁定Hex#FFFFFF），无阴影、无噪点、无渐变；画面比例为横向16:9，宠物完整居中，构图简洁明快。去除水印，整体风格清晰、干净、平衡。';
+      const runPrompt = '将图片中的宠物提取出来，保持其品种、体型、毛色和花纹等特征基本一致。\n\n重新生成一张高像素辨识度的像素艺术风格图（Pixel Art），像素颗粒感清晰、线条锐利。宠物身体成跑步姿势，身体前倾，重心前移。右后肢率先向后蹬直发力，左后肢（尚处于收缩状态准备跟进，身体开始向前（画面左侧）推进；身体与画面呈约5°角，头在左、尾在右，形成轻微立体透视感。眼睛不可为纯黑色，需保留高光与层次。\n\n背景为纯白色（锁定Hex#FFFFFF），无阴影、无噪点、无渐变；画面比例为横向16:9，宠物完整居中，构图简洁明快。去除水印，整体风格清晰、干净、平衡。';
+      // 使用 wan 模型生成图片
+      const model = 'bailian';
+
+      console.log('开始生成宠物动作形象...');
+      // 将生成的宠物图片转换为File对象
+      const petImageFile = await base64ToFile(generatedPetImage, 'pet-walk-image.png');
+
+      // 调用图片生成API,生成【走路】姿态
+      let result = await ImageApi.imageEdit(walkPrompt, [petImageFile], model);
+      console.log('生成【走路】姿态结果:', result);
+
+      if (result && typeof result === 'string' && result.startsWith('data:image')) {
+        setGeneratedWalkImage(result);
+        message.success('宠物【走路】姿态生成成功！');
+      } else if (result && typeof result === 'string' && result.startsWith('{')) {
+        // 尝试解析JSON错误信息
+        try {
+          const errorObj = JSON.parse(result);
+          if (errorObj.code === 'Arrearage') {
+            throw new Error('⚠️ 阿里百炼账户余额不足，请充值后重试');
+          }
+          throw new Error(errorObj.message || errorObj.error || '生成失败');
+        } catch (e) {
+          if (e instanceof Error && e.message.includes('余额不足')) {
+            throw e;
+          }
+          throw new Error('生成失败：' + result);
+        }
+      } else if (result && result.error) {
+        throw new Error(result.error);
+      } else {
+        //throw new Error('生成失败，请重试');
+        const data = await imageUrlToBase64(result);
+        setGeneratedWalkImage(data);
+        message.success('宠物【走路】姿态生成成功！');
+      }
+
+      // 调用图片生成API,生成【跑步】姿态
+      result = await ImageApi.imageEdit(runPrompt, [petImageFile], model);
+      console.log('生成【跑步】姿态结果:', result);
+
+      if (result && typeof result === 'string' && result.startsWith('data:image')) {
+        setGeneratedRunImage(result);
+        message.success('宠物【跑步】姿态生成成功！');
+      } else if (result && typeof result === 'string' && result.startsWith('{')) {
+        // 尝试解析JSON错误信息
+        try {
+          const errorObj = JSON.parse(result);
+          if (errorObj.code === 'Arrearage') {
+            throw new Error('⚠️ 阿里百炼账户余额不足，请充值后重试');
+          }
+          throw new Error(errorObj.message || errorObj.error || '生成失败');
+        } catch (e) {
+          if (e instanceof Error && e.message.includes('余额不足')) {
+            throw e;
+          }
+          throw new Error('生成失败：' + result);
+        }
+      } else if (result && result.error) {
+        throw new Error(result.error);
+      } else {
+        const data = await imageUrlToBase64(result);
+        setGeneratedRunImage(data);
+        message.success('宠物【跑步】姿态生成成功！');
+      }
+    } catch (error: any) {
+      console.error('生成图片失败:', error);
+      message.error(error.message || '生成失败，请重试');
     } finally {
       setIsGenerating(false);
     }
@@ -118,7 +205,7 @@ const PetCreator = () => {
     return new File([blob], filename, { type: blob.type });
   };
 
-  const imageUrlToBase64 = async(url: string): Promise<string> {
+  const imageUrlToBase64 = async(url: string): Promise<string> => {
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -196,15 +283,14 @@ const PetCreator = () => {
       // 根据风格定义不同的动作列表
       const pixelActions = [
         { id: 1, name: '自然状态', prompt: '为图片中的宠物生成如下动作：全身站立姿势，尾巴轻轻摇动，身体呈现自然呼吸感（轻微起伏，富有生命力）；画面居中，宠物完整入镜；背景为纯白色；' },
-        { id: 2, name: '走', prompt: '基础：纯白无杂质背景，1080P 高清，镜头固定无晃。参考图小狗全身（头、躯干、四肢、尾巴）完整入镜，无裁切，1:1 像素化还原定妆细节（毛发纹理、毛色、眼型、耳型等）。角色：按定妆图像素化呈现，保留毛质蓬松感、装饰，全身入镜时体态稳定，神态愉悦放松。5秒动作（全程全身可见，核心：头部自然转向与腿部锁定）：0-1秒：小狗松弛正面朝向镜头站立于画面中心，身体有自然呼吸起伏。1-2秒：行走启动。迈出左前肢（LF）与右后肢（RH），同时头部自然地从正面转向行进方向（正前方），视线随之改变。2-3秒：迈出右前肢（RF）与左后肢（LH），头部稳定保持朝向前方，身体重心平稳过渡，严格锁定四肢身份。3-4秒：重复LF和RH的迈步，保持节奏，头部方向稳定朝前。4-5秒：行走动作柔和收尾，头部可略微转回朝向镜头，回归放松的正面站姿。细节：明确描述头部从起始的"正面朝向镜头"自然转向行走时的"目视前方"，并在结束时可有回转趋势，使动作更完整。同时，运用腿部身份标识（LF, RH, RF, LH）技术，禁止腿部替换错误。行走中带入肩臀微小联动，步伐柔和，整体动态流畅自然，定妆细节清晰，风格治愈。' },
-        { id: 3, name: '跑', prompt: '基础：纯白无杂质背景，1080P高清，镜头固定无晃。小狗全身（头、躯干、四肢、尾巴）完整入镜，无裁切，1:1还原定妆细节（毛发纹理、毛色、眼型、耳型等）。小狗始终处于画面中心位置。角色：按定妆图呈现，保留毛质蓬松感、装饰。身体侧面朝向镜头，神态兴奋专注。5秒动作（核心：模拟真实的交替蹬地奔跑步态，身体呈波浪形运动）：0-1秒：起始于画面正中心。小狗身体前倾，重心前移。右后肢（RH）率先向后蹬直发力，左后肢（LH）尚处于收缩状态准备跟进，身体开始向前（画面左侧）推进。1-2秒：第一次腾空。在RH的推动下，身体短暂腾空。腾空时，身体向左侧充分伸展，左后肢（LH）迅速前摆至身体下方准备下一次触地。头部与眼神坚定前向（画面左侧）。2-3秒：交替发力。LH触地并紧接着迅猛向后蹬伸，提供第二次主要推力。此时RH已完成前摆动作。身体在LH的推动下再次获得加速度。3-4秒：第二次腾空。在LH的推动下，身体出现第二次腾空帧。RH再次前摆准备触地。背部随着后腿的交替蹬踏呈现明显的波浪形起伏。4-5秒：动作收尾。奔跑节奏放缓，四肢交替触地，从奔跑过渡到小跑，最终稳定停止在画面正中心。头部始终保持前向注视。细节：步态核心：明确描述后腿的"交替蹬伸"（RH蹬 -> LH蹬）和"波浪形背部起伏"，这是真实奔跑的核心动力来源。腾空机制：将腾空描述为由单侧后腿强力蹬地所产生的自然结果，而非双腿同时发力跳跃。力量感：强调 "迅猛向后蹬伸"、"提供主要推力" 等词汇，体现后腿的爆发力。技术锁定：严格运用并突出后腿身份标识（RH, LH）的交替顺序（RH, LH的字不要显示在画面中），确保动力链的准确性。' },
+        { id: 2, name: '走', prompt: '基础：纯白无杂质背景，1080P 高清，镜头固定无晃。参考图小狗为行走过程中的某一姿态（非站立），全身完整入镜，无裁切，1:1 像素化还原定妆细节。\n角色：按定妆图像素化呈现，保留毛质蓬松感、装饰，全身入镜时体态稳定，神态愉悦放松，头部与身体始终严格朝向正前方（行进方向）。\n5秒无缝循环动作（核心：头部稳定与直线行走）\n核心指令1：将小狗视为一个整体单元进行水平移动，其内部动画为一个独立的、稳定的行走循环。四肢运动仅作为该整体单元内的纹理变化，而非独立的几何体位移，以此杜绝腿部身份互换与变形。\n核心指令2：头部作为整体单元的一部分，锁定其空间位置。在整个行走循环中，头部相对于身体主干保持绝对稳定，无任何上下点头或左右晃动。\n0-1秒：整体单元从起始位置开始，沿画面中心轴线匀速水平左移。内部动画：左前肢与右后肢处于向前摆动状态。头部保持稳定。\n1-2秒：整体单元继续左移。内部动画：左前肢与右后肢向后蹬地，右前肢与左后肢开始向前摆动。头部保持稳定。\n2-3秒：整体单元继续左移。内部动画：右前肢与左后肢达到最大前伸位，左前肢与右后肢处于最大后蹬位。头部保持稳定。\n3-4秒：整体单元继续左移。内部动画：右前肢与左后肢向后蹬地，左前肢与右后肢开始向前摆动，回归至与0秒时完全对称的姿态。头部保持稳定。\n4-5秒：整体单元移动至循环终点，其内部姿态与0秒起始帧完全一致，实现无缝衔接。\n细节：首要目标是确保行走循环的稳定与无缝，以及头部的绝对稳定。 严格保证首尾帧一致。运动轨迹为绝对直线，无任何旋转或偏移。' },
+        { id: 3, name: '跑', prompt: '基础：纯白无杂质背景，1080P高清，镜头固定无晃。小狗全身（头、躯干、四肢、尾巴）完整入镜，无裁切，1:1还原定妆细节（毛发纹理、毛色、眼型、耳型等）。小狗始终处于画面中心位置。\n角色：按定妆图呈现，保留毛质蓬松感、装饰。身体侧面朝向镜头，头部与眼神坚定地朝向画面左侧（前向），神态兴奋专注。\n5秒动作（核心：构建一个可无缝循环的完整奔跑步态周期）：\n0-1秒（起始帧 = 周期起点）：小狗身体前倾，右后肢（RH）作为主导发力腿，正处于即将蹬直发力的临界点，左后肢（LH）已离地并向前摆动。左前肢（LF）即将触地，右前肢（RF）处于向后蹬伸的末尾阶段。此姿态定义为循环起点A。\n1-2秒：RH迅猛蹬直，将身体向前（左）推出，产生第一次腾空。LH继续前摆，LF触地承重。\n2-3秒：身体落地，LH接替成为发力腿，开始迅猛蹬伸。RF向前摆动，LF承重结束。\n3-4秒：LH全力蹬直，产生第二次腾空。RF准备触地，RH向前摆动至身体下方。\n4-5秒（结束帧 = 周期终点/下一周期起点）：动作流畅地过渡回与0-1秒完全一致的起始姿态。即：RH再次回到即将蹬直发力的临界点，LH离地前摆，LF即将触地，RF处于后蹬末尾。此姿态定义为循环终点A‘，与A完美匹配。\n细节：\n循环核心：明确描述起始帧与结束帧的姿态一致性，确保动画可以无缝衔接、循环播放。\n步态周期：完整描述一个由两次后腿主导蹬地（RH→LH） 和两次腾空构成的标准奔跑步态周期。\n动态流畅：强调动作的“流畅过渡”，避免任何生硬的起始或停止感。\n技术锁定：严格运用腿部身份标识（LF, RF, LH, RH），清晰定义它们在周期中每一个阶段的位置和状态，这是实现精准循环的关键。\n视觉辅助：背景有流向画面右侧的平滑、匀速运动模糊，以增强循环奔跑的无限动感。' },
         { id: 4, name: '搜寻', prompt: '为图片中的宠物生成如下动作：行走姿势，呈搜寻状态，边走边低头嗅闻；画面居中，宠物完整入镜；背景为纯白色；' },
         { id: 5, name: '站-坐-趴下', prompt: '为图片中的宠物生成如下动作：坐姿，呈侧坐状态，身体偏向一侧，臀部着地，并从坐下过渡到趴下；画面居中，宠物完整入镜；背景为纯白色；' },
         { id: 6, name: '蜷缩睡觉', prompt: '为图片中的宠物生成如下动作：从站立姿势慢慢坐下，然后再趴下，进入睡觉状态；身体蜷缩成一团，四肢自然收拢，尾巴轻轻环在身侧；随呼吸轻微起伏，呈现柔和而富有生命力的动态感。画面居中，宠物完整入镜；背景为纯白色（#FFFFFF），无阴影、无杂物、无渐变；整体风格清晰、干净、温和。' },
         { id: 7, name: '吃狗粮', prompt: '为图片中的宠物生成如下动作：地上出现一个宠物粮碗，宠物凑近粮碗，先是低下头仔细闻了闻，随后便低下头，津津有味地吃了起来。画面居中，宠物完整入镜；背景为纯白色；' },
-        { id: 8, name: '跳跃', prompt: '基础：纯白无杂质背景，1080P高清，镜头固定无晃。小狗全身（头、躯干、四肢、尾巴）完整入镜，无裁切，1:1像素化还原定妆细节（毛发纹理、毛色、眼型、耳型等）。\n\n为图片中宠物生成如下跳跃动作——\n0-3s：小狗转身，头部与眼神坚定前向（画面左侧）。身体微下沉，完成跳跃前蓄力，然后向前蹬地，身体向斜上方跃起，腾空时四肢完全伸展，形成流畅抛物线轨迹。\n3-5s：小狗前爪率先触地，身体随惯性轻微前倾，后爪随即落地。落地后身体保持平衡，尾巴自然下垂，动作无卡顿。以放松姿态稳定站立在画面左侧，动作结束。\n\n物理准确性：强调步伐 "扎实无滑动" 、驱动 "向前的爆发力" 、落地 "无任何异常滑动" ，确保动作符合真实力学。\n力量感与姿态：通过 "强力蹬地"、"大幅度腾空"、"四肢完全伸展" 描绘出力量感和动态美感。' },
+        { id: 8, name: '跳跃', prompt: '基础：纯白无杂质背景，1080P高清，镜头固定无晃。小狗全身（头、躯干、四肢、尾巴）完整入镜，无裁切，1:1像素化还原定妆细节（毛发纹理、毛色、眼型、耳型等）。\n\n为图片中宠物生成如下跳跃动作——\n0-3s：小狗转身，头部与眼神坚定前向（画面左侧）。身体微下沉，完成跳跃前蓄力，然后向前蹬地，身体向斜上方跃起，腾空时四肢完全伸展，形成流畅抛物线轨迹。\n3-5s：小狗前爪率先触地，身体随惯性轻微前倾，后爪随即落地。落地后身体保持平衡，尾巴自然下垂，动作无卡顿。以放松姿态稳定站立在画面左侧，动作结束。\n\n物理准确性：强调步伐 "扎实无滑动" 、驱动 "向前的爆发力" 、落地 "无任何异常滑动" ，确保动作符合真实力学。\n力量感与姿态：通过 "强力蹬地"、"大幅度腾空"、"四肢完全伸展" 描绘出力量感和动态美感。' },
       ];
-
       const disneyActions = [
         { id: 1, name: '自然状态', prompt: '基础参数：1080P 高清分辨率，9:16 竖屏比例，纯白无杂质背景，无任何多余道具或元素。镜头固定不动，无推拉、摇移、晃动，全程保持小狗全身（头部、躯干、四肢、尾巴）完整入镜，无任何裁切。角色要求：严格按照定妆图还原，毛发纹理、毛色、眼型、耳型、身体装饰等细节 1:1 呈现。全程保持固定坐姿（臀部不离开地面，四肢不站立），体态、愉悦神态不改变，毛质蓬松自然。5 秒动作设计（全程全身可见，坐姿不变）：0-1 秒：小狗位于画面中下区域，呈放松坐姿，胸腔随平稳呼吸轻微起伏，无多余动作。1-2 秒：保持坐姿不变，缓慢眨眼 1 次。2-3 秒：保持坐姿不变，头部缓慢向左右两侧各转动 1 次（转动角度不超过30°），随后恢复正视镜头状态。3-4 秒：保持坐姿不变，尾巴小幅度上下摆动（摆动幅度不超过身体高度的 1/4），呼吸保持平稳。4-5 秒：保持坐姿不变，停止尾巴摆动，恢复初始放松状态，胸腔随平稳呼吸轻微起伏。风格细节：整体风格治愈，小狗状态放松自然，无紧张或夸张动作。定妆细节（毛发、装饰、五官）全程清晰可见，无模糊或变形。' },
         { id: 2, name: '趴下', prompt: '1080P 高清，9:16 竖屏，纯白背景无杂物。镜头固定，全程小狗全身（含尾巴）完整入镜无裁切，尾巴尖始终不超出画面边缘。角色要求：按定妆图 1:1 还原毛发、五官、装饰，全程愉悦神态，毛质蓬松。动作前为标准坐姿（臀贴地，后肢弯，前肢撑），转换流畅不僵硬。5 秒动作设计（全身含尾巴可见）：0-1 秒：中下区域标准坐姿，呼吸起伏，头正视，尾巴自然垂地且尖不超画面，无多余动作。1-2 秒：头不动，前肢前伸（尖不超画面，不站立），臀微抬（不超身体厚 1/2），后肢弯，尾巴保持垂地不超界。2-3 秒：前肢不动，臀慢贴地，后肢展向两侧（不挡腹部），过渡半趴，尾巴始终在画面内。3-4 秒：完全趴姿（腹贴地，前肢撑，后肢展），尾巴小幅左右摆（尖不超画面，幅度不超身体宽 1/3）。4-5 秒：尾停贴地不超界，保持趴姿，呼吸起伏，无多余动作。风格细节：治愈自然，动作自然流畅。定妆细节、尾巴全程清晰，无遮挡模糊，突出小狗主体。' },
@@ -229,9 +315,20 @@ const PetCreator = () => {
         try {
           console.log(`[${i + 1}/${actions.length}] 开始生成动作: ${action.name}, 使用模型: ${videoModel}`);
           message.loading({ content: `正在生成"${action.name}"动作... (${i + 1}/${actions.length})`, key: 'genAction', duration: 0 });
-          
+
+          let frameFiles = [petImageFile];
+          if (action.name == '走') {
+            const walkStartFile = await base64ToFile(generatedWalkImage, 'walk-start-image.png');
+            const walkEndFile = await base64ToFile(generatedWalkImage, 'walk-end-image.png');
+            frameFiles = [walkStartFile, walkEndFile];
+          }
+          else if (action.name == '跑') {
+            const runStartFile = await base64ToFile(generatedRunImage, 'run-start-image.png');
+            const runEndFile = await base64ToFile(generatedRunImage, 'run-end-image.png');
+            frameFiles = [runStartFile, runEndFile];
+          }
           // 调用视频生成API
-          let taskId: any = await ImageApi.imageToVideo(action.prompt, [petImageFile], videoModel);
+          let taskId: any = await ImageApi.imageToVideo(action.prompt, frameFiles, videoModel);
           console.log(`${action.name} 任务ID（原始）:`, taskId);
 
           // volce 特殊处理：如果直接返回了URL，视为已完成，无需轮询
@@ -953,6 +1050,13 @@ const PetCreator = () => {
                   <p className="success-text">🎉 你的{selectedStyle === 'pixel' ? '像素风' : '迪士尼风'}宠物形象生成完成！</p>
                   <div className="pet-image-container">
                     <img src={generatedPetImage} alt="生成的宠物形象" className="generated-pet-image" />
+                  </div>
+                  <p className="instruction">
+                    对应的走路和跑步形象
+                  </p>
+                  <div className="pet--action-image-container">
+                    <img src={generatedWalkImage} alt="生成的走路形象" className="generated-pet-action-image" />
+                    <img src={generatedRunImage} alt="生成的跑步形象" className="generated-pet-action-image" />
                   </div>
                   <p className="instruction">
                     如果对生成的形象满意，可以下载保存或继续下一步生成专属动作
