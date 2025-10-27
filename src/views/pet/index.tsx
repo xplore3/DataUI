@@ -595,18 +595,18 @@ const PetCreator = () => {
     try {
       message.loading({ content: '正在转换为GIF，请稍候...', key: 'convertGif', duration: 0 });
       
-      // 调用转换API
-      /*const gifUrl = await ImageApi.videoToGif(action.preview);
+      // 调用转换API，使用10fps确保流畅度
+      const gifUrl = await ImageApi.videoToGif(action.preview, 10);
       
       if (gifUrl && typeof gifUrl === 'string' && gifUrl.startsWith('http')) {
         // 更新状态
         setGeneratedActions(prev =>
           prev.map(a => a.id === actionId ? { ...a, gifUrl, isConvertingToGif: false } : a)
         );
-        message.success({ content: '转换成功！', key: 'convertGif' });
+        message.success({ content: `${action.name} 转换成功！`, key: 'convertGif' });
       } else {
-        throw new Error('转换失败');
-      }*/
+        throw new Error('转换失败，返回格式不正确');
+      }
     } catch (error: any) {
       console.error('转换GIF失败:', error);
       message.error({ content: error.message || '转换失败，请重试', key: 'convertGif' });
