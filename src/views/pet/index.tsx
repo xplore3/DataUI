@@ -1049,20 +1049,23 @@ const PetCreator = () => {
               </>
             )}
 
-            {!isGenerating && generatedPetImage && generatedWalkImage && generatedRunImage && (
+            {!isGenerating && generatedPetImage && (
               <>
                 <div className="generated-pet-preview">
                   <p className="success-text">🎉 你的{selectedStyle === 'pixel' ? '像素风' : '迪士尼风'}宠物形象生成完成！</p>
                   <div className="pet-image-container">
                     <img src={generatedPetImage} alt="生成的宠物形象" className="generated-pet-image" />
                   </div>
-                  <p className="instruction">
-                    对应的走路和跑步形象
-                  </p>
-                  <div className="pet-action-image-container">
-                    <img src={generatedWalkImage} alt="生成的走路形象" className="generated-pet-action-image" />
-                    <img src={generatedRunImage} alt="生成的跑步形象" className="generated-pet-action-image" />
-                  </div>
+                  {generatedWalkImage && generatedRunImage && (
+                  <>
+                    <p className="instruction">
+                      对应的走路和跑步姿态形象
+                    </p>
+                    <div className="pet-action-image-container">
+                      <img src={generatedWalkImage} alt="生成的走路形象" className="generated-pet-action-image" />
+                      <img src={generatedRunImage} alt="生成的跑步形象" className="generated-pet-action-image" />
+                    </div>
+                  </>）}
                   <p className="instruction">
                     如果对生成的形象满意，可以下载保存或继续下一步生成专属动作
                   </p>
