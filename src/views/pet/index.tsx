@@ -72,8 +72,9 @@ const PetCreator = () => {
       });
       
       // 调用图片生成API（传递目标比例）
-      const result = await ImageApi.imageEdit(prompt, [uploadedFile], model, targetRatio);
-      
+      //const result = await ImageApi.imageEdit(prompt, [uploadedFile], model, targetRatio);
+      const result = await ImageApi.imageEdit(prompt, [uploadedFile], model);
+
       console.log('生成结果:', result);
       
       if (result && typeof result === 'string' && result.startsWith('data:image')) {
@@ -96,7 +97,10 @@ const PetCreator = () => {
       } else if (result && result.error) {
         throw new Error(result.error);
       } else {
-        throw new Error('生成失败，请重试');
+        //throw new Error('生成失败，请重试');
+        const data = await imageUrlToBase64(result);
+        setGeneratedPetImage(data);
+        message.success('宠物形象生成成功！');
       }
     } catch (error: any) {
       console.error('生成图片失败:', error);
@@ -113,6 +117,38 @@ const PetCreator = () => {
     const blob = await response.blob();
     return new File([blob], filename, { type: blob.type });
   };
+
+  const imageUrlToBase64 = async(url: string): Promise<string> {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+  
+        reader.onloadend = () => {
+          // reader.result 是 base64 字符串
+          if (typeof reader.result === 'string') {
+            resolve(reader.result);
+          } else {
+            reject(new Error('Failed to convert blob to base64'));
+          }
+        };
+
+        reader.onerror = () => {
+          reject(new Error('FileReader error'));
+        };
+
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      throw new Error(`Failed to convert image to base64: ${error}`);
+    }
+  }
 
   // 轮询查询视频生成结果
   const pollVideoResult = async (taskId: string | any, model: string = 'bailian'): Promise<string> => {
@@ -458,7 +494,7 @@ const PetCreator = () => {
       message.loading({ content: '正在转换为GIF，请稍候...', key: 'convertGif', duration: 0 });
       
       // 调用转换API
-      const gifUrl = await ImageApi.videoToGif(action.preview);
+      /*const gifUrl = await ImageApi.videoToGif(action.preview);
       
       if (gifUrl && typeof gifUrl === 'string' && gifUrl.startsWith('http')) {
         // 更新状态
@@ -468,7 +504,7 @@ const PetCreator = () => {
         message.success({ content: '转换成功！', key: 'convertGif' });
       } else {
         throw new Error('转换失败');
-      }
+      }*/
     } catch (error: any) {
       console.error('转换GIF失败:', error);
       message.error({ content: error.message || '转换失败，请重试', key: 'convertGif' });
