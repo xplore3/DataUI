@@ -81,7 +81,9 @@ const PetCreator = () => {
       
       if (result && typeof result === 'string' && result.startsWith('data:image')) {
         setGeneratedPetImage(result);
-        await handleGenerateActionImage(result);
+        if (selectedStyle === 'pixel') {
+          await handleGenerateActionImage(result);
+        }
         message.success('宠物形象生成成功！');
       } else if (result && typeof result === 'string' && result.startsWith('{')) {
         // 尝试解析JSON错误信息
@@ -103,7 +105,9 @@ const PetCreator = () => {
         //throw new Error('生成失败，请重试');
         const data = await imageUrlToBase64(result);
         setGeneratedPetImage(data);
-        await handleGenerateActionImage(data);
+        if (selectedStyle === 'pixel') {
+          await handleGenerateActionImage(data);
+        }
         message.success('宠物形象生成成功！');
       }
     } catch (error: any) {
@@ -1055,7 +1059,7 @@ const PetCreator = () => {
                   <p className="instruction">
                     对应的走路和跑步形象
                   </p>
-                  <div className="pet--action-image-container">
+                  <div className="pet-action-image-container">
                     <img src={generatedWalkImage} alt="生成的走路形象" className="generated-pet-action-image" />
                     <img src={generatedRunImage} alt="生成的跑步形象" className="generated-pet-action-image" />
                   </div>
