@@ -1065,7 +1065,7 @@ const PetCreator = () => {
                       <img src={generatedWalkImage} alt="生成的走路形象" className="generated-pet-action-image" />
                       <img src={generatedRunImage} alt="生成的跑步形象" className="generated-pet-action-image" />
                     </div>
-                  </>）}
+                  </>)}
                   <p className="instruction">
                     如果对生成的形象满意，可以下载保存或继续下一步生成专属动作
                   </p>
