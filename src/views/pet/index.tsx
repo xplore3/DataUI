@@ -267,7 +267,7 @@ const PetCreator = () => {
   };
 
   const handleGenerateActions = async () => {
-    if (!generatedPetImage) {
+    if (!generatedPetImage || !generatedWalkImage || !generatedRunImage) {
       message.error('请先生成宠物形象');
       return;
     }
@@ -1044,7 +1044,7 @@ const PetCreator = () => {
               </>
             )}
 
-            {!isGenerating && generatedPetImage && (
+            {!isGenerating && generatedPetImage && generatedWalkImage && generatedRunImage (
               <>
                 <div className="generated-pet-preview">
                   <p className="success-text">🎉 你的{selectedStyle === 'pixel' ? '像素风' : '迪士尼风'}宠物形象生成完成！</p>
