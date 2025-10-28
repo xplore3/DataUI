@@ -272,8 +272,12 @@ const PetCreator = () => {
   };
 
   const handleGenerateActions = async () => {
-    if (!generatedPetImage || !generatedWalkImage || !generatedRunImage) {
+    if (!generatedPetImage) {
       message.error('请先生成宠物形象');
+      return;
+    }
+    if (selectedStyle === 'pixel' && (!generatedWalkImage || !generatedRunImage)) {
+      message.error('请先生成宠物动作姿态');
       return;
     }
 
