@@ -247,7 +247,7 @@
       height: 100%;
       background-color: @primary-color;
       border-radius: 5px;
-      animation: progress 30s linear forwards;
+      animation: progress 45s linear forwards;
     }
 
     @keyframes progress {
@@ -274,7 +274,10 @@
     background-color: @background-light;
     border-radius: @border-radius;
     box-shadow: @shadow;
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
 
     .generated-pet-image {
       max-width: 400px;
@@ -292,6 +295,16 @@
     border-radius: @border-radius;
     box-shadow: @shadow;
     display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .pet-action-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
 
     .generated-pet-action-image {
       max-width: 200px;
@@ -299,6 +312,19 @@
       border-radius: 8px;
       display: block;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .action-placeholder {
+      width: 200px;
+      height: 200px;
+      border: 1px dashed @border-color;
+      border-radius: 8px;
+      background-color: #fff;
+      color: @text-light;
+      .flex-center();
+      text-align: center;
+      padding: 10px;
+      line-height: 1.4;
     }
   }
 
