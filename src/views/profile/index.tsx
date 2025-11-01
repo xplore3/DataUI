@@ -398,13 +398,13 @@ const ProfilePage = () => {
                       label="知识内容"
                       rules={[
                         { required: true, message: '请输入知识内容或URL' },
-                        { max: 5000, message: '内容不能超过5000个字符' }
+                        { max: 20000, message: '内容不能超过20000个字符' }
                       ]}
                     >
                       <TextArea
                         placeholder="请输入详细的知识内容或URL"
                         rows={6}
-                        maxLength={5000}
+                        maxLength={20000}
                         showCount
                       />
                     </Form.Item>
