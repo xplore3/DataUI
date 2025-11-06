@@ -120,13 +120,14 @@ const ProfilePage = () => {
         : [];
       
       setKnowledgeItems(formattedData);
-      setTotalNumber(knowledgeRes.total || knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length);
-      localStorage.setItem(PROFILE_KNOWLEDGE_TOTAL, knowledgeRes.pagination?.totalItems.toString());
+      const totalItems = knowledgeRes.total || knowledgeRes.pagination?.totalItems || formattedData.length || 0;
+      setTotalNumber(totalItems);
+      localStorage.setItem(PROFILE_KNOWLEDGE_TOTAL, totalItems.toString());
       setPagination(prev => ({
         ...prev,
-        current: knowledgeRes.page || knowledgeRes.pagination?.currentPage,
+        current: knowledgeRes.page || knowledgeRes.pagination?.currentPage || 1,
         pageSize,
-        total: knowledgeRes.total || knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length || 0
+        total: totalItems
       }));
     } catch (error) {
       console.error('加载数据失败:', error);
