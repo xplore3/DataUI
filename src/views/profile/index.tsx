@@ -105,13 +105,14 @@ const ProfilePage = () => {
         return;
       }
       // 确保数据格式正确
-      const formattedData = Array.isArray(knowledgeRes.memories) 
-        ? knowledgeRes.memories.map((item: any) => ({
+      const items = knowledgeRes.memories || knowledgeRes.documents || [];
+      const formattedData = Array.isArray(items) 
+        ? items.map((item: any) => ({
             id: item.id || Date.now() + Math.random(),
             title: item.title || '无标题',
             content: item.content || item.text || '',
             type: item.type || 'text',
-            tag: item.tag || 'default',
+            tag: item.tag || item.containerTag || 'default',
             status: item.status,
             createdAt: item.createdAt || new Date().toISOString(),
             updatedAt: item.updatedAt || new Date().toISOString()
@@ -119,13 +120,13 @@ const ProfilePage = () => {
         : [];
       
       setKnowledgeItems(formattedData);
-      setTotalNumber(knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length);
+      setTotalNumber(knowledgeRes.total || knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length);
       localStorage.setItem(PROFILE_KNOWLEDGE_TOTAL, knowledgeRes.pagination?.totalItems.toString());
       setPagination(prev => ({
         ...prev,
-        current: knowledgeRes.pagination?.currentPage,
+        current: knowledgeRes.page || knowledgeRes.pagination?.currentPage,
         pageSize,
-        total: knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length || 0
+        total: knowledgeRes.total || knowledgeRes.pagination?.totalItems || knowledgeRes.memories?.length || 0
       }));
     } catch (error) {
       console.error('加载数据失败:', error);

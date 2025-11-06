@@ -339,7 +339,8 @@ const DetailPage: React.FC = () => {
                         <Tag key={index} color="geekblue" style={{ marginBottom: 4 }}>
                           {tag}
                         </Tag>
-                      )) || <Text type="secondary">{knowledge.metadata?.category}</Text>}
+                      )) || <Text type="secondary">{knowledge.tag}</Text>
+                      || <Text type="secondary">{knowledge.metadata?.category}</Text>}
                     </div>
                   )}
                 </Item>
