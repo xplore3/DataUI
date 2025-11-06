@@ -46,8 +46,8 @@ export const ProfileApi = {
     try {
       const result = await api.post('/memory_add', {
         content: text,
+        tag: TAG_PREFIX + tag,
         containerTag: TAG_PREFIX + tag
-        //containerTag: 'sk_ai_quality'
       });
       console.log('add result', result);
 
@@ -71,8 +71,8 @@ export const ProfileApi = {
     try {
       const result = await api.post('/memory_add_urls', {
         content: text,
+        tag: TAG_PREFIX + tag,
         containerTag: TAG_PREFIX + tag
-        //containerTag: 'sk_ai_quality'
       });
       console.log('add urls result', result);
 
