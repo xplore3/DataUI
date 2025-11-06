@@ -34,6 +34,7 @@ interface KnowledgeItem {
   content: string;
   type: string;
   containerTags?: string[];
+  tag?: string;
   createdAt: string;
   updatedAt: string;
   metadata?: {
