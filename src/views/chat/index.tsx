@@ -718,6 +718,125 @@ const Chat = () => {
     }
   };
 
+  // 测试跨境电商报告质量
+  const handleTestEcomReport = async () => {
+    if (loading) return;
+    
+    try {
+      toast('正在生成跨境电商人才市场报告，请稍候......');
+      setLoading(true);
+      
+      // 第一步：生成报告
+      const reportPrompt = '生成2024年第四季度跨境电商人才供给市场跟踪报告';
+      setMessageList(prev => [...prev, { text: `[测试] ${reportPrompt}`, user: 'user', action: 'NONE', displayText: reportPrompt }]);
+      
+      // 调用 ecomroutine 生成报告
+      let reportRes;
+      try {
+        reportRes = await chatApi.routineTask(reportPrompt, 'ecom_talent_report');
+      } catch (error: any) {
+        console.error('生成报告失败:', error);
+        const errorMessage = error?.response?.data?.error || error?.message || '生成报告时出错，请检查后端服务是否正常运行';
+        setMessageList(prev => [...prev, { 
+          text: `[错误] ${errorMessage}`, 
+          user: 'agent', 
+          action: 'NONE', 
+          displayText: errorMessage 
+        }]);
+        toast.error('报告生成失败: ' + errorMessage);
+        return;
+      }
+      
+      // 检查返回结果
+      if (!reportRes || !reportRes.text) {
+        toast.error('报告生成失败：未收到有效响应');
+        return;
+      }
+      
+      // 添加报告到消息列表
+      setMessageList(prev => [...prev, { ...reportRes, displayText: '' }]);
+      
+      // 等待报告生成完成（handlerStatus会通过轮询更新消息列表）
+      await handlerStatus();
+      
+      // 等待一段时间让报告完全生成
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      
+      // 再次检查状态以获取最新报告
+      await handlerStatus();
+      
+      // 使用返回的报告内容进行质量评估
+      // 注意：由于handlerStatus会异步更新messageList，我们使用reportRes.text
+      // 如果报告还在生成中，质量评估会基于当前可用的内容
+      let reportText = reportRes.text || '';
+      
+      // 如果报告文本太短，可能是错误消息
+      if (reportText && reportText.length > 100 && !reportText.includes('Error') && !reportText.includes('错误')) {
+        // 第二步：评估报告质量
+        toast('报告已生成，正在评估报告质量...');
+        
+        // 提取报告内容（如果是JSON格式，提取process_result）
+        let reportContent = reportText;
+        try {
+          const jsonMatch = reportText.match(/\{[\s\S]*"process_result"[\s\S]*\}/);
+          if (jsonMatch) {
+            const json = JSON.parse(jsonMatch[0]);
+            reportContent = json.process_result || reportText;
+          }
+        } catch (e) {
+          // 如果不是JSON格式，直接使用原文本
+          reportContent = reportText;
+        }
+        
+        // 限制报告长度，避免过长
+        const truncatedReport = reportContent.substring(0, 5000);
+        
+        const qualityPrompt = `请评估以下跨境电商人才市场报告的质量，从以下维度进行评分（1-10分）并给出改进建议：
+
+1. 数据完整性：报告是否包含所有必要的数据维度（市场大事记、岗位数量、薪酬、人才供给、招聘趋势等）
+2. 分析深度：分析是否深入，是否有洞察，是否包含环比和同比分析
+3. 结构清晰度：报告结构是否清晰，逻辑是否连贯，章节划分是否合理
+4. 数据准确性：数据是否准确，是否有明显错误，是否标注了"数据暂时无法找到"
+5. 可读性：报告是否易于理解和阅读，表格使用是否恰当，格式是否规范
+
+报告内容：
+${truncatedReport}
+
+请以结构化的方式输出评估结果，包括每个维度的评分、具体评价和改进建议。`;
+        
+        setMessageList(prev => [...prev, { 
+          text: '[质量评估] 正在评估报告质量...', 
+          user: 'user', 
+          action: 'NONE', 
+          displayText: '[质量评估] 正在评估报告质量...' 
+        }]);
+        
+        // 调用质量评估
+        try {
+          const qualityRes = await chatApi.createChat(qualityPrompt);
+          setMessageList(prev => [...prev, { ...qualityRes, displayText: '' }]);
+          
+          // 等待评估完成
+          await handlerStatus();
+          
+          toast.success('报告质量评估完成！');
+        } catch (qualityError: any) {
+          console.error('质量评估失败:', qualityError);
+          const qualityErrorMessage = qualityError?.response?.data?.error || qualityError?.message || '质量评估时出错';
+          toast.error('质量评估失败: ' + qualityErrorMessage);
+        }
+      } else {
+        toast.warning('报告生成失败或内容过短，无法进行评估。请检查后端服务配置。');
+      }
+    } catch (error: any) {
+      console.error('测试报告质量失败:', error);
+      const errorMessage = error?.response?.data?.error || error?.message || '测试失败，请稍后再试';
+      toast.error('测试失败: ' + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="chat-page ">
       <PromptPin open={showPinModal} promptText={pinPrompt} onClose={() => setShowPinModal(false)} />
@@ -778,8 +897,9 @@ const Chat = () => {
               )} */}
             {item.options && item.options.length > 0 && (
               <div className="options-view">
-                {item.options.map(option => (
+                {item.options.map((option, optionIndex) => (
                   <button
+                    key={`option-${index}-${optionIndex}-${option}`}
                     className={item.hasSubmit ? 'option-button-disabled' : 'option-button'}
                     disabled={item.hasSubmit /* || (index !== messageList.length - 1)*/}
                     onClick={() => {
@@ -833,6 +953,26 @@ const Chat = () => {
             </div>
           ))}
           {loading ? (<ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>) : (<></>)}
+        </div>
+        {/* 测试报告质量按钮 */}
+        <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'center' }}>
+          <div 
+            className={loading ? 'chat-page-items loading' : 'chat-page-items'} 
+            style={{ 
+              backgroundColor: '#ff6b35', 
+              color: 'white',
+              border: 'none',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? 0.6 : 1
+            }}
+            onClick={() => {
+              if (!loading) {
+                handleTestEcomReport();
+              }
+            }}
+          >
+            {loading ? '正在处理...' : '🧪 测试报告质量'}
+          </div>
         </div>
         {false && (
           <div className="chat-page-input">

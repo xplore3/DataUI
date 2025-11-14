@@ -192,17 +192,32 @@ export const chatApi = {
       try {
         const json = JSON.parse(response);
         if (json) {
-          newTaskId = json.taskId;
-          useUserStore.getState().setTaskId(newTaskId);
-          response = (json.process_result + json.option_description) || json.data_result || json.question_description;
+          newTaskId = json.taskId || '';
+          if (newTaskId) {
+            useUserStore.getState().setTaskId(newTaskId);
+          }
+          response = (json.process_result + json.option_description) || json.data_result || json.question_description || response;
           pdfUrl = json.pdf_url || '';
         }
       } catch (err) {
         //console.log(err);
-        newTaskId = response.taskId || result.data.taskId;
-        useUserStore.getState().setTaskId(newTaskId);
-        response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
-        pdfUrl = response.pdf_url || result.data.pdf_url || '';
+        // 如果 response 是对象，尝试从中获取 taskId
+        if (response && typeof response === 'object') {
+          newTaskId = response.taskId || '';
+          if (newTaskId) {
+            useUserStore.getState().setTaskId(newTaskId);
+          }
+          response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
+          pdfUrl = response.pdf_url || '';
+        } else if (result.data) {
+          // 如果 response 是字符串，尝试从 result.data 获取
+          newTaskId = result.data.taskId || '';
+          if (newTaskId) {
+            useUserStore.getState().setTaskId(newTaskId);
+          }
+          pdfUrl = result.data.pdf_url || '';
+        }
+        // 如果 response 是字符串且无法解析，保持原样
       }
       return {
         text: response,
