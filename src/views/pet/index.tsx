@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect  } from 'react';
 import { message, Modal } from 'antd';
 import JSZip from 'jszip';
 import { ImageApi } from '../../services/image';
@@ -161,6 +161,21 @@ const PetCreator = () => {
     walkImage: false,
     runImage: false
   });
+
+  // 在组件内部添加
+  useEffect(() => {
+    const predefinedActions = getPredefinedActions();
+    if (generatedResults.actions.length === 0 && predefinedActions.length > 0) {
+      const initialActions: GeneratedAction[] = predefinedActions.map(action => ({
+        id: action.id,
+        name: action.name,
+        preview: '',
+        prompt: action.prompt,
+        isRegenerating: false
+      }));
+      setGeneratedResults(prev => ({ ...prev, actions: initialActions }));
+    }
+  }, [selectedStyle, generatedResults.actions.length]);
 
   // 预定义动作列表
   const getPredefinedActions = () => {
@@ -413,6 +428,157 @@ const PetCreator = () => {
       showError(error, `重新生成${type === 'walk' ? '走路' : '跑步'}姿态失败`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 生成单个动作图片（走路、跑步）
+  const handleGenerateSingleActionImage = async (type: 'walk' | 'run') => {
+    if (!generatedResults.petImage) {
+      message.error('请先生成宠物定妆照');
+      return;
+    }
+
+    const key = `generate-${type}-image`;
+    const setLoading = (loading: boolean) =>
+      setRegeneratingStates(prev => ({ ...prev, [type === 'walk' ? 'walkImage' : 'runImage']: loading }));
+
+    const prompt = type === 'walk' ? PROMPTS.pixel.walk : PROMPTS.pixel.run;
+    const successText = type === 'walk' ? '走路姿态生成成功！' : '跑步姿态生成成功！';
+
+    setLoading(true);
+    message.loading({ content: `正在生成${type === 'walk' ? '走路' : '跑步'}姿态...`, key, duration: 0 });
+
+    try {
+      const petImageFile = await base64ToFile(generatedResults.petImage, `pet-${type}-image.png`);
+      const result = await withTimeout(
+        ImageApi.imageEdit(prompt, [petImageFile], 'bailian'),
+        GENERATE_TIMEOUT
+      );
+      const imageData = await normalizeImageResult(result);
+      assertValidImageData(imageData, `${type === 'walk' ? '走路' : '跑步'}姿态`);
+
+      setGeneratedResults(prev => ({
+        ...prev,
+        [type === 'walk' ? 'walkImage' : 'runImage']: imageData
+      }));
+
+      message.success({ content: successText, key });
+    } catch (error: any) {
+      showError(error, `生成${type === 'walk' ? '走路' : '跑步'}姿态失败`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 生成单个动作视频
+  const handleGenerateSingleAction = async (actionId: number) => {
+    const action = getPredefinedActions().find(a => a.id === actionId);
+    if (!action || !generatedResults.petImage) {
+      message.error('动作不存在或宠物形象未生成');
+      return;
+    }
+
+    // 设置生成状态
+    setGeneratedResults(prev => ({
+      ...prev,
+      actions: prev.actions.map(a =>
+        a.id === actionId ? { ...a, isRegenerating: true } : a
+      )
+    }));
+
+    const key = `generate-action-${actionId}`;
+    message.loading({ content: `正在生成"${action.name}"动作...`, key, duration: 0 });
+
+    try {
+      const videoModel = selectedStyle === 'pixel' ? 'bailian' : 'volce';
+      const petImageFile = await base64ToFile(generatedResults.petImage, 'pet-image.png');
+
+      let frameFiles = [petImageFile];
+      if (action.name === '走' && generatedResults.walkImage) {
+        const walkFile = await base64ToFile(generatedResults.walkImage, 'walk-image.png');
+        frameFiles = [walkFile, walkFile];
+      } else if (action.name === '跑' && generatedResults.runImage) {
+        const runFile = await base64ToFile(generatedResults.runImage, 'run-image.png');
+        frameFiles = [runFile, runFile];
+      }
+
+      let taskId: any = await ImageApi.imageToVideo(action.prompt, frameFiles, videoModel);
+
+      if (videoModel === 'volce' && typeof taskId === 'string' &&
+        (taskId.startsWith('http://') || taskId.startsWith('https://'))) {
+
+        setGeneratedResults(prev => ({
+          ...prev,
+          actions: prev.actions.map(a =>
+            a.id === actionId ? {
+              ...a,
+              preview: taskId,
+              prompt: action.prompt,
+              isRegenerating: false
+            } : a
+          )
+        }));
+
+        message.success({ content: `"${action.name}"动作生成成功！`, key });
+        return;
+      }
+
+      if (typeof taskId === 'number') {
+        taskId = String(taskId);
+      }
+
+      if (videoModel === 'volce' && typeof taskId === 'string' && taskId.startsWith('{')) {
+        try {
+          taskId = JSON.parse(taskId);
+        } catch (e) {
+          console.error('解析 volce taskId 失败:', e);
+        }
+      }
+
+      if (!taskId || (typeof taskId !== 'string' && !(taskId.task_id && taskId.req_key))) {
+        throw new Error(`无效的任务ID: ${JSON.stringify(taskId)}`);
+      }
+
+      message.loading({ content: `等待"${action.name}"视频生成中...`, key, duration: 0 });
+      const videoUrl = await pollVideoResult(taskId, videoModel);
+
+      setGeneratedResults(prev => ({
+        ...prev,
+        actions: prev.actions.map(a =>
+          a.id === actionId ? {
+            ...a,
+            preview: videoUrl,
+            taskId,
+            prompt: action.prompt,
+            isRegenerating: false
+          } : a
+        )
+      }));
+
+      message.success({ content: `"${action.name}"动作生成成功！`, key });
+
+    } catch (error: any) {
+      console.error(`生成${action.name}动作失败:`, error);
+
+      let errorMessage = '生成失败，请重试';
+      if (error instanceof Error) {
+        if (error.message.includes('余额不足')) {
+          errorMessage = error.message;
+        } else if (error.message.includes('超时')) {
+          errorMessage = '生成超时，请稍后重试';
+        } else {
+          errorMessage = `生成失败: ${error.message}`;
+        }
+      }
+
+      message.error({ content: errorMessage, key });
+
+      setGeneratedResults(prev => ({
+        ...prev,
+        actions: prev.actions.map(a =>
+          a.id === actionId ? { ...a, isRegenerating: false } : a
+        )
+      }));
     }
   };
 
@@ -975,16 +1141,27 @@ const PetCreator = () => {
                           {generatedResults.walkImage ? (
                             <img src={generatedResults.walkImage} alt="生成的走路形象" className="generated-pet-action-image" />
                           ) : (
-                            <div className="image-placeholder">等待生成...</div>
+                            <div className="image-placeholder">
+                              <div>等待生成...</div>
+                              <button
+                                className="btn small generate-btn"
+                                onClick={() => handleGenerateSingleActionImage('walk')}
+                                disabled={!generatedResults.petImage || regeneratingStates.walkImage}
+                              >
+                                {regeneratingStates.walkImage ? '生成中...' : '单独生成'}
+                              </button>
+                            </div>
                           )}
                         </div>
-                        <button
-                          className="btn secondary small"
-                          onClick={() => handleRegenerateActionImage('walk')}
-                          disabled={regeneratingStates.walkImage || !generatedResults.petImage}
-                        >
-                          {regeneratingStates.walkImage ? '生成中...' : generatedResults.walkImage ? '重新生成' : '等待生成'}
-                        </button>
+                        {generatedResults.walkImage && (
+                          <button
+                            className="btn secondary small"
+                            onClick={() => handleRegenerateActionImage('walk')}
+                            disabled={regeneratingStates.walkImage}
+                          >
+                            {regeneratingStates.walkImage ? '重新生成中...' : '重新生成'}
+                          </button>
+                        )}
                       </div>
                     </div>
 
@@ -996,16 +1173,27 @@ const PetCreator = () => {
                           {generatedResults.runImage ? (
                             <img src={generatedResults.runImage} alt="生成的跑步形象" className="generated-pet-action-image" />
                           ) : (
-                            <div className="image-placeholder">等待生成...</div>
+                            <div className="image-placeholder">
+                              <div>等待生成...</div>
+                              <button
+                                className="btn small generate-btn"
+                                onClick={() => handleGenerateSingleActionImage('run')}
+                                disabled={!generatedResults.petImage || regeneratingStates.runImage}
+                              >
+                                {regeneratingStates.runImage ? '生成中...' : '单独生成'}
+                              </button>
+                            </div>
                           )}
                         </div>
-                        <button
-                          className="btn secondary small"
-                          onClick={() => handleRegenerateActionImage('run')}
-                          disabled={regeneratingStates.runImage || !generatedResults.petImage}
-                        >
-                          {regeneratingStates.runImage ? '生成中...' : generatedResults.runImage ? '重新生成' : '等待生成'}
-                        </button>
+                        {generatedResults.runImage && (
+                          <button
+                            className="btn secondary small"
+                            onClick={() => handleRegenerateActionImage('run')}
+                            disabled={regeneratingStates.runImage}
+                          >
+                            {regeneratingStates.runImage ? '重新生成中...' : '重新生成'}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1080,27 +1268,45 @@ const PetCreator = () => {
               <div className="actions-grid-preview">
                 {predefinedActions.map(action => {
                   const generatedAction = generatedResults.actions.find(a => a.id === action.id);
+                  const isGenerating = generatedAction?.isRegenerating || false;
+
                   return (
                     <div key={action.id} className="action-preview-item">
                       <div className="action-preview">
                         {generatedAction?.preview ? (
-                          <video 
-                            src={generatedAction.preview} 
-                            autoPlay 
-                            loop 
+                          <video
+                            src={generatedAction.preview}
+                            autoPlay
+                            loop
                             muted
                             playsInline
                             className="action-video"
                           />
+                        ) : isGenerating ? (
+                          <div className="action-placeholder generating">
+                            <div className="loading-spinner-small"></div>
+                            <div>生成中...</div>
+                          </div>
                         ) : (
                           <div className="action-placeholder">
-                            {generationState.isGenerating ? '生成中...' : '等待生成'}
+                            <div>等待生成...</div>
+                            <button
+                              className="btn small generate-btn"
+                              onClick={() => handleGenerateSingleAction(action.id)}
+                              disabled={!generatedResults.petImage || generationState.isGenerating}
+                            >
+                              单独生成
+                            </button>
                           </div>
                         )}
                       </div>
                       <p className="action-name">{action.name}</p>
-                      {generatedAction?.preview && (
-                        <div className="action-status-badge">✓ 已完成</div>
+                      {generatedAction?.preview ? (
+                        <div className="action-status-badge completed">✓ 已完成</div>
+                      ) : isGenerating ? (
+                        <div className="action-status-badge generating">生成中</div>
+                      ) : (
+                        <div className="action-status-badge waiting">等待中</div>
                       )}
                     </div>
                   );

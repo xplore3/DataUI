@@ -611,6 +611,112 @@
   }
 }
 
+// 图片占位样式修改
+.image-wrapper {
+  .image-placeholder {
+    width: 100%;
+    height: 100%;
+    .flex-center();
+    flex-direction: column;
+    color: @text-light;
+    background-color: @background-light;
+    font-size: 14px;
+    gap: 10px;
+
+    .generate-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+      background-color: @primary-color;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      .transition();
+
+      &:hover:not(:disabled) {
+        background-color: darken(@primary-color, 10%);
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// 动作占位样式修改
+.action-preview {
+  .action-placeholder {
+    width: 100%;
+    height: 100%;
+    &.generating {
+      background-color: fade(@primary-color, 10%);
+      color: @primary-color;
+    }
+
+    .loading-spinner-small {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid @primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .flex-center();
+    flex-direction: column;
+    color: @text-light;
+    background-color: @background-light;
+    font-size: 14px;
+    gap: 10px;
+
+    .generate-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+      background-color: @primary-color;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      .transition();
+
+      &:hover:not(:disabled) {
+        background-color: darken(@primary-color, 10%);
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// 状态徽章样式
+.action-status-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  &.generating {
+    background-color: @primary-color;
+    color: white;
+  }
+
+  &.completed {
+    background-color: #52c41a;
+    color: white;
+  }
+
+  &.waiting {
+    background-color: #faad14;
+    color: white;
+  }
+}
+
 // 响应式调整
 @media (max-width: 768px) {
   .image-wrapper {
