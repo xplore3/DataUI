@@ -78,7 +78,7 @@ export async function addWhiteBackgroundToGenerated(
           } else {
             reject(new Error('无法生成Blob'));
           }
-        }, 'image/png', 0.95);
+        }, 'image/png', 0.5);
         
       } catch (error) {
         reject(error);
