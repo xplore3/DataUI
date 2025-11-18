@@ -2,26 +2,13 @@ import './App.css';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import 'virtual:uno.css';
 import About from './views/about';
-import Chat from './views/chat';
-import DownloadWithCode from './views/download';
 import Help from './views/help';
-import IpHome from './views/iphome';
-import UserCenter from './views/user';
-import WecomAuth from './views/wecom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { useThemeStore } from './stores/useThemeStore';
-import Welcome from './views/welcome';
-import CodeGen from './views/codeGen';
-import UserList from './views/stat';
-import RawPage from './views/raw';
 import ImagePage from './views/image';
 import PetCreator from './views/pet';
-import HomePage from './views/aij';
-import BrandResultPage from './views/aijbrand';
-import ProfilePage from './views/profile';
-import DetailPage from './views/detail';
 //import VConsole from 'vconsole';
 function App() {
   const { theme } = useThemeStore();
@@ -48,24 +35,11 @@ function App() {
     />
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/ip" replace />} />
+        <Route path="/" element={<Navigate to="/pet" replace />} />
         <Route path="/about" element={<About />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/codeGen" element={<CodeGen />} />
-        <Route path="/download" element={<DownloadWithCode />} />
         <Route path="/help" element={<Help />} />
         <Route path="/image" element={<ImagePage />} />
-        <Route path="/ip" element={<IpHome />} />
-        <Route path="/aij" element={<HomePage />} />
-        <Route path="/brand" element={<BrandResultPage />} />
-        <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/pet" element={<PetCreator />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/raw" element={<RawPage />} />
-        <Route path="/user" element={<UserCenter />} />
-        <Route path="/userlist" element={<UserList />} />
-        <Route path="/wecom" element={<WecomAuth />} />
-        <Route path="/welcome" element={<Welcome />} />
       </Routes>
     </Router>
   </div>);
