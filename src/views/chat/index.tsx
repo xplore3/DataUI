@@ -974,7 +974,7 @@ ${truncatedReport}
             {loading ? '正在处理...' : '🧪 测试报告质量'}
           </div>
         </div>
-        {false && (
+        {true && (
           <div className="chat-page-input">
             <textarea ref={textareaRef} placeholder={tips} value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
             {loading ? (
