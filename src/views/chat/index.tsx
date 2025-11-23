@@ -956,7 +956,7 @@ ${truncatedReport}
           {loading ? (<ReactSVG src={LoadingImg} className="chat-loading"></ReactSVG>) : (<></>)}
         </div>
         {/* 测试报告质量按钮 */}
-        <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'center' }}>
+        {false && (<div style={{ marginTop: '8px', display: 'flex', justifyContent: 'center' }}>
           <div 
             className={loading ? 'chat-page-items loading' : 'chat-page-items'} 
             style={{ 
@@ -974,7 +974,7 @@ ${truncatedReport}
           >
             {loading ? '正在处理...' : '🧪 测试报告质量'}
           </div>
-        </div>
+        </div>)}
         {true && (
           <div className="chat-page-input">
             <textarea ref={textareaRef} placeholder={tips} value={text} onInput={onInput} onKeyDown={handleKeyDown} disabled={loading} />
