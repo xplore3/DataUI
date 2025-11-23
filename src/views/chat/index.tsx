@@ -656,10 +656,10 @@ const Chat = () => {
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.altKey) {
         e.preventDefault();
-        const taskId = useUserStore.getState().getTaskId();
+        /*const taskId = useUserStore.getState().getTaskId();
         if (taskId) {
           onDataProcess(text, false);
-        } else {
+        } else */{
           onSend();
         }
         useUserStore.getState().setOriginInput(text);
@@ -986,10 +986,10 @@ ${truncatedReport}
                 src={text ? SendActive : Send}
                 alt="Send"
                 onClick={() => {
-                  const taskId = useUserStore.getState().getTaskId();
+                  /*const taskId = useUserStore.getState().getTaskId();
                   if (taskId) {
                     onDataProcess(text, false);
-                  } else {
+                  } else */{
                     onSend();
                   }
                   useUserStore.getState().setOriginInput(text);
