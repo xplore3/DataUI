@@ -331,7 +331,8 @@ const Chat = () => {
       setText('');
       setMessageList(prev => [...prev, { text: finalText, user: 'user', action: 'NONE', displayText: finalText }]);
       chatApi
-        .createChat(finalText)
+        //.createChat(finalText)
+        .routineTask(finalText, 'ecom_talent_report')
         .then(res => {
           setMessageList(prev => [...prev, { ...res, displayText: '' }]);
         })
