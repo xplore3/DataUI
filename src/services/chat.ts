@@ -70,14 +70,22 @@ export const chatApi = {
           useUserStore.getState().setTaskId(json.taskId);
           newTaskId = json.taskId;
           //backup_options = json.intention_options || json.available_options;
-          response = (json.process_result + json.option_description) || json.data_result || json.question_description;
+          
+          // 调试：打印 process_result 的前 200 个字符
+          if (json.process_result) {
+            console.log('[Debug] process_result preview:', json.process_result.substring(0, 200));
+            console.log('[Debug] Has newlines:', json.process_result.includes('\n'));
+            console.log('[Debug] Has literal backslash-n:', json.process_result.includes('\\n'));
+          }
+          
+          response = (json.process_result + (json.option_description || '')) || json.data_result || json.question_description;
         }
       } catch (err) {
         //console.log(err);
         newTaskId = response.taskId || result.data.taskId;
         useUserStore.getState().setTaskId(newTaskId);
         //backup_options = response.intention_options || response.available_options;
-        response = (response.process_result + response.option_description) || response.data_result || response.question_description || response;
+        response = (response.process_result + (response.option_description || '')) || response.data_result || response.question_description || response;
       }
       //if (backup_options) {
       //  options = getRandomElements<string>(backup_options, 3, 5);
