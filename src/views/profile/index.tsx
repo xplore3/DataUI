@@ -23,7 +23,8 @@ import {
   FileOutlined,
   EditOutlined,
   QuestionCircleOutlined,
-  WarningOutlined
+  WarningOutlined,
+  ReloadOutlined
 } from '@ant-design/icons';
 import type { UploadProps, RcFile } from 'antd/es/upload';
 import './index.less';
@@ -499,6 +500,16 @@ const ProfilePage = () => {
                       知识库列表
                       <Tag color="blue">{totalNumber}</Tag>
                     </Space>
+                  }
+                  extra={
+                    <Button
+                      type="text"
+                      icon={<ReloadOutlined />}
+                      loading={loading}
+                      onClick={() => loadKnowledgeData(pagination.current, pagination.pageSize)}
+                    >
+                      刷新
+                    </Button>
                   }
                   className="knowledge-list-card"
                   bordered={false}
