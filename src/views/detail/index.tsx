@@ -20,7 +20,7 @@ import {
   CalendarOutlined,
   FileTextOutlined 
 } from '@ant-design/icons';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ProfileApi } from '@/services/profile';
 import './index.less';
 
@@ -48,6 +48,8 @@ interface KnowledgeItem {
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const tag = searchParams.get('tag') || 'Evaluation';
   const [form] = Form.useForm();
   
   const [knowledge, setKnowledge] = useState<KnowledgeItem | null>(null);
@@ -61,8 +63,8 @@ const DetailPage: React.FC = () => {
     
     setLoading(true);
     try {
-      // 获取单条知识的API
-      const response = await ProfileApi.getById(id);
+      // 获取单条知识的API，传递 tag 参数
+      const response = await ProfileApi.getById(id, tag);
       setKnowledge(response);
       form.setFieldsValue({
         title: response.title,
@@ -79,7 +81,7 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     loadKnowledgeDetail();
-  }, [id]);
+  }, [id, tag]);
 
   // 进入编辑模式
   const handleEdit = () => {

@@ -92,12 +92,14 @@ export const ProfileApi = {
     return null;
   },
 
-  list: async (page = 1, pageSize = 20) => {
+  list: async (page = 1, pageSize = 20, tag?: string) => {
     try {
       const result = await api.post('/memory_list', {
         includeContent: true,
         page: page,
-        limit: pageSize
+        limit: pageSize,
+        tag: tag ? TAG_PREFIX + tag : undefined,
+        containerTag: tag ? TAG_PREFIX + tag : undefined
       });
       console.log('list result', result);
 
@@ -116,9 +118,10 @@ export const ProfileApi = {
     return null;
   },
 
-  getById: async (id: string) => {
+  getById: async (id: string, tag?: string) => {
     try {
-      const result = await api.get(`/memory_get?id=${id}`, {});
+      const tagParam = tag ? `&tag=${TAG_PREFIX}${tag}&containerTag=${TAG_PREFIX}${tag}` : '';
+      const result = await api.get(`/memory_get?id=${id}${tagParam}`, {});
       console.log('get result', result);
 
       let response = result.data || result;

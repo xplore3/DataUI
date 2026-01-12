@@ -13,7 +13,8 @@ import {
   Space,
   Typography,
   Progress,
-  Tag
+  Tag,
+  Select
 } from 'antd';
 import {
   PlusOutlined,
@@ -96,10 +97,10 @@ const ProfilePage = () => {
   });
 
   // 加载知识库数据
-  const loadKnowledgeData = async (page = 1, pageSize = 10) => {
+  const loadKnowledgeData = async (page = 1, pageSize = 10, currentTag?: string) => {
     setLoading(true);
     try {
-      const knowledgeRes = await ProfileApi.list(page, pageSize);
+      const knowledgeRes = await ProfileApi.list(page, pageSize, currentTag || tag);
       if (!knowledgeRes) {
         setLoading(false);
         message.error('加载数据失败');
@@ -139,19 +140,8 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    const savedList = localStorage.getItem(PROFILE_KNOWLEDGE_LIST);
-    if (savedList) {
-      const parsedMessages: KnowledgeItem[] = JSON.parse(savedList);
-      const initializedMessages = parsedMessages.slice(-200);
-      setKnowledgeItems(initializedMessages);
-      setPagination(prev => ({
-        ...prev,
-        total: totalNumber
-      }));
-    }
-    else {
-      loadKnowledgeData();
-    }
+    // 初始加载时直接从服务器获取当前标签的数据
+    loadKnowledgeData(1, pagination.pageSize, tag);
   }, []);
 
   useEffect(() => {
@@ -297,13 +287,26 @@ const ProfilePage = () => {
 
   // 分页处理
   const handlePageChange = (page: number, pageSize?: number) => {
-    loadKnowledgeData(page, pageSize || pagination.pageSize);
+    loadKnowledgeData(page, pageSize || pagination.pageSize, tag);
   };
 
-  // 点击项目在新窗口打开
+  // 标签切换处理
+  const handleTagChange = (newTag: string) => {
+    setTag(newTag);
+    localStorage.setItem(PROFILE_KNOWLEDGE_TAG, newTag);
+    // 清除本地缓存的列表数据
+    localStorage.removeItem(PROFILE_KNOWLEDGE_LIST);
+    localStorage.removeItem(PROFILE_KNOWLEDGE_TOTAL);
+    // 重置分页并加载新标签的数据
+    setPagination(prev => ({ ...prev, current: 1, total: 0 }));
+    setTotalNumber(0);
+    loadKnowledgeData(1, pagination.pageSize, newTag);
+  };
+
+  // 点击项目跳转到详情页
   const handleItemClick = (itemId: number) => {
     //window.open(`/detail/${itemId}`, '_blank');
-    navigate(`/detail/${itemId}`);
+    navigate(`/detail/${itemId}?tag=${tag}`);
   };
 
   // 格式化文件大小
@@ -385,14 +388,16 @@ const ProfilePage = () => {
                       name="tag"
                       label="知识标签"
                       rules={[
-                        { required: true, message: '请输入知识标签' },
-                        { max: 20, message: '标题不能超过20个字符' }
+                        { required: true, message: '请选择知识标签' }
                       ]}
                     >
-                      <Input
-                        placeholder="请输入知识标签" 
-                        maxLength={20}
-                        showCount
+                      <Select
+                        placeholder="请选择知识标签"
+                        options={[
+                          { value: 'Evaluation', label: 'Evaluation' },
+                          { value: 'Comparison', label: 'Comparison' }
+                        ]}
+                        onChange={handleTagChange}
                       />
                     </Form.Item>
 
@@ -498,6 +503,7 @@ const ProfilePage = () => {
                     <Space>
                       <FileTextOutlined />
                       知识库列表
+                      <Tag color={tag === 'Comparison' ? 'green' : 'blue'}>{tag}</Tag>
                       <Tag color="blue">{totalNumber}</Tag>
                     </Space>
                   }
@@ -506,7 +512,7 @@ const ProfilePage = () => {
                       type="text"
                       icon={<ReloadOutlined />}
                       loading={loading}
-                      onClick={() => loadKnowledgeData(pagination.current, pagination.pageSize)}
+                      onClick={() => loadKnowledgeData(pagination.current, pagination.pageSize, tag)}
                     >
                       刷新
                     </Button>
