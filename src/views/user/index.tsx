@@ -188,9 +188,9 @@ const UserCenter = () => {
       <button className="user-center-logout" onClick={onDeleteProfile}>
         删除IP信息
       </button>
-      <button className="user-center-logout" onClick={onLogout}>
+      {/* <button className="user-center-logout" onClick={onLogout}>
         退出登录
-      </button>
+      </button> */}
       </>) : (<div className="user-center-login">
         <img src={Profile} alt="profile" />
         <p>使用微信扫一扫，授权微信绑定实现与微信Bot的互通使用</p>

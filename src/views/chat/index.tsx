@@ -527,6 +527,7 @@ const Chat = () => {
   }
 
   const handleKeyPress = async (key: string,code?:string) => {
+    console.log('[Button Click] Key pressed:', key, 'Code:', code);
     if (key === '模板') {
       if (loading) return;
       toast('正在获取模板，请稍候......');
@@ -904,6 +905,7 @@ ${truncatedReport}
                     className={item.hasSubmit ? 'option-button-disabled' : 'option-button'}
                     disabled={item.hasSubmit /* || (index !== messageList.length - 1)*/}
                     onClick={() => {
+                      console.log('[Button Click] Option button clicked:', option, 'index:', index);
                       onDataProcess(option, true, index);
                     }}
                   >
@@ -986,6 +988,7 @@ ${truncatedReport}
                 src={text ? SendActive : Send}
                 alt="Send"
                 onClick={() => {
+                  console.log('[Button Click] Send button clicked, text:', text);
                   /*const taskId = useUserStore.getState().getTaskId();
                   if (taskId) {
                     onDataProcess(text, false);

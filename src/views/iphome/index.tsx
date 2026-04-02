@@ -9,7 +9,9 @@ const IpHome: React.FC = () => {
   const navigate = useNavigate();
 
   const checkUserProfile = () => {
+    console.log('[Button Click] checkUserProfile called');
     const set = localStorage.getItem('trendmuse_form_submitted') === 'true';
+    console.log('[Button Click] trendmuse_form_submitted:', set);
     if (!set) {
       toast.error('请在设置页面输入IP背景资料等');
       navigate('/user');
@@ -18,10 +20,13 @@ const IpHome: React.FC = () => {
   };
 
   const onStart = () => {
+    console.log('[Button Click] "立即使用" button clicked!');
     if (checkUserProfile()) {
+      console.log('[Button Click] Navigating to /chat');
       navigate('/chat');
     }
     else {
+      console.log('[Button Click] Navigating to /user');
       navigate('/user');
     }
   };
